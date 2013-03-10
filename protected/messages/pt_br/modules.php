@@ -1,0 +1,28 @@
+<?php
+return array(
+	'all' => 'Todos',
+	'budgets' => 'Or&ccedil;amentos',
+	'budgetsconcepts' => 'Conceito de Or&ccedil;amento',
+	'invoices' => 'Faturas',
+	'invoicesconcepts' => 'Conceito de Fatura',
+	'expenses' => 'Gastos',
+	'expensesconcepts' => 'Conceito de Gasto',
+	'bconcepts' => 'Or&ccedil;amentos Conceitos',
+	'iconcepts' => 'Faturas Conceitos',
+	'econcepts' => 'Gastos Conceitos',
+	'documents' => 'Documentos',
+	'milestones' => 'Etapas',
+	'diagrams' => 'Diagramas',
+	'cases' => 'Casos',
+	'tasks' => 'Tarefas',
+	'projects' => 'Projetos',
+	'companies' => 'Empresas',
+	'users' => 'Usu&aacute;rios',
+	'clients' => 'Clientes',
+	'dashboards' => 'Dashboard',
+	'validations' => 'Valida&ccedil;&otilde;es',
+	'secuences' => 'Sequ&ecirc;ncias',
+	'configuration' => 'Configura&ccedil;&atilde;o',
+	'dashboard' => 'Dashboard',
+);
+?>

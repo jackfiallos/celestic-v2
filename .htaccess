@@ -1,0 +1,126 @@
+# TODO
+# sudo a2enmod rewrite mem_cache cache headers expires deflate
+# expose_php Off
+# SET GLOBAL query_cache_size = 16777216;
+# nano /etc/my.cnf
+# query_cache_size = 268435456
+# query_cache_type=1
+# query_cache_limit=1048576
+
+php_value register_globals off
+#expose_php Off
+Header add x-content-type-options "nosniff"
+Header add x-frame-options "SAMEORIGIN"
+Header add x-xss-protection: "1; mode=block"
+
+ContentDigest On
+
+# Turn on Expires and set default to 0
+ExpiresActive On
+ExpiresDefault A0
+
+Options +FollowSymLinks
+Options All -Indexes
+IndexIgnore */*
+RewriteEngine on
+
+# accept connection only using https
+#RewriteCond %{HTTPS} !=on
+#RewriteRule .* https://%{SERVER_NAME}%{REQUEST_URI} [R,L]
+
+RewriteCond %{THE_REQUEST} ^GET\ /.*\;.*\ HTTP/
+RewriteCond %{QUERY_STRING} !^$
+RewriteRule .* https://%{SERVER_NAME}%{REQUEST_URI}? [R=301,L]
+
+# if a directory or a file exists, use it directly
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+
+# otherwise forward it to index.php
+RewriteRule . index.php
+
+#External Redirect .php files to .html files (SEO friendly)
+#RewriteRule ^(.*)\.php$ /$1.html [R=301,L]
+
+RewriteRule ^(.*)\.html$ $1.php [R=301,L]
+
+#############################################
+
+SetEnv SERVER_ADMIN info@propiedades.com
+SetEnv TZ America/Mexico_City
+ServerSignature Off
+
+# enable symbolic links
+Options +FollowSymLinks
+
+# Lenguaje
+DefaultLanguage es-MX
+
+# Establecer un encoding por omision
+<Files ~ "\.(htm|html|css|js|php)$">
+	AddDefaultCharset UTF-8
+	DefaultLanguage en-US
+</Files>
+
+# Asegurarse de que el archivo .htaccess no se tiene acceso por web
+<files .htaccess>
+	order allow,deny
+	deny from all
+</files>
+
+# Prevenir acceso a archivos del sistema
+<FilesMatch "\.(htaccess|ini|log|sh)$">
+	Order Allow,Deny
+	Deny from all
+</FilesMatch>
+
+# Activar el caching para archivos estaticos
+<ifModule mod_headers.c>
+	Header set Content-Language "en-US"
+	<filesMatch "\\.(ico|pdf|jpg|jpeg|png|gif|css)$">
+		Header set Cache-Control "max-age=29030400, public"
+		Header set Expires "Mon, 31 Dic 2012 20:00:00 GMT"
+	</filesMatch>
+	<filesMatch "\\.(js)$">
+		Header set Cache-Control "max-age=29030400, private"
+	</filesMatch>
+	<filesMatch "\\.(xml|txt)$">
+		Header set Cache-Control "max-age=29030400, public, must-revalidate"
+	</filesMatch>
+	<filesMatch "\\.(html|htm)$">
+		Header set Cache-Control "max-age=1, private, must-revalidate"
+	</filesMatch>
+</ifModule>
+
+# Forzar a que los navegadores no se queden con una copia de los archivos
+<FilesMatch "\.(php|cgi|pl|htm)$">
+	FileETag None
+	ExpiresActive Off
+	<IfModule mod_headers.c>
+		Header unset ETag
+		Header set Expires "Wed, 11 Jan 1984 05:00:00 GMT"
+		Header set Cache-Control "max-age=0, must-revalidate, private, no-cache, no-store, proxy-revalidate, no-transform"
+		Header set Pragma "no-cache"
+		Header set Expires "Wed, 11 Jan 1984 05:00:00 GMT"
+	</IfModule>
+</FilesMatch>
+
+# Activando la compresion si el modulo esta presente
+<IfModule mod_deflate.c>
+	<FilesMatch "\.(js|css)$">
+		SetOutputFilter DEFLATE
+	</FilesMatch>
+	Header add x-enabled mod_deflate  
+	AddOutputFilterByType DEFLATE text/plain
+	AddOutputFilterByType DEFLATE text/html
+	AddOutputFilterByType DEFLATE text/xml
+	AddOutputFilterByType DEFLATE text/css
+	AddOutputFilterByType DEFLATE application/xml
+	AddOutputFilterByType DEFLATE application/xhtml+xml
+	AddOutputFilterByType DEFLATE application/rss+xml
+	AddOutputFilterByType DEFLATE application/javascript
+	AddOutputFilterByType DEFLATE application/x-javascript
+	<IfModule mod_headers.c>
+		Header append Vary User-Agent
+	</IfModule>
+</IfModule>
