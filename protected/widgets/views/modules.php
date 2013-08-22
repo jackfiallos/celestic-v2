@@ -1,5 +1,7 @@
 <ul>
-	<li class="heading"><span>Modules</span></li>
+	<li class="heading">
+		<span>Modules</span>
+	</li>
 	<li class="glyphicons home active">
 		<a href="<?php echo Yii::app()->createUrl('site/dashboard'); ?>">
 			<i></i><span>Dashboard</span>

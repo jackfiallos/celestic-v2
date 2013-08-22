@@ -5,7 +5,7 @@ error_reporting(E_ALL);
 ini_set('error_reporting', E_ALL);
 
 // change the following paths if necessary
-$yii=dirname(__FILE__).'/../../yii-1.1.12.b600af/framework/yii.php';
+$yii=dirname(__FILE__).'/../yii-1.1.12.b600af/framework/yii.php';
 $config=dirname(__FILE__).'/protected/config/main.php';
 
 // remove the following lines when in production mode

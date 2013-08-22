@@ -114,7 +114,7 @@
   	Yii::app()->clientScript->registerCoreScript('jquery');
   	Yii::app()->clientScript->registerCoreScript('jquery.ui');
   	$cs->registerScript('mainScript',"
-        
+        $('.dropdown-toggle').dropdown();
     ", CClientScript::POS_READY);
   	?>
 

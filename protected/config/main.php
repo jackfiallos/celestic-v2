@@ -42,7 +42,8 @@ return array(
         'milestones',
         'cases',
         'tasks',
-        'tests'
+        'tests',
+        'install'
 	),
 
 	// application components
@@ -106,7 +107,7 @@ return array(
 		'modules'=>array(
 			'tasks'=>array(
 				'title'=>'Tasks',
-				'iconClass'=>'cogwheels'
+				'iconClass'=>'list'
 			),
 			'documents'=>array(
 				'title'=>'Documents',
