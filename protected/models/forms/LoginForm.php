@@ -22,7 +22,7 @@ class LoginForm extends CFormModel
 	{
 		return array(
 			// username and password are required
-			array('username, password', 'required'),
+			array('username, password', 'required', 'message'=>Yii::t('inputValidations','RequireValidation')),
 			// rememberMe needs to be a boolean
 			array('rememberMe', 'boolean'),
 			// password needs to be authenticated
@@ -36,7 +36,9 @@ class LoginForm extends CFormModel
 	public function attributeLabels()
 	{
 		return array(
-			'rememberMe'=>'Remember me next time',
+			'username'=>Yii::t('site','username'),
+			'password'=>Yii::t('site','password'),
+			'rememberMe'=>Yii::t('site','rememberMe'),
 		);
 	}
 
@@ -46,12 +48,12 @@ class LoginForm extends CFormModel
 	 */
 	public function authenticate($attribute,$params)
 	{
-		if(!$this->hasErrors())
-		{
-			$this->_identity=new UserIdentity($this->username,$this->password);
-			if(!$this->_identity->authenticate())
-				$this->addError('password','Incorrect username or password.');
-		}
+		$this->_identity=new UserIdentity($this->username,$this->password);
+		if(!$this->_identity->authenticate())
+			$this->addError('password','Incorrect username or password.');
+			
+		if($this->_identity->errorCode===UserIdentity::ERROR_USER_INACTIVE)
+			$this->addError('username','Account is not activated yet!');
 	}
 
 	/**
@@ -65,6 +67,13 @@ class LoginForm extends CFormModel
 			$this->_identity=new UserIdentity($this->username,$this->password);
 			$this->_identity->authenticate();
 		}
+		
+		if($this->_identity->errorCode===UserIdentity::ERROR_USER_INACTIVE)
+		{
+			$this->_identity=new UserIdentity($this->username,$this->password);
+			$this->_identity->authenticate();
+		}
+		
 		if($this->_identity->errorCode===UserIdentity::ERROR_NONE)
 		{
 			$duration=$this->rememberMe ? 3600*24*30 : 0; // 30 days

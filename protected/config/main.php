@@ -1,24 +1,40 @@
 <?php
+/**
+ * main configuration file
+ * 
+ * @author		Jackfiallos
+ * @link		http://qbit.com.mx/labs/celestic
+ * @copyright Copyright (c) 2009-2011 Qbit Mexhico
+ * @license http://qbit.com.mx/labs/celestic/license/
+ * @description
+ * This is the main Web application configuration
+ * CWebApplication properties can be configured here.
+ *
+ **/ 
 
-// uncomment the following to define a path alias
-// Yii::setPathOfAlias('local','path/to/local-folder');
+// Load db config file
+$db = include_once('db.php');
 
-// This is the main Web application configuration. Any writable
-// CWebApplication properties can be configured here.
-return array(
+$main = array(
 	'basePath'=>dirname(__FILE__).DIRECTORY_SEPARATOR.'..',
 	'name'=>'Celestic',
 
-	// preloading 'log' component
+	// preloading components
 	'preload'=>array('log'),
 
 	// autoloading model and component classes
 	'import'=>array(
 		'application.models.*',
-		'application.components.*',
+		'application.models.forms.*',
+		'application.components.*'
 	),
 
 	'theme'=>'artemisa',
+
+	// Begin request event
+    'onBeginRequest'=>array(
+    	'Request','begin'
+   	),
 
 	// Lenguaje de los mensajes
 	'sourceLanguage'=>'en_US',
@@ -62,48 +78,50 @@ return array(
             'enableCsrfValidation' => true,
         ),
 		'urlManager'=>array(
-			'urlFormat'=>'path',
+			'urlFormat'=>'get',
 			'showScriptName'=>false,
 			'caseSensitive'=>false,
 			'rules'=>array(
-				'<controller:\w+>/<id:\d+>'=>'<controller>/view',
-				'<controller:\w+>/<action:\w+>/<id:\d+>'=>'<controller>/<action>',
-				'<controller:\w+>/<action:\w+>'=>'<controller>/<action>',
-			),
-		),
-		'db'=>array(
-			'connectionString' => 'mysql:host=localhost;dbname=celestic',
-			'emulatePrepare' => true,
-			'username' => 'root',
-			'password' => '',
-			'charset' => 'utf8',
+				'index'=>array('site/index'),
+				'login'=>array('site/login')
+			)
+        ),
+		'authManager'=>array(
+			'class'=>'CDbAuthManager',
+			'connectionID'=>'db',
+			'itemTable'=>'stb_authItems',
+			'assignmentTable'=>'stb_authAssignments',
+			'itemChildTable'=>'stb_authItemChilds',
 		),
 		'errorHandler'=>array(
 			// use 'site/error' action to display errors
 			'errorAction'=>'site/error',
-		),
-		'log'=>array(
-			'class'=>'CLogRouter',
-			'routes'=>array(
-				array(
-					'class'=>'CFileLogRoute',
-					'levels'=>'error, warning',
-				),
-				// uncomment the following to show log messages on web pages
-				/*
-				array(
-					'class'=>'CWebLogRoute',
-				),
-				*/
-			),
-		),
+		)
 	),
 
 	// application-level parameters that can be accessed
 	// using Yii::app()->params['paramName']
 	'params'=>array(
-		// this is used in contact page
-		'adminEmail'=>'webmaster@example.com',
+		// App parameters
+		'appVersion'=>'0.4.1',
+		'lastAppVersion'=>'0.4.0',
+		// Email configuration
+		'adminEmail'=>'erling.fiallos@qbit.com.mx',
+		'multiplesAccounts'=>false,
+		'mailSenderEmail'=>'celestic@qbit.com.mx',
+		'mailSenderName'=>'Celestic',
+		'mailHost'=>'smtp.qbit.com.mx',
+		'mailSMTPAuth'=>true,
+		'mailUsername'=>'qbitnoreply',
+		'mailPassword'=>'n0r3plyqb1t',
+		'mailSendMultiples'=>5,
+		// Internationalization
+		'timezone' => 'America/Mexico_City',
+		'database_format'=>array(
+			'date'=>'yyyy-MM-dd',
+			'time'=>'HH:mm:ss',
+			'dateTimeFormat'=>'{1} {0}',
+		),
 		'modules'=>array(
 			'tasks'=>array(
 				'title'=>'Tasks',
@@ -129,24 +147,31 @@ return array(
 		'languages'=>array(
 			'en_us'=>array(
 				'title'=>'English',
-				'icon'=>'flag_usa.png'
+				'icon'=>'flag_usa.png',
+				'lang'=>'en_us'
 			),
 			'es_mx'=>array(
 				'title'=>'Espa&ntilde;ol',
-				'icon'=>'flag_mexico.png'
+				'icon'=>'flag_mexico.png',
+				'lang'=>'es_mx'
 			),
 			'es_es'=>array(
 				'title'=>'Espa&ntilde;ol (Espa&ntilde;a)',
-				'icon'=>'flag_spain.png'
+				'icon'=>'flag_spain.png',
+				'lang'=>'es_es'
 			),
 			'pt_br'=>array(
 				'title'=>'Portugu&eacute;s',
-				'icon'=>'flag_brazil.png'
+				'icon'=>'flag_brazil.png',
+				'lang'=>'pt_br'
 			),
 			'de_de'=>array(
 				'title'=>'Denmark',
-				'icon'=>'flag_germany.png'
+				'icon'=>'flag_germany.png',
+				'lang'=>'de_de'
 			)
 		),
 	),
 );
+
+return CMap::mergeArray($main, $db);

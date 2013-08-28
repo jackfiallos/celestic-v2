@@ -1,53 +1,34 @@
+<?php $this->pageTitle = Yii::app()->name." - Project Manager"; ?>
+<h2 class="login">
+	<?php echo CHtml::image(Yii::app()->request->baseUrl."/images/celestic.png",CHtml::encode(Yii::app()->name).' v.'.Yii::app()->params['appVersion']); ?>
+</h2>
 <?php
-/* @var $this SiteController */
-/* @var $model LoginForm */
-/* @var $form CActiveForm  */
-
-$this->pageTitle=Yii::app()->name . ' - Login';
-$this->breadcrumbs=array(
-	'Login',
-);
-?>
-
-<h1>Login</h1>
-
-<p>Please fill out the following form with your login credentials:</p>
-
-<div class="form">
-<?php $form=$this->beginWidget('CActiveForm', array(
+$form=$this->beginWidget('CActiveForm', array(
 	'id'=>'login-form',
-	'enableClientValidation'=>true,
-	'clientOptions'=>array(
-		'validateOnSubmit'=>true,
-	),
-)); ?>
-
-	<p class="note">Fields with <span class="required">*</span> are required.</p>
-
-	<div class="row">
-		<?php echo $form->labelEx($model,'username'); ?>
-		<?php echo $form->textField($model,'username'); ?>
-		<?php echo $form->error($model,'username'); ?>
+	'enableAjaxValidation'=>false,
+));
+?>
+	<div class="input-module box">
+		<div class="field">
+			<h4><?php echo $form->labelEx($model,'username'); ?></h4>
+			<span class="input over"><?php echo $form->textField($model,'username', array('class'=>'username betterform','tabindex'=>1)); ?></span>
+			<?php echo $form->error($model,'username',array('class'=>'errorMessage labelhelper')); ?>
+		</div>
+		<div class="field last">
+			<h4><?php echo $form->labelEx($model,'password'); ?></h4>
+			<span class="input"><?php echo $form->passwordField($model,'password', array('class'=>'password betterform','tabindex'=>2)); ?> <?php echo CHtml::link(Yii::t('site', 'ForgottenPassword'), Yii::app()->controller->createUrl("site/recover")); ?></span>
+			<?php echo $form->error($model,'password',array('class'=>'errorMessage labelhelper')); ?>
+		</div>
 	</div>
-
-	<div class="row">
-		<?php echo $form->labelEx($model,'password'); ?>
-		<?php echo $form->passwordField($model,'password'); ?>
-		<?php echo $form->error($model,'password'); ?>
-		<p class="hint">
-			Hint: You may login with <kbd>demo</kbd>/<kbd>demo</kbd> or <kbd>admin</kbd>/<kbd>admin</kbd>.
-		</p>
+	<div class="buttons">
+		<?php echo CHtml::button(Yii::t('site','send'), array('type'=>'submit', 'class'=>'button big primary','tabindex'=>4)); ?>
+		<?php if(Yii::app()->params['multiplesAccounts']): ?>
+		<div class="field last" style="text-align:right;">
+			<?php echo CHtml::link(Yii::t('site','alreadyToRegister'), Yii::app()->createUrl('site/register')); ?>
+		</div>
+		<?php endif; ?>
 	</div>
-
-	<div class="row rememberMe">
-		<?php echo $form->checkBox($model,'rememberMe'); ?>
-		<?php echo $form->label($model,'rememberMe'); ?>
-		<?php echo $form->error($model,'rememberMe'); ?>
-	</div>
-
-	<div class="row buttons">
-		<?php echo CHtml::submitButton('Login'); ?>
-	</div>
-
 <?php $this->endWidget(); ?>
-</div><!-- form -->
+<p style="border-top:1px solid #ccc; margin-top:5px;">
+	<span class="corners"><?php echo Yii::app()->name; ?> <?php echo Yii::t('site','CelesticExplanation'); ?></span>
+</p>

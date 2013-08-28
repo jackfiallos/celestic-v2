@@ -66,11 +66,11 @@
 						<img src="<?php echo Yii::app()->theme->baseUrl; ?>/images/lang/<?php echo Yii::app()->params['languages']['en_us']['icon']; ?>" alt="en" />
 					</a>
 			    	<ul class="dropdown-menu pull-right">
-			    		<?php foreach (Yii::app()->params['languages'] as $language): ?>
-			      		<li class="<?php echo ($language == $this->locale) ? 'active' : ''; ?>">
-			      			<a href="?lang=en" title="<?php echo $language['title']; ?>">
-			      				<img src="<?php echo Yii::app()->theme->baseUrl; ?>/images/lang/<?php echo $language['icon']; ?>" alt="<?php echo $language['title']; ?>">
-			      				<?php echo $language['title']; ?>
+			    		<?php foreach (Yii::app()->params['languages'] as $key => $value): ?>
+			      		<li>
+			      			<a href="?lang=en" title="<?php echo Yii::app()->params['languages'][$key]['title']; ?>">
+			      				<img src="<?php echo Yii::app()->theme->baseUrl; ?>/images/lang/<?php echo Yii::app()->params['languages'][$key]['icon']; ?>" alt="<?php echo Yii::app()->params['languages'][$key]['title']; ?>">
+			      				<?php echo Yii::app()->params['languages'][$key]['title']; ?>
 			      			</a>
 			      		</li>
 			      		<?php endforeach;?>
