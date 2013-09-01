@@ -27,9 +27,15 @@ class SiteController extends Controller
 	 */
 	public function actionIndex()
 	{
-		// renders the view file 'protected/views/site/index.php'
-		// using the default layout 'protected/views/layouts/main.php'
-		$this->render('index');
+		// redirec to login page is user is guest
+		if (Yii::app()->user->isGuest)
+		{
+			$this->redirect(Yii::app()->createUrl('site/login'));
+		}
+		else
+		{
+			$this->render('index');
+		}
 	}
 
 	/**
@@ -45,11 +51,13 @@ class SiteController extends Controller
 		else
 		{
 			// create LoginForm object
-			$model=new LoginForm;
+			$model = new LoginForm;
 			
 			// if it is ajax validation request
 			if(isset($_POST['ajax']) && $_POST['ajax']==='login-form')
 			{
+
+				header('Content-type: application/json');
 				echo CActiveForm::validate($model);
 				Yii::app()->end();
 			}

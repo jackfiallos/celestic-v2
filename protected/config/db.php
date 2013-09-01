@@ -7,7 +7,7 @@ $db = array(
             'connectionString' => 'mysql:host=localhost;dbname=celestic',
 			'emulatePrepare' => true,
 			'username' => 'root',
-			'password' => '',
+			'password' => 'mysqlubuntu',
             'charset' => 'latin1',
             'tablePrefix' => '',
             'emulatePrepare' => true,

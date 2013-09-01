@@ -37,7 +37,8 @@ $main = array(
    	),
 
 	// Lenguaje de los mensajes
-	'sourceLanguage'=>'en_US',
+	'sourceLanguage' => 'en',
+	'language' => 'en_us',
 	
 	'localeDataPath'=>'protected/i18n/data/',
 
@@ -78,7 +79,7 @@ $main = array(
             'enableCsrfValidation' => true,
         ),
 		'urlManager'=>array(
-			'urlFormat'=>'get',
+			'urlFormat'=>'path',
 			'showScriptName'=>false,
 			'caseSensitive'=>false,
 			'rules'=>array(
