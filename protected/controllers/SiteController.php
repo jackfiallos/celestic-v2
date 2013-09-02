@@ -1,5 +1,14 @@
 <?php
-
+/**
+ * SiteController class file
+ * 
+ * @author		Jackfiallos
+ * @link		http://qbit.com.mx/labs/celestic
+ * @copyright 	Copyright (c) 2009-2013 Qbit Mexhico
+ * @license 	http://qbit.com.mx/labs/celestic/license/
+ * @description
+ *
+ **/
 class SiteController extends Controller
 {
 	/**
@@ -34,6 +43,18 @@ class SiteController extends Controller
 		}
 		else
 		{
+			// verify infoproject exist
+			if ((isset($_GET['infoproject'])) && (is_numeric($_GET['infoproject'])))
+			{ 
+				// verify is user has project send via GET params
+				$Project = Projects::model()->hasProject(Yii::app()->user->id, Yii::app()->request->getParam('infoproject', 0));
+				// project_id has relation with user_id then, save project information inside session
+				if (isset($Project->project_id))
+				{
+					Yii::app()->user->setState('project_selected', $Project->project_id);
+					Yii::app()->user->setState('project_selectedName', $Project->project_name);
+				}
+			}
 			$this->render('index');
 		}
 	}

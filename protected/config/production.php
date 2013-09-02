@@ -18,9 +18,9 @@ $main = include_once('main.php');
 $production = array(
 	'components' => array(
 		'db' =>  array(
-            //'connectionString' => 'mysql:host=localhost;dbname=celestic',
-			//'username' => 'qbit',
-			//'password' => 'Favq62mv',
+            'connectionString' => 'mysql:host=localhost;dbname=celestic',
+			'username' => 'root',
+			'password' => 'mysqlubuntu',
 			'class' => 'CDbConnection',
 			'emulatePrepare' => true,
 			'charset' => 'latin1',

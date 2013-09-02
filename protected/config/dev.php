@@ -44,10 +44,10 @@ $development = array(
 		// 			'categories'=>'system.*'
 		// 		),
 		// 		array(
-		// 				'class'=>'CFileLogRoute',
-		// 				'logFile'=>'apperror.log',
-		// 				'levels'=>'error, warning',
-		// 				'categories'=>'error.*'
+		// 			'class'=>'CFileLogRoute',
+		// 			'logFile'=>'apperror.log',
+		// 			'levels'=>'error, warning',
+		// 			'categories'=>'error.*'
 		// 		),
 		// 		array(
 		// 			'class'=>'CProfileLogRoute'
