@@ -11,6 +11,21 @@
  **/
 class DefaultController extends Controller
 {
+	/**
+	 * @var CActiveRecord the currently loaded data model instance.
+	 */
+	private $_model;
+	
+	/**
+	 * @var resourceFolder saved inside all uploaded images
+	 */
+	const FOLDERIMAGES = 'resources/';
+	
+	/**
+	 * @var string temporal filename
+	 */
+	private $tmpFileName = '';
+
 	public function actionIndex()
 	{
 		// verify if user has permissions to indexDownloads
@@ -46,6 +61,10 @@ class DefaultController extends Controller
 		}
 	}
 
+	/**
+	 * [actionCreate description]
+	 * @return [type] [description]
+	 */
 	public function actionCreate()
 	{
 		// verify if user has permissions to createDownloads
@@ -134,13 +153,16 @@ class DefaultController extends Controller
 					$this->redirect(array('view','id'=>$model->document_id));
 				}					
 			}
+			$this->layout = false;
 
-			// response with create view
+			// response with render view
 			$this->render('create',array(
 				'model'=>$model,
 			));
 		}
 		else
+		{
 			throw new CHttpException(403, Yii::t('site', '403_Error'));
+		}
 	}
 }

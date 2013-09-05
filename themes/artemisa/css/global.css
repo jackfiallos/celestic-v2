@@ -1,6 +1,5 @@
 .navbar #info {
-	font-size: 11px;
-	font-weight: bold;
+	font-size: 13px;
 	padding-right: 85px;
 	position: absolute;
 	right: 20px;
@@ -118,6 +117,20 @@ ul.aboutModuleInformationList li {
 .aboutModuleInformation ul.aboutModuleInformationList li span.aboutModuleInformationDesc {
 	color: #74838F;
 	display: block;
-	font-size: 12px;
+	font-size: 13px;
 	margin: 0 10px 13px 48px;
+}
+
+.help-inline {
+	width: 100%;
+}
+
+.help-inline label {
+	font-size:11px;
+	color: #3a87ad;
+}
+
+label .required {
+	color: #b94a48;
+	font-weight: bold;
 }

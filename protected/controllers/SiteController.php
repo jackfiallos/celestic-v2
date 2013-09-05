@@ -107,4 +107,24 @@ class SiteController extends Controller
 		Yii::app()->user->logout();
 		$this->redirect(Yii::app()->homeUrl);
 	}
+
+	/**
+	 * [actionError description]
+	 * @return [type] [description]
+	 */
+	public function actionError()
+	{
+		$this->layout = 'error';
+		if ($error = Yii::app()->errorHandler->error)
+		{
+			if(Yii::app()->request->isAjaxRequest)
+			{
+				echo $error['message'];
+			}
+			else
+			{
+				$this->render('error', $error);
+			}
+		}
+	}
 }

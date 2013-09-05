@@ -19,9 +19,6 @@ $main = array(
 	'basePath'=>dirname(__FILE__).DIRECTORY_SEPARATOR.'..',
 	'name'=>'Celestic',
 
-	// preloading components
-	'preload'=>array('log'),
-
 	// autoloading model and component classes
 	'import'=>array(
 		'application.models.*',
@@ -47,14 +44,10 @@ $main = array(
 
 	// alias shortcodes
    	'aliases' => array(
-        'widgets' => 'application.widgets',
+        'widgets' => 'application.widgets'
 	),
 
 	'modules'=>array(
-		'gii'=>array(
-			'class'=>'system.gii.GiiModule',
-			'password'=>'jack'
-		),
         'documents',
         'milestones',
         'cases',
@@ -66,25 +59,26 @@ $main = array(
 	// application components
 	'components'=>array(
 		'messages'=>array(
-			'class'=>'CPhpMessageSource',
+			'class'=>'CPhpMessageSource'
 		),
 		'user'=>array(
 			'allowAutoLogin'=>true,
 			'loginUrl'=>array('site/login'),
-			'class' => 'ValidateUser',
+			'class' => 'ValidateUser'
 		),
 		'request' => array(
 			'class' => 'CHttpRequest',
             'enableCookieValidation' => true,
-            'enableCsrfValidation' => true,
+            'enableCsrfValidation' => true
         ),
 		'urlManager'=>array(
-			'urlFormat'=>'path',
+			'urlFormat'=>'get',
 			'showScriptName'=>false,
 			'caseSensitive'=>false,
 			'rules'=>array(
-				'index'=>array('site/index'),
-				'login'=>array('site/login')
+				'<module:\w+>/'=>'<module>/default/index',
+				'<module:\w+>/<action:\w+>'=>'<module>/default/<action>',
+				'<action:\w+>'=>array('site/<action>'),
 			)
         ),
 		'authManager'=>array(
@@ -92,11 +86,10 @@ $main = array(
 			'connectionID'=>'db',
 			'itemTable'=>'stb_authItems',
 			'assignmentTable'=>'stb_authAssignments',
-			'itemChildTable'=>'stb_authItemChilds',
+			'itemChildTable'=>'stb_authItemChilds'
 		),
 		'errorHandler'=>array(
-			// use 'site/error' action to display errors
-			'errorAction'=>'site/error',
+			'errorAction'=>'site/error'
 		)
 	),
 
@@ -121,7 +114,7 @@ $main = array(
 		'database_format'=>array(
 			'date'=>'yyyy-MM-dd',
 			'time'=>'HH:mm:ss',
-			'dateTimeFormat'=>'{1} {0}',
+			'dateTimeFormat'=>'{1} {0}'
 		),
 		'modules'=>array(
 			'tasks'=>array(
@@ -171,8 +164,8 @@ $main = array(
 				'icon'=>'flag_germany.png',
 				'lang'=>'de_de'
 			)
-		),
-	),
+		)
+	)
 );
 
 return CMap::mergeArray($main, $db);

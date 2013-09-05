@@ -2,7 +2,7 @@
 <!--[if lt IE 7]> <html class="lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
 <!--[if IE 7]>    <html class="lt-ie9 lt-ie8"> <![endif]-->
 <!--[if IE 8]>    <html class="lt-ie9"> <![endif]-->
-<!--[if gt IE 8]><!--> <html> <!--<![endif]-->
+<!--[if gt IE 8]><!--> <html lang="en" ng-app="celestic"> <!--<![endif]-->
 <head>
 	<title><?php echo CHtml::encode($this->pageTitle); ?></title>
 	<meta charset="UTF-8" />
@@ -47,16 +47,16 @@
 						?>
 					</p>
 					<?php 
-						$this->widget('application.extensions.VGGravatarWidget.VGGravatarWidget', 
-							array(
-								'email' => CHtml::encode(Yii::app()->user->getState('user_email')),
-								'hashed' => false,
-								'default' => 'http://'.$_SERVER['SERVER_NAME'].Yii::app()->request->baseUrl.'/images/bg-avatar.png',
-								'size' => 65,
-								'rating' => 'PG',
-								'htmlOptions' => array('class'=>'borderCaption','alt'=>'Gravatar Icon' ),
-							)
-						);
+						// $this->widget('application.extensions.VGGravatarWidget.VGGravatarWidget', 
+						// 	array(
+						// 		'email' => CHtml::encode(Yii::app()->user->getState('user_email')),
+						// 		'hashed' => false,
+						// 		'default' => 'http://'.$_SERVER['SERVER_NAME'].Yii::app()->request->baseUrl.'/images/bg-avatar.png',
+						// 		'size' => 65,
+						// 		'rating' => 'PG',
+						// 		'htmlOptions' => array('class'=>'borderCaption','alt'=>'Gravatar Icon' ),
+						// 	)
+						// );
 					?>
 				</div>
 			<?php endif; ?>

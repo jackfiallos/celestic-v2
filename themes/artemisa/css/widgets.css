@@ -127,7 +127,7 @@ padding: 5px 0;
 list-style: none;
 border-top: 1px solid #fff;
 border-bottom: 1px solid #eee;
-font-size: 12px;
+font-size: 13px;
 }
 
 ul.dashboard-list li i {
@@ -162,7 +162,7 @@ margin-left: 0px !important;
 padding: 5px;
 border-top: 1px solid #fff;
 border-bottom: 1px solid #f6f6f6;
-font-size: 12px;
+font-size: 13px;
 position: relative;
 }
 
@@ -194,7 +194,7 @@ list-style: none;
 padding: 5px 0;
 border-top: 1px solid #fff;
 border-bottom: 1px solid #eee;
-font-size: 12px;
+font-size: 13px;
 }
 
 ul.tickets li:last-child {
@@ -252,7 +252,7 @@ border-top: 3px solid #f9f9f9;
 border-bottom: 3px solid #f9f9f9;
 padding: 10px 0px;
 margin-bottom: 20px;
-font-size: 12px;
+font-size: 13px;
 }
 
 .attachments ul {
@@ -265,7 +265,7 @@ margin: 10px 0;
 }
 
 .attachments ul li span.label {
-font-size: 12px !important;
+font-size: 13px !important;
 }
 
 .attachments ul li span.quickMenu {
@@ -367,7 +367,7 @@ padding: 5px 0 5px 25px;
   	text-shadow: 0 -1px 1px rgba(0, 0, 0, 0.15);
 	font-family: 'Open Sans', sans-serif;
 	font-weight: 600;
-	font-size: 12px;
+	font-size: 13px;
 	padding: 3px 6px;
 }
 
