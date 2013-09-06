@@ -100,6 +100,6 @@ $cs = Yii::app()->clientScript;
 $cs->registerScriptFile(Yii::app()->theme->baseUrl.'/js/lib/angular.min.js', CClientScript::POS_END);
 $cs->registerScriptFile(Yii::app()->theme->baseUrl.'/js/documents.module.js', CClientScript::POS_END);
 $cs->registerScript('documentsScript', "
-	Celestic.CSRF_Token = '".Yii::app()->request->csrfToken."';
+	// Celestic.CSRF_Token = '".Yii::app()->request->csrfToken."';
 ");
 ?>

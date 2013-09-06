@@ -10,7 +10,7 @@
 		'ng-submit'=>'submitForm()',
 		'onsubmit'=>'return false'
 	),
-	'enableAjaxValidation'=>false,
+	'enableAjaxValidation'=>false
 )); ?>
 
 	<div class="alert alert-info">
@@ -46,11 +46,13 @@
 	</div>	
 	
 	<div class="row-fluid">
-		<?php echo $form->labelEx($model,'document_description'); ?>
-		<div class="controls">
-			<?php echo $form->textArea($model,'document_description',array('style'=>'width:100%', 'tabindex'=>3)); ?>
-			<div class="help-inline">
-				<?php echo CHtml::label(Yii::t('documents','FormDocumentDescription'), CHtml::activeId($model, 'document_description'), array('class'=>'labelhelper')); ?>
+		<div class="control-group">
+			<?php echo $form->labelEx($model,'document_description'); ?>
+			<div class="controls">
+				<?php echo $form->textArea($model,'document_description',array('style'=>'width:100%', 'tabindex'=>3)); ?>
+				<div class="help-inline">
+					<?php echo CHtml::label(Yii::t('documents','FormDocumentDescription'), CHtml::activeId($model, 'document_description'), array('class'=>'labelhelper')); ?>
+				</div>
 			</div>
 		</div>
 

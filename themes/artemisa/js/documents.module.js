@@ -18,11 +18,11 @@ Celestic.config(
  * @return {[type]}            [description]
  */
 Celestic.factory('sharedService', function($rootScope) {
-    return {
-        broadcast: function(value) {
-            $rootScope.$broadcast('handleBroadcast', value);
-        }
-    };
+	return {
+		broadcast: function(value) {
+			$rootScope.$broadcast('handleBroadcast', value);
+		}
+	};
 });
 
 /**
@@ -47,7 +47,7 @@ Celestic.controller('celestic.documents.home.controller', function($scope, $http
  * @param  {[type]} sharedService [description]
  * @return {[type]}               [description]
  */
-Celestic.controller('celestic.documents.create.controller', function($scope, $http, sharedService) {
+Celestic.controller('celestic.documents.create.controller', function($scope, $http, $location, sharedService) {
 	sharedService.broadcast(false);
 
 	$scope.showHome = function() {
@@ -61,16 +61,28 @@ Celestic.controller('celestic.documents.create.controller', function($scope, $ht
 		for(var x in inputs) {
 			fd.append(inputs[x].name, inputs[x].value);
 		}
-		fd.append('Documents[image]', jQuery('#Documents_image').val());
+		fd.append('Documents[image]', jQuery('#Documents_image').prop('files')[0]);
 
 		jQuery.ajax({
 			type: 'POST',
+			dataType:'json',
 			processData: false,
 			contentType: false,
 			url: jQuery('#documents-form').attr('action'),
 			data: fd,
 			success:function(data){
-				console.log(data);
+				if (!data.success) {
+					for(var fields in data.error) {
+						jQuery('#'+fields).closest('.control-group').addClass('error');
+						jQuery('#'+fields).next().html(data.error[fields][0]);
+					}
+				}
+				else {
+					$scope.$apply(function() {
+						$location.path('/home');
+						sharedService.broadcast(true);
+					});
+				}
 			}
 		});
 	};

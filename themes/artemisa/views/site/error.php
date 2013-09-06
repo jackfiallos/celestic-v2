@@ -10,7 +10,9 @@ $this->breadcrumbs=array(
 <div class="error_main">
 <!--Place Your Logo Here--> 
 	<div class="logo">
-		<a href="#" title="Place your logo here"><img src="images/your_logo.png" alt="Place your logo here"></a>
+		<a href="#" title="Place your logo here">
+			<img src="<?php echo Yii::app()->baseUrl; ?>images/celestic.png" alt="<?php echo CHtml::encode(Yii::app()->name).' v.'.Yii::app()->params['appVersion']?>">
+		</a>
 	</div>
 	<!--Displays UFO -->
 	<div class="ufo ufo-image">

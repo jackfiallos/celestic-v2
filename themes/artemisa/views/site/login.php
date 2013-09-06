@@ -132,7 +132,7 @@ $cs->registerScriptFile(Yii::app()->theme->baseUrl.'/js/lib/angular.min.js', CCl
 $cs->registerScriptFile(Yii::app()->theme->baseUrl.'/js/lib/angular-cookies.min.js', CClientScript::POS_END);
 $cs->registerScriptFile(Yii::app()->theme->baseUrl.'/js/login.configuration.js', CClientScript::POS_END);
 $cs->registerScript('loginScript', "
-	Celestic.loginUrl = '".Yii::app()->createAbsoluteUrl('site/login')."';
-	Celestic.CSRF_Token = '".Yii::app()->request->csrfToken."';
+	// Celestic.loginUrl = '".Yii::app()->createAbsoluteUrl('site/login')."';
+	// Celestic.CSRF_Token = '".Yii::app()->request->csrfToken."';
 ");
 ?>
