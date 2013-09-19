@@ -32,7 +32,17 @@ class DocumentsSearchForm extends CFormModel
 		'xls'	=> 'application/vnd.ms-excel',
 		'ppt'	=> 'application/vnd.ms-powerpoint',
 		'odt'	=> 'application/vnd.oasis.opendocument.text',
-		'ods'	=> 'application/vnd.oasis.opendocument.spreadsheet'
+		'ods'	=> 'application/vnd.oasis.opendocument.spreadsheet',
+		'xlsx' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+		'xltx' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.template',
+		'potx' => 'application/vnd.openxmlformats-officedocument.presentationml.template',
+		'ppsx' => 'application/vnd.openxmlformats-officedocument.presentationml.slideshow',
+		'pptx' => 'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+		'sldx' => 'application/vnd.openxmlformats-officedocument.presentationml.slide',
+		'docx' => 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+		'dotx' => 'application/vnd.openxmlformats-officedocument.wordprocessingml.template',
+		'xlam' => 'application/vnd.ms-excel.addin.macroEnabled.12',
+		'xlsb' => 'application/vnd.ms-excel.sheet.binary.macroEnabled.12'
 	);
 	
 	/**
@@ -60,6 +70,10 @@ class DocumentsSearchForm extends CFormModel
 		);
 	}
 	
+	/**
+	 * [search description]
+	 * @return [type] [description]
+	 */
 	public function search()
 	{
 		$selected = Yii::app()->user->getState('project_selected');
@@ -69,25 +83,20 @@ class DocumentsSearchForm extends CFormModel
 		$criteria->compare('document_description',trim($this->document_description),true);
 		$criteria->compare('document_revision',trim($this->document_revision),true);
 		$criteria->compare('project_id',(!empty($selected)) ? $selected : ($this->project_id));
-		$criteria->compare('document_type',isset($this->extensions[trim($this->document_type)]) ? $this->extensions[trim($this->document_type)] : null, true);
-		/*$criteria->join = 'LEFT JOIN tb_documents dt ON t.document_baseRevision = dt.document_baseRevision AND t.document_id < dt.document_id';
-		$criteria->condition = 'dt.document_id IS NULL AND t.project_id = :project_id';
-		$criteria->condition = 't.project_id = :project_id';
-		$criteria->params = array(
-			':project_id' => $selected,
-		);*/
-		$criteria->order = 't.document_id DESC';
+		$criteria->compare('document_type', isset($this->extensions[trim($this->document_type)]) ? $this->extensions[trim($this->document_type)] : null, true);
+		$criteria->order = 't.document_uploadDate DESC';
 		$criteria->group = 't.document_baseRevision';
-
-		$items = new CActiveDataProvider('Documents', array(
-			'criteria'=>$criteria,
-		));
 		
-		$this->_itemsCount = $items->totalItemCount;
+		$items = Documents::model()->findAll($criteria);
+		
+		$this->_itemsCount = count($items);
 		return $items;
 	}
 	
-	
+	/**
+	 * [getItemsCount description]
+	 * @return [type] [description]
+	 */
 	public function getItemsCount()
 	{
 		return $this->_itemsCount;

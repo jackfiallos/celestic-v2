@@ -362,7 +362,7 @@ padding: 5px 0 5px 25px;
 	background-image: linear-gradient(top, hsl(11, 95%, 76%), hsl(11, 95%, 61%));
 }
 
-.label,
+/*.label,
 .badge {
   	text-shadow: 0 -1px 1px rgba(0, 0, 0, 0.15);
 	font-family: 'Open Sans', sans-serif;
@@ -471,4 +471,4 @@ padding: 5px 0 5px 25px;
 	background-image: -ms-linear-gradient(top, hsl(200, 80%, 82%), hsl(200, 81%, 67%));
 	background-image: -o-linear-gradient(top, hsl(200, 80%, 82%), hsl(200, 81%, 67%));
 	background-image: linear-gradient(top, hsl(200, 80%, 82%), hsl(200, 81%, 67%));
-}
+}*/

@@ -15,6 +15,23 @@ class DefaultController extends Controller
 	 * @var CActiveRecord the currently loaded data model instance.
 	 */
 	private $_model;
+
+	/**
+	 * [$officeDocs description]
+	 * @var array
+	 */
+	private $officeDocs = array(
+		'xlsx' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+		'xltx' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.template',
+		'potx' => 'application/vnd.openxmlformats-officedocument.presentationml.template',
+		'ppsx' => 'application/vnd.openxmlformats-officedocument.presentationml.slideshow',
+		'pptx' => 'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+		'sldx' => 'application/vnd.openxmlformats-officedocument.presentationml.slide',
+		'docx' => 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+		'dotx' => 'application/vnd.openxmlformats-officedocument.wordprocessingml.template',
+		'xlam' => 'application/vnd.ms-excel.addin.macroEnabled.12',
+		'xlsb' => 'application/vnd.ms-excel.sheet.binary.macroEnabled.12'
+	);
 	
 	/**
 	 * @var resourceFolder saved inside all uploaded images
@@ -35,35 +52,99 @@ class DefaultController extends Controller
 		// verify if user has permissions to indexDownloads
 		if(Yii::app()->user->checkAccess('indexDownloads'))
 		{
-		
-			$view = (Yii::app()->user->getState('view') != null) ? Yii::app()->user->getState('view') : 'list'; 
-			if((isset($_GET['view'])) && (!empty($_GET['view'])))
-			{
-				if ($_GET['view'] == 'grid')
-				{
-					$view = 'grid';
-				}
-				else
-				{
-					$view = 'list';
-				}
-			}
-			Yii::app()->user->setState('view',$view);
-		
 			// create object Documents search form
-			$model=new DocumentsSearchForm;
-			$model->search();
-			$model->unsetAttributes();  // clear any default values
+			$model = new DocumentsSearchForm;
+			$documents = $model->search();
 			
-			// if form DocumentsSearchForm was used
-			if(isset($_GET['DocumentsSearchForm']))
+			if(Yii::app()->request->isPostRequest)
 			{
-				$model->attributes=$_GET['DocumentsSearchForm'];
+				$document = array();
+				foreach($documents as $item)
+				{
+					$timestamp = strtotime($item->document_uploadDate);
+
+					$type = $item->document_type;
+					if (in_array($type, $this->officeDocs))
+					{
+						$key = array_search($item->document_type, $this->officeDocs);
+						$type = 'office/'.$key;
+					}
+
+					array_push($document, array(
+						'id'=>$item->document_id,
+						'name'=>CHtml::encode($item->document_name),
+						'description'=>CHtml::encode($item->document_description),
+						'url'=>$this->createUrl('index', array('#'=>'/view/'.$item->document_id)),
+						'downloadLink'=>$this->createUrl('download', array('id'=>$item->document_id)),
+						'imageType'=>Yii::app()->theme->baseUrl.'/images/icons/'.strtoupper(substr(strrchr($type,'/'),1)).'.png',
+						'userName'=>ucfirst(CHtml::encode($item->User->user_name)),
+						'userUrl'=>$this->createUrl('users/view', array('id'=>$item->User->user_id)),
+						'timestamp'=>Yii::app()->dateFormatter->format('MMMM d, yyy', $timestamp)
+					));
+				}
+
+				$labels = array(
+					'downloadLabel'=>Yii::t("documents","downloadFile"),
+					'orLabel'=>Yii::t('site','or'),
+					'viewDetailsLabel'=>Yii::t('documents','ViewDetails')
+				);
+				
+				header('Content-type: application/json');
+				echo CJSON::encode(array(
+					'documents'=>$document,
+					'labels'=>$labels
+				));
+				Yii::app()->end();
 			}
 			
-			$this->render('index',array(
-				'model'=>$model,
-			));
+			$this->render('index');
+		}
+		else
+		{
+			throw new CHttpException(403, Yii::t('site', '403_Error'));
+		}
+	}
+
+	/**
+	 * Displays a particular model.
+	 */
+	public function actionView()
+	{
+		// verify if user has permissions to viewDownloads
+		if(Yii::app()->user->checkAccess('viewDownloads'))
+		{
+			if (($_POST) && (Yii::app()->request->isPostRequest))
+			{
+				$model = null;
+
+				if(isset($_GET['id']))
+				{
+					$model = Documents::model()->with('Projects', 'User')->together()->findbyPk((int)$_GET['id']);
+				}
+
+
+				if($model === null)
+				{
+					throw new CHttpException(404, Yii::t('site', '404_Error'));
+				}
+				else 
+				{
+					header('Content-type: application/json');
+					echo CJSON::encode(array(
+						'document_name' => $model->document_name,
+						'document_description' => $model->document_description,
+						'document_uploadDate' => Yii::app()->dateFormatter->format('MMMM d, yyy', $model->document_uploadDate),
+						'document_download' => $this->createUrl('download', array('id'=>$model->document_id)),
+						'userName'=>ucfirst(CHtml::encode($model->User->user_name)),
+						'userUrl'=>$this->createUrl('users/view', array('id'=>$model->User->user_id)),
+					));
+					Yii::app()->end();
+				}
+			}
+
+			$this->layout = false;
+			// render page
+			$this->render('view');
 		}
 		else
 		{
@@ -107,6 +188,7 @@ class DefaultController extends Controller
 						if($model->image->saveAs($this::FOLDERIMAGES.$this->tmpFileName.'.'.$extension))
 						{
 							// set other attributes
+							$model->document_name = $model->image->getName();
 							$model->document_path = $this::FOLDERIMAGES.$this->tmpFileName.'.'.$extension;
 							$model->document_revision = '1';
 							$model->document_uploadDate = date("Y-m-d");
@@ -147,7 +229,7 @@ class DefaultController extends Controller
 							'log_date' => date("Y-m-d G:i:s"),
 							'log_activity' => 'DocumentCreated',
 							'log_resourceid' => $model->primaryKey,
-							'log_type' => 'created',
+							'log_type' => Logs::LOG_CREATED,
 							'user_id' => Yii::app()->user->id,
 							'module_id' => $this->module->getName(),
 							'project_id' => $model->project_id,
@@ -181,11 +263,30 @@ class DefaultController extends Controller
 						), true);
 						
 						$mailer->pushMail($subject, $str, $recipientsList, Emails::PRIORITY_NORMAL);
+
+						$type = $model->document_type;
+						if (in_array($type, $this->officeDocs))
+						{
+							$key = array_search($model->document_type, $this->officeDocs);
+							$type = 'office/'.$key;
+						}
+
+						$document = array(
+							'id'=>$model->document_id,
+							'name'=>$model->document_name,
+							'description'=>$model->document_description,
+							'url'=>$this->createUrl('index', array('#'=>'/view/'.$model->document_id)),
+							'downloadLink'=>$this->createUrl('download', array('id'=>$model->document_id)),
+							'imageType'=>Yii::app()->theme->baseUrl.'/images/icons/'.strtoupper(substr(strrchr($type,'/'),1)).'.png',
+							'userName'=>ucfirst(CHtml::encode($model->User->user_name)),
+							'userUrl'=>$this->createUrl('users/view', array('id'=>$model->User->user_id)),
+							'timestamp'=>Yii::app()->dateFormatter->format('MMMM d, yyy', strtotime($model->document_uploadDate))
+						);
 						
 						header('Content-type: application/json');
 						echo CJSON::encode(array(
 							'success'=>true,
-							'id'=>$model->document_id
+							'document'=>$document
 						));
 						Yii::app()->end();
 					}
@@ -193,17 +294,14 @@ class DefaultController extends Controller
 					{
 						header('Content-type: application/json');
 						echo CJSON::encode(array(
-							'error'=>array(
-								'description'=>'unknow'
-							)
+							'error'=>$model->getErrors()
 						));
 						Yii::app()->end();
 					}
 				}
 			}
+			
 			$this->layout = false;
-
-			// response with render view
 			$this->render('create',array(
 				'model'=>$model,
 			));

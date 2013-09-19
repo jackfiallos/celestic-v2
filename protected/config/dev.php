@@ -16,10 +16,13 @@ $main = include_once('main.php');
 
 // Development configurations
 $development = array(
+	// preloading components
+	'preload'=>array('log'),
+	
 	'modules'=>array(
 		'gii'=>array(
 			'class'=>'system.gii.GiiModule',
-			'password'=>'jack',
+			'password'=>'jack'
 		),
 	),
 	'components' => array(

@@ -87,7 +87,7 @@
 						<button class="glyphicons search"><i></i></button>
 					</div>
 					<?php
-						$this->widget('widgets.modules');
+						$this->widget('widgets.applicationModules');
 					?>
 				</div>
 			</div>			
@@ -109,9 +109,14 @@
   	Yii::app()->clientScript->registerCoreScript('jquery');
   	Yii::app()->clientScript->registerCoreScript('jquery.ui');
   	$cs->registerScriptFile(Yii::app()->theme->baseUrl.'/bootstrap/js/bootstrap.min.js', CClientScript::POS_END);
+  	$cs->registerScriptFile(Yii::app()->theme->baseUrl.'/js/lib/jquery.timeago.js',CClientScript::POS_END);
   	$cs->registerScriptFile(Yii::app()->theme->baseUrl.'/js/site.js', CClientScript::POS_END);
   	$cs->registerScript('mainScript',"
         jQuery('.dropdown-toggle').dropdown();
+
+		".Yii::t('site','jquery.timeago.configuration')."
+        jQuery.timeago.settings.allowFuture = true;
+        jQuery('abbr.timeago').timeago();
     ", CClientScript::POS_READY);
   	?>
 

@@ -51,9 +51,9 @@ $main = array(
         'documents',
         'milestones',
         'cases',
-        'tasks',
+        /*'tasks',
         'tests',
-        'install'
+        'install'*/
 	),
 
 	// application components

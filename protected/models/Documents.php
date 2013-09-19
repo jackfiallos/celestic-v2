@@ -46,7 +46,7 @@ class Documents extends CActiveRecord
 		return array(
 			array('project_id, document_name, document_description, image, user_id', 'required', 'message'=>Yii::t('inputValidations','RequireValidation')),
 			array('project_id, document_revision, document_baseRevision, comment_id, user_id', 'numerical', 'integerOnly'=>true),
-			array('document_name, document_type', 'length', 'max'=>45, 'message'=>Yii::t('inputValidations','MaxValidation')),
+			array('document_name, document_type', 'length', 'max'=>100, 'message'=>Yii::t('inputValidations','MaxValidation')),
 			array('document_path', 'length', 'max'=>255, 'message'=>Yii::t('inputValidations','MaxValidation')),
 			array('document_name', 'length', 'min'=>8, 'message'=>Yii::t('inputValidations','MinValidation')),
 			array('image', 'file', 'types'=>'doc, docx, rtf, ppt, pptx, odt, ods, xls, xlsx, sql, wav, ogg, pdf, psd, ai, txt, bmp, jpg, jpeg, gif, png, svg, zip, rar, bz, bz2, z, tar, vsd', 'message'=>Yii::t('inputValidations','FileTypeValidation')),
@@ -101,18 +101,21 @@ class Documents extends CActiveRecord
 		// should not be searched.
 
 		$criteria=new CDbCriteria;
-
 		$criteria->compare('project_id',$this->project_id);
 		$criteria->compare('document_description',$this->document_description,true);
 		$criteria->compare('document_revision',$this->document_revision);
 		$criteria->compare('document_type',$this->document_type,true);
-		
+		$criteria->group = 'date(document_uploadDate)';
 
 		return new CActiveDataProvider(get_class($this), array(
 			'criteria'=>$criteria,
 		));
 	}
 	
+	/**
+	 * [behaviors description]
+	 * @return [type] [description]
+	 */
 	public function behaviors(){
 		return array(
 			'CSafeContentBehavor' => array( 
@@ -122,6 +125,11 @@ class Documents extends CActiveRecord
 		);
 	}
 	
+	/**
+	 * [findDocuments description]
+	 * @param  [type] $project_id [description]
+	 * @return [type]             [description]
+	 */
 	public function findDocuments($project_id)
     {
 		return Documents::model()->findAll(array(

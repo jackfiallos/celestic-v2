@@ -39,6 +39,7 @@
 
 .data-block header {
 	padding: 10px;
+	margin-bottom: 5px;
 }
 
 .data-block header.blue h2 {

@@ -10,7 +10,7 @@
  * @property array $modules
  *
  **/  
-class modules extends CWidget
+class applicationModules extends CWidget
 {
 	public $htmlOptions;
 	public $modules;

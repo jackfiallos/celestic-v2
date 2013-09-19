@@ -21,7 +21,7 @@ body {
     background:#f9f9f9;
     background:#ECECEC;
     background:#ffffff url(../images/pattern1.png) repeat;
-    font-size:12pt;
+    font-size:10pt;
     padding-bottom:35px;
 }
 a {
@@ -2096,18 +2096,6 @@ p.glyphicons.envelope i:before {
     -moz-border-radius:3px 3px 0 0;
     border-radius:3px 3px 0 0;
 }
-.progress .bar {
-    background-color:#D7D8DA;
-}
-.progress.progress-info .bar {
-    background-color:#93b9d8;
-}
-.progress.progress-succes .bar {
-    background-color:#468847;
-}
-.progress.progress-danger .bar {
-    background-color:#37a6cd;
-}
 .sliders-vertical span {
     height:120px;
     float:left;
@@ -2381,20 +2369,20 @@ hr {
     color:rgba(255, 255, 255, 0.4);
     text-shadow:none;
 }
-.btn-primary {
+/*.btn-primary {
     background:#37a6cd;
-    border:1px solid #2a87a7;
+    border:1px solid #236981;
     color:#ffffff;
     text-shadow:0 1px 0 rgba(0, 0, 0, 0.5);
-}
-.btn-primary.glyphicons i:before {
+}*/
+/*.btn-primary.glyphicons i:before {
     color:rgba(255, 255, 255, 0.4);
     text-shadow:none;
-}
-.btn-group.open .btn-primary.dropdown-toggle, .btn-primary.disabled, .btn-primary[disabled], .btn-primary:hover {
-    background:#37a6cd;
+}*/
+/*.btn-group.open .btn-primary.dropdown-toggle, .btn-primary.disabled, .btn-primary[disabled], .btn-primary:hover {
+    background:#31819C;
     color:#fff;
-}
+}*/
 .btn-primary .caret {
     border-top-color:#ffffff;
     border-bottom-color:#ffffff;
@@ -3277,4 +3265,91 @@ body.choose #choose-preview>span span {
         left:0;
         top:0;
     }
+}
+
+/*************************
+ * DOCUMENTS MODULE
+ *************************/
+.documents .summary div {
+	font-size: 12px;
+ }
+
+ .documents .groupdate {
+ 	font-size: 16px;
+	font-weight: bold;
+	border-top: 1px solid #ccbbcc;
+	padding-top: 5px;
+	text-align: right;
+ }
+
+.documents .view {
+	padding: 10px 0;
+	margin-bottom: 10px;
+}
+
+.documents .view span.icon {
+	float: left;
+}
+
+.documents .view span.icon img {
+	width: 64px;
+	height: 64px;
+}
+
+.documents .view span.description {
+	padding-left: 64px;
+	width: 100%;
+	display: block;
+}
+
+.documents .view span.description h3 {
+	font-size: 16px;
+	margin: 0;
+	line-height: 20px;
+}
+
+.documents .view span.description .dfooter div {
+	display: block;
+}
+
+.documents .view span.description .dfooter span, .dfooter {
+	padding-right: 5px;
+	color: #AFADAD;
+}
+
+.documents .ddescription {
+	font-size: 16px;
+}
+
+/*************************
+ * MILESTONES MODULE
+ *************************/
+
+.milestones .view {
+	padding: 10px 0;
+	margin-bottom: 10px;
+	border-bottom: 1px solid #ccc;
+}
+
+.milestones .view span.icon {
+	float: left;
+	position: relative;
+}
+
+.milestones span.description {
+	width: 100%;
+	display: block;
+}
+
+.milestones .view span.description h3 {
+	font-size: 16px;
+	line-height: 20px;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	overflow: hidden;
+}
+
+.milestones span.description blockquote {
+	margin: 0px;
+	margin-left: 65px;
 }

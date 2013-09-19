@@ -207,18 +207,19 @@ class Logs extends CActiveRecord
 		$mailer->Ready($subject, $str, $recipientsList);
 	}
 	
-	public function getCountComments($module_name, $resource_id)
+	/**
+	 * [getCountComments description]
+	 * @param  [type] $module_name [description]
+	 * @param  [type] $resource_id [description]
+	 * @return [type]              [description]
+	 */
+	public static function getCountComments($module_name, $resource_id)
 	{
-		//get_class($this)
-		$criteria=new CDbCriteria;
-		$criteria->compare('module_name',$module_name);
-		$module_id = Modules::model()->find($criteria)->module_id;
-		
-		return Logs::model()->count(array(
-			'condition'=>'t.module_id = :module_id AND t.log_resourceid = :resource_id AND t.log_commentid <> 0',
+		return (int)Logs::model()->with('Module')->together()->count(array(
+			'condition'=>'Module.module_name = :module_name AND t.log_resourceid = :resource_id AND t.log_commentid <> 0',
 			'params'=>array(
-				':module_id' => $module_id,
-				':resource_id' => $resource_id,
+				':module_name' => $module_name,
+				':resource_id' => (int)$resource_id,
 			)
 		));
 	}
