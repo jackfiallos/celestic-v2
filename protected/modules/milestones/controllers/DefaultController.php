@@ -12,8 +12,46 @@
 class DefaultController extends Controller
 {
 	/**
-	 * Lists all models.
-	 * @return index view
+	 * @return array action filters
+	 */
+	public function filters()
+	{
+		return array(
+			'accessControl', // perform access control for CRUD operations
+			array(
+				'application.filters.YXssFilter',
+				'clean'   => '*',
+				'tags'    => 'strict',
+				'actions' => 'all'
+			)
+		);
+	}
+
+	/**
+	 * Especify access control rights
+	 * @return array access rules
+	 */
+	public function accessRules()
+	{
+		return array(
+			array('allow', 
+				'actions'=>array(
+					'view',
+					'create',
+					'index'
+				),
+				'users'=>array('@'),
+				'expression'=>'!$user->isGuest',
+			),
+			array('deny',
+				'users'=>array('*'),
+			),
+		);
+	}
+
+	/**
+	 * [actionIndex description]
+	 * @return [type] [description]
 	 */
 	public function actionIndex()
 	{
@@ -33,7 +71,7 @@ class DefaultController extends Controller
 					array_push($milestone, array(
 						'id'=>$item->milestone_id,
 						'title'=>CHtml::encode($item->milestone_title),
-						'description'=>CHtml::encode($item->milestone_description),
+						'description'=>nl2br(CHtml::decode($item->milestone_description)),
 						'url'=>$this->createUrl('index', array('#'=>'/view/'.$item->milestone_id)),
 						'countComments'=>Logs::getCountComments($this->module->id, $item->milestone_id),
 						'userOwner'=>ucfirst(CHtml::encode($item->Users->user_name)),
@@ -60,8 +98,8 @@ class DefaultController extends Controller
 	}
 
 	/**
-	 * Creates a new model.
-	 * @return create view
+	 * [actionCreate description]
+	 * @return [type] [description]
 	 */
 	public function actionCreate()
 	{
@@ -173,6 +211,102 @@ class DefaultController extends Controller
 				'model'=>$model,
 				'users'=>$Users,
 			));
+		}
+		else
+		{
+			throw new CHttpException(403, Yii::t('site', '403_Error'));
+		}
+	}
+
+	/**
+	 * [actionView description]
+	 * @return [type] [description]
+	 */
+	public function actionView()
+	{
+		// check if user has permission to viewMilestones
+		if(Yii::app()->user->checkAccess('viewMilestones'))
+		{
+			if (($_POST) && (Yii::app()->request->isPostRequest))
+			{
+				$model = null;
+
+				if(isset($_GET['id']))
+				{
+					$model = Milestones::model()->findByPk((int)Yii::app()->request->getParam('id', 0));
+				}
+
+				if($model === null)
+				{
+					throw new CHttpException(404, Yii::t('site', '404_Error'));
+				}
+				else 
+				{
+					// Tasks dataprovider
+					$dataProviderTasks = Tasks::model()->findAll(array(
+						'condition'=>'t.milestone_id = :milestone_id',
+						'params'=>array(
+							':milestone_id'=>$model->milestone_id,
+						),
+						'order'=>'t.status_id ASC, t.task_priority DESC'
+					));
+
+					// finding by status
+					$criteria = new CDbCriteria;
+					$criteria->select = "count(t.status_id) as total";
+					$criteria->condition = "t.milestone_id = :milestone_id";
+					$criteria->params = array(
+						':milestone_id' => (int)Yii::app()->request->getParam('id', 0),
+					);			
+					$criteria->group = "t.status_id";
+					$foundTasksStatus = Tasks::model()->with('Status')->together()->findAll($criteria);
+
+					$TasksStatus = array();
+					foreach($foundTasksStatus as $task)
+					{
+						$TasksStatus[] = array(
+							'name' => $task->Status->status_name,
+							'data' => intval($task->total),
+						);
+					}
+
+					// finding by priority
+					$criteria = new CDbCriteria;
+					$criteria->select = "t.task_priority, count(t.task_priority) as total";
+					$criteria->condition = "t.milestone_id = :milestone_id";
+					$criteria->params = array(
+						':milestone_id' => (int)Yii::app()->request->getParam('id', 0),
+					);			
+					$criteria->group = "t.task_priority";
+					$foundTasksPriority = Tasks::model()->findAll($criteria);
+					$TasksPriority = array();
+					foreach($foundTasksPriority as $task)
+					{
+						$TasksPriority[] = array(Tasks::getNameOfTaskPriority($task->task_priority), intval($task->total));
+					}
+
+					header('Content-type: application/json');
+					echo CJSON::encode(array(
+						'milestone'=>array(
+							'title'=>$model->milestone_title,
+							'description'=>nl2br(ECHtml::createLinkFromString(CHtml::encode($model->milestone_description))),
+							'duedate'=>Yii::app()->dateFormatter->formatDateTime($model->milestone_duedate, 'medium', false),
+							'owner'=>$model->Users->completeName,
+							'ownerUrl'=>$this->createUrl("users/view",array("id"=>$model->user_id)),
+							'completed'=>round(Milestones::model()->getMilestonePercent($model->milestone_id),2),
+							'isManager'=>Yii::app()->user->IsManager || Yii::app()->user->isOwner,
+							'milestone_editUrl'=>$this->createUrl('milestone', array('id'=>$model->milestone_id)),
+							'dataProviderTasks'=>$dataProviderTasks,
+							'TasksStatus'=>$TasksStatus,
+							'TasksPriority'=>$TasksPriority,
+						)
+					));
+					Yii::app()->end();
+				}
+			}
+
+			$this->layout = false;
+			$this->render('view');
 		}
 		else
 		{

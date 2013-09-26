@@ -79,15 +79,15 @@ class DocumentsSearchForm extends CFormModel
 		$selected = Yii::app()->user->getState('project_selected');
 		
 		$criteria=new CDbCriteria;
-		$criteria->compare('document_name',trim($this->document_name),true);
-		$criteria->compare('document_description',trim($this->document_description),true);
-		$criteria->compare('document_revision',trim($this->document_revision),true);
-		$criteria->compare('project_id',(!empty($selected)) ? $selected : ($this->project_id));
+		$criteria->compare('document_name', trim($this->document_name), true);
+		$criteria->compare('document_description', trim($this->document_description), true);
+		$criteria->compare('document_revision', trim($this->document_revision), true);
+		$criteria->compare('project_id', (!empty($selected)) ? $selected : ($this->project_id));
 		$criteria->compare('document_type', isset($this->extensions[trim($this->document_type)]) ? $this->extensions[trim($this->document_type)] : null, true);
 		$criteria->order = 't.document_uploadDate DESC';
 		$criteria->group = 't.document_baseRevision';
 		
-		$items = Documents::model()->findAll($criteria);
+		$items = Documents::model()->with('User')->together()->findAll($criteria);
 		
 		$this->_itemsCount = count($items);
 		return $items;

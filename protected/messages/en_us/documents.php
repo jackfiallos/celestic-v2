@@ -34,6 +34,7 @@ return array(
 	'selectOption' => 'Select an Option',
 	'lastRevision' => 'Last Revisions',
 	'download' => 'Download',
+	'upload' => 'Upload',
 	'downloadFile' => 'Download File',
 );
 ?>

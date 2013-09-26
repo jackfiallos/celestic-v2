@@ -38,6 +38,7 @@ return array(
 	'selectOption' => 'Eine Option auswählen',
 	'lastRevision' => 'Letzte Revisionen',
 	'download' => 'Herunterladen',
+	'upload' => 'Upload',
 	'downloadFile' => 'Datei herunterladen',
 );
 ?>

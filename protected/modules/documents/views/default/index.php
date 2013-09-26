@@ -9,11 +9,18 @@ $this->pageTitle = Yii::app()->name." - ".Yii::t('documents', 'TitleDocuments');
 				<?php echo Yii::t('documents', 'TitleDocuments'); ?>
 			</h1>
 			<div class="data-header-actions">
-				<?php echo CHtml::link("<i class=\"icon-plus-sign\"></i> ".Yii::t('documents', 'CreateDocuments'), $this->createUrl('index', array('#'=>'/create')), array('class'=>'btn')); ?>
+				<?php echo CHtml::link("<i class=\"icon-plus-sign\"></i> ".Yii::t('documents','upload'), $this->createUrl('index', array('#'=>'/create')), array('ng-click'=>'uploadform=true', 'ng-hide'=>'uploadform', 'class'=>'btn btn-primary', 'title'=>Yii::t('documents', 'CreateDocuments'))); ?>
 			</div>
 		</header>
 		<section>
-			<input type="text" class="search-query" placeholder="Filter Search" ng-model="search">
+
+			<?php echo $this->renderPartial('_form', array('model'=>$model)); ?>
+
+			<div class="input-append">
+				<input type="text" class="" placeholder="Filter Search" ng-model="search"> 
+				<i class="add-on icon-search"></i>
+			</div>
+
 			<div class="view" ng-show="hasDocuments" ng-repeat="document in documents | filter:search">
 				<div class="groupdate" ng-show="CreateHeader(document.timestamp)">
 					{{document.timestamp}}
@@ -31,6 +38,10 @@ $this->pageTitle = Yii::app()->name." - ".Yii::t('documents', 'TitleDocuments');
 						{{document.description}}
 					</div>
 					<div class="dfooter">
+						<div class="news-comments" ng-show="document.countComments > 0">
+							<img class="icon" src="<?php echo Yii::app()->theme->baseUrl; ?>/images/UI/speech-bubble-center-2.png" alt="">
+							<a href="#">{{document.countComments}} Comment(s)</a>
+						</div>
 						<span>
 							<?php echo Yii::t('documents', 'user_id'); ?> <a href="{{document.userUrl}}">{{document.userName}}</a>
 						</span>

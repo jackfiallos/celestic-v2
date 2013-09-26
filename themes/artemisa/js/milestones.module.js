@@ -64,10 +64,7 @@ Celestic.controller('celestic.milestones.home.controller', function($scope, $htt
 });
 
 Celestic.controller('celestic.milestones.view.controller', function($scope, $route, $routeParams, sharedService) {
-	$scope.document_name = 'asdf';
-	$scope.document_description = '';
-	$scope.document_uploadDate = '';
-	$scope.user_id = '';
+	$scope.milestone = {};
 
 	var id = ($routeParams.id || '');
 
@@ -86,10 +83,7 @@ Celestic.controller('celestic.milestones.view.controller', function($scope, $rou
 		},
 		success:function(data) {
 			$scope.$apply(function() {
-				$scope.document_name = data.document_name;
-				$scope.document_description = data.document_description;
-				$scope.document_uploadDate = data.document_uploadDate;
-				$scope.user_id = data.user_id;
+				$scope.milestone = data.milestone;
 			});
 		}
 	});

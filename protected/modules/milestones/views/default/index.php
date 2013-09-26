@@ -27,7 +27,7 @@ $this->pageTitle = Yii::app()->name." - ".Yii::t('milestones', 'TitleMilestones'
 						</div>
 						<div class="span4">
 							<div class="progress progress-striped" title="{{milestone.completed}}%" ng-show="milestone.completed > 0">
-								<div class="bar" style="width:{{milestone.completed}}%;"></div>
+								<span class="percent">{{milestone.completed}}%</span><div class="bar" style="width:{{milestone.completed}}%;"></div>
 							</div>
 						</div>
 					</div>
@@ -36,7 +36,7 @@ $this->pageTitle = Yii::app()->name." - ".Yii::t('milestones', 'TitleMilestones'
 					</span>
 					<blockquote>
 						<div class="moduleTextDescription corners">
-							{{milestone.description}}
+							<span ng-bind-html-unsafe="milestone.description"></span>
 						</div>
 						<div class="dfooter">
 							<span>

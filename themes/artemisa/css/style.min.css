@@ -516,6 +516,10 @@ ul.dropdown-menu li a:hover {
     margin:0;
 }
 #menu ul li a {
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	o-text-overflow: ellipsis;
     display:block;
     width:auto;
     border-bottom:1px solid #dddddd;
@@ -3298,7 +3302,6 @@ body.choose #choose-preview>span span {
 
 .documents .view span.description {
 	padding-left: 64px;
-	width: 100%;
 	display: block;
 }
 
@@ -3313,12 +3316,21 @@ body.choose #choose-preview>span span {
 }
 
 .documents .view span.description .dfooter span, .dfooter {
-	padding-right: 5px;
+	padding-top: 15px;
 	color: #AFADAD;
 }
 
-.documents .ddescription {
-	font-size: 16px;
+.documents .dfooter a {
+	position: relative;
+}
+
+.documents .details .icontype {
+	float: left;
+}
+
+.documents .details .ddescription {
+	padding-left: 64px;
+	display: block;
 }
 
 /*************************
@@ -3352,4 +3364,34 @@ body.choose #choose-preview>span span {
 .milestones span.description blockquote {
 	margin: 0px;
 	margin-left: 65px;
+}
+
+.milestones span.percent {
+	text-shadow: 1px 1px #1D435C;
+	position: absolute;
+	color: #fff;
+	font-weight: bold;
+	padding-left: 10px;
+}
+
+figure.media-object {
+	margin: 0 0 21px 0;
+}
+
+figure.media-object figcaption.caption {
+	padding: 7px 10.5px;
+	background: #f6f6f6;
+}
+
+.left {
+	float: left;
+}
+
+figcaption.caption img.icon {
+	vertical-align: bottom;
+	margin-right: 7px;
+}
+
+figcaption.caption a {
+	font-weight: bold;
 }

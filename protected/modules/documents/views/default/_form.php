@@ -1,4 +1,4 @@
-<div class="form">
+<div class="form well" ng-show="uploadform">
 
 <?php $form=$this->beginWidget('CActiveForm', array(
 	'id'=>'documents-form',
@@ -12,13 +12,6 @@
 	),
 	'enableAjaxValidation'=>false
 )); ?>
-
-	<div class="alert alert-info">
-  		<h4>Atenci&oacute;n!</h4>
-  		<?php echo Yii::t('documents','FieldsRequired'); ?>
-	</div>
-
-	<?php echo $form->errorSummary($model, null, null, array('class'=>'errorSummary stick'))."<br />"; ?>
 	
 	<div class="row-fluid">
 		<div class="control-group">
@@ -30,26 +23,24 @@
 				</div>
 			</div>
 		</div>
-	</div>	
-	
-	<div class="row-fluid">
+
 		<div class="control-group">
 			<?php echo $form->labelEx($model,'document_description'); ?>
 			<div class="controls">
-				<?php echo $form->textArea($model,'document_description',array('style'=>'width:100%')); ?>
+				<?php echo $form->textArea($model,'document_description',array('class'=>'span12')); ?>
 				<div class="help-inline">
 					<?php echo CHtml::label(Yii::t('documents','FormDocumentDescription'), CHtml::activeId($model, 'document_description'), array('class'=>'labelhelper')); ?>
 				</div>
 			</div>
 		</div>
 
-		<div class="form-actions row">
+		<div class="form-actions">
 			<div class="span6">
-				<?php echo CHtml::button($model->isNewRecord ? Yii::t('site','create') : Yii::t('site','save'), array('type'=>'submit', 'class'=>'btn btn-primary')); ?>
+				<?php echo CHtml::htmlButton($model->isNewRecord ? "<i class=\"icon-plus-sign\"></i> ".Yii::t('documents','upload') : Yii::t('site','save'), array('type'=>'submit', 'class'=>'btn btn-primary')); ?>
 				<?php echo CHtml::button(Yii::t('site','reset'), array('type'=>'reset', 'class'=>'btn')); ?>
 			</div>
 			<div class="span6">
-				<?php echo CHtml::link(Yii::t('site','return'), $this->createUrl('index', array('#'=>'/home')), array('class'=>'pull-right button', 'ng-click'=>'showHome()')); ?>
+				<?php echo CHtml::link(Yii::t('site','return'), $this->createUrl('index', array('#'=>'/home')), array('class'=>'pull-right button', 'ng-click'=>'uploadform=false', 'ng-show'=>'uploadform')); ?>
 			</div>
 		</div>
 	</div>

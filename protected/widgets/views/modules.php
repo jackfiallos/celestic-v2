@@ -3,7 +3,7 @@
 		<span>Modules</span>
 	</li>
 	<li class="glyphicons home <?php echo (!isset(Yii::app()->controller->module->id)) ? 'active' : ''; ?>">
-		<a href="<?php echo Yii::app()->createUrl('site/index'); ?>">
+		<a href="<?php echo Yii::app()->createUrl('site'); ?>">
 			<i></i><span>Dashboard</span>
 		</a>
 	</li>
@@ -13,7 +13,7 @@
 		</a>
 		<div class="projectlist">
 			<?php foreach(Yii::app()->user->getProjects() as $project): ?>
-				<a href="<?php echo Yii::app()->createUrl('site/index', array('infoproject'=>$project->project_id)); ?>"><?php echo $project->project_name; ?></a>
+				<a href="<?php echo Yii::app()->createUrl('site', array('infoproject'=>$project->project_id)); ?>"><?php echo $project->project_name; ?></a>
 			<?php endforeach; ?>
 		</div>
 	</li>
@@ -39,7 +39,7 @@
 						{
 							$active = ((Yii::app()->controller->module->id == $module) ? 'active' : '');
 						}
-						echo "<li class=\"glyphicons ".$active." ".Yii::app()->params['modules'][$module]['iconClass']."\"><a href=\"".Yii::app()->createUrl($module)."\"><i></i><span>".Yii::app()->params['modules'][$module]['title']."</span></a></li>";
+						echo "<li class=\"glyphicons ".$active." ".Yii::app()->params['modules'][$module]['iconClass']."\"><a href=\"".Yii::app()->createUrl($module.'/default/index')."\"><i></i><span>".Yii::app()->params['modules'][$module]['title']."</span></a></li>";
 					}
 				}
 			}

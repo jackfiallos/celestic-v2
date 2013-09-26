@@ -26,7 +26,7 @@ return array(
 	'create' => 'Create',
 	'save' => 'Update',
 	'reset' => 'Reset',
-	'return' => 'Return',
+	'return' => 'Cancel',
 	'send' => 'Send',
 	'search' => 'Search',
 	'comment' => 'Comment',
