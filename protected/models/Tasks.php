@@ -188,7 +188,7 @@ class Tasks extends CActiveRecord
 		return Tasks::model()->with('Users')->count($criteria);
 	}
 	
-	public function getNameOfTaskPriority($task_priority)
+	public static function getNameOfTaskPriority($task_priority)
 	{
 		$output = Yii::t('tasks','task_priority')." ";
 		switch($task_priority)

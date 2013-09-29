@@ -40,12 +40,6 @@ Celestic.controller('celestic.documents.home.controller', function($scope, $http
 	$scope.timestamp = '';
 	$scope.uploadform = false;
 
-	$scope.CreateHeader = function(timestamp) {
-		showHeader = (timestamp != $scope.timestamp);
-		$scope.timestamp = timestamp;
-		return showHeader;
-	};
-
 	jQuery.ajax({
 		type: 'POST',
 		dataType:'json',
@@ -63,6 +57,19 @@ Celestic.controller('celestic.documents.home.controller', function($scope, $http
 			});
 		}
 	});
+
+	$scope.$on('handleBroadcast', function(event, value, createdObject) {
+		$scope.ishome = value;
+		if (typeof(createdObject) != 'undefined') {
+			$scope.documents.unshift(createdObject);
+		}
+	});
+
+	$scope.CreateHeader = function(timestamp) {
+		showHeader = (timestamp != $scope.timestamp);
+		$scope.timestamp = timestamp;
+		return showHeader;
+	};
 
 	$scope.submitForm = function() {
 		var fd = new FormData();
@@ -96,13 +103,6 @@ Celestic.controller('celestic.documents.home.controller', function($scope, $http
 			}
 		});
 	};
-	
-	$scope.$on('handleBroadcast', function(event, value, createdObject) {
-		$scope.ishome = value;
-		if (typeof(createdObject) != 'undefined') {
-			$scope.documents.unshift(createdObject);
-		}
-	});
 });
 
 Celestic.controller('celestic.documents.view.controller', function($scope, $route, $routeParams, sharedService) {
@@ -111,10 +111,6 @@ Celestic.controller('celestic.documents.view.controller', function($scope, $rout
 	var id = ($routeParams.id || '');
 
 	sharedService.broadcast(false);
-
-	$scope.showHome = function() {
-		sharedService.broadcast(true);
-	};
 
 	jQuery.ajax({
 		type: 'POST',
@@ -129,4 +125,8 @@ Celestic.controller('celestic.documents.view.controller', function($scope, $rout
 			});
 		}
 	});
+
+	$scope.showHome = function() {
+		sharedService.broadcast(true);
+	};
 });

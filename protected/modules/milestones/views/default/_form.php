@@ -1,4 +1,4 @@
-<div class="form">
+<div class="form well" ng-show="milestonesForm">
 
 <?php $form=$this->beginWidget('CActiveForm', array(
 	'id'=>'milestones-form',
@@ -11,13 +11,6 @@
 	),
 	'enableAjaxValidation'=>false
 )); ?>
-
-	<div class="alert alert-info">
-  		<h4>Atenci&oacute;n!</h4>
-  		<?php echo Yii::t('milestones','FieldsRequired'); ?>
-	</div>
-
-	<?php echo $form->errorSummary($model,null,null,array('class'=>'errorSummary stick'))."<br />"; ?>
 	
 	<div class="row-fluid">
 		<div class="span6">
@@ -128,13 +121,13 @@
 			</div>
 		</div>
 
-		<div class="form-actions row">
+		<div class="form-actions">
 			<div class="span6">
 				<?php echo CHtml::button($model->isNewRecord ? Yii::t('site','create') : Yii::t('site','save'), array('type'=>'submit', 'class'=>'btn btn-primary')); ?>
 				<?php echo CHtml::button(Yii::t('site','reset'), array('type'=>'reset', 'class'=>'btn')); ?>
 			</div>
 			<div class="span6">
-				<?php echo CHtml::link(Yii::t('site','return'), $this->createUrl('index', array('#'=>'/home')), array('class'=>'pull-right button', 'ng-click'=>'showHome()')); ?>
+				<?php echo CHtml::link(Yii::t('site','return'), '', array('class'=>'showpointer pull-right', 'ng-click'=>'milestonesForm=false')); ?>
 			</div>
 		</div>
 

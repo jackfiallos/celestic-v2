@@ -33,6 +33,7 @@ return array(
 	'WelcomeMessage' => 'Καλως ήρθατε',
 	'LoggedAs' => 'Συνδεθήκατε ώς',
 	'jquery.timeago.configuration' => '
+		jQuery.timeago.settings.allowFuture = true;
 		jQuery.timeago.settings.strings = {
 		   prefixAgo: null,
 			prefixFromNow: null,

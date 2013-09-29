@@ -9,11 +9,17 @@ $this->pageTitle = Yii::app()->name." - ".Yii::t('milestones', 'TitleMilestones'
 				<?php echo Yii::t('milestones', 'TitleMilestones'); ?>
 			</h1>
 			<div class="data-header-actions">
-				<?php echo CHtml::link("<i class=\"icon-plus-sign\"></i> ".Yii::t('milestones', 'CreateMilestones'), $this->createUrl('index', array('#'=>'/create')), array('class'=>'btn')); ?>
+				<?php echo CHtml::link("<i class=\"icon-plus-sign\"></i> ".Yii::t('milestones', 'CreateMilestones'), $this->createUrl('index', array('#'=>'/create')), array('class'=>'btn btn-primary', 'ng-click'=>'milestonesForm=true', 'ng-hide'=>'milestonesForm', 'title'=>Yii::t('milestones', 'CreateMilestones'))); ?>
 			</div>
 		</header>
 		<section>
-			<input type="text" class="search-query" placeholder="Filter Search" ng-model="search">
+
+			<?php echo $this->renderPartial('_form', array('model'=>$model, 'users'=>$users)); ?>
+
+			<div class="input-append">
+				<input type="text" class="" placeholder="Filter Search" ng-model="search"> 
+				<i class="add-on icon-search"></i>
+			</div>
 			<hr />
 			<div class="view" ng-show="hasMilestones" ng-repeat="milestone in milestones | filter:search">
 				<span class="description">
@@ -32,7 +38,7 @@ $this->pageTitle = Yii::app()->name." - ".Yii::t('milestones', 'TitleMilestones'
 						</div>
 					</div>
 					<span class="icon">
-						<img style="width:64px;height:64px" src="<?php echo Yii::app()->theme->baseUrl; ?>/images/icons/PNG.png">
+						<i class="icon-calendar icon-3x"></i>
 					</span>
 					<blockquote>
 						<div class="moduleTextDescription corners">
@@ -103,6 +109,7 @@ $cs->registerScript('milestonesScript', "
     	var CelesticParams = window.CelesticParams || {};
     	CelesticParams.URL = {
 	        'create':'".$this->createUrl('create')."',
+	        'update':'".$this->createUrl('update')."',
 	        'view':'".$this->createUrl('view')."',
 	        'home':'".$this->createUrl('index')."'
 	    };

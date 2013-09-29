@@ -74,7 +74,7 @@ class DefaultController extends Controller
 						'description'=>nl2br(CHtml::decode($item->milestone_description)),
 						'url'=>$this->createUrl('index', array('#'=>'/view/'.$item->milestone_id)),
 						'countComments'=>Logs::getCountComments($this->module->id, $item->milestone_id),
-						'userOwner'=>ucfirst(CHtml::encode($item->Users->user_name)),
+						'userOwner'=>ucfirst(CHtml::encode($item->Users->completeName)),
 						'userOwnerUrl'=>$this->createUrl('users/view', array('id'=>$item->Users->user_id)),
 						'due_date'=>CHtml::encode($item->milestone_duedate),
 						'due_dateFormatted'=>CHtml::encode(Yii::app()->dateFormatter->format('dd.MM.yyyy', $item->milestone_duedate)),
@@ -89,7 +89,11 @@ class DefaultController extends Controller
 				Yii::app()->end();
 			}
 				
-			$this->render('index');
+			$this->render('index', array(
+				'model' => new Milestones,
+				'users' => Projects::model()->findManagersByProject(Yii::app()->user->getState('project_selected')),
+				'status'=>Status::model()->findAll(),
+			));
 		}
 		else
 		{
@@ -227,10 +231,10 @@ class DefaultController extends Controller
 		// check if user has permission to viewMilestones
 		if(Yii::app()->user->checkAccess('viewMilestones'))
 		{
+			$model = new Milestones();
+
 			if (($_POST) && (Yii::app()->request->isPostRequest))
 			{
-				$model = null;
-
 				if(isset($_GET['id']))
 				{
 					$model = Milestones::model()->findByPk((int)Yii::app()->request->getParam('id', 0));
@@ -243,13 +247,46 @@ class DefaultController extends Controller
 				else 
 				{
 					// Tasks dataprovider
-					$dataProviderTasks = Tasks::model()->findAll(array(
+					$dataProviderTasks = Tasks::model()->with('UserReported','Status')->together()->findAll(array(
 						'condition'=>'t.milestone_id = :milestone_id',
 						'params'=>array(
 							':milestone_id'=>$model->milestone_id,
 						),
 						'order'=>'t.status_id ASC, t.task_priority DESC'
 					));
+
+					$tasks = array();
+					foreach($dataProviderTasks as $data)
+					{
+						$class = '';
+						switch ($data->task_priority) {
+							case Tasks::PRIORITY_LOW:
+								$class = 'blue';
+								break;
+							case Tasks::PRIORITY_MEDIUM:
+								$class = 'yellow';
+								break;
+							case Tasks::PRIORITY_HIGH:
+								$class = 'red';
+								break;
+							default:
+								$class = 'blue';
+								break;
+						}
+
+						$tasks[] = array(
+							'status'=>$data->Status->status_name,
+							'taskTypes_id'=>$data->taskTypes_id,
+							'task_startDate'=>Yii::app()->dateFormatter->format('MMMM d, yyy', strtotime($data->task_startDate)),
+							'task_endDate'=>$data->task_endDate,
+							'task_id'=>$data->task_id,
+							'task_url'=>$this->createUrl('/tasks/view', array('id'=>$data->task_id)),
+							'task_name'=>$data->task_name,
+							'task_priority'=>Tasks::getNameOfTaskPriority($data->task_priority),
+							'task_priority_class'=>$class,
+							'user'=>$data->UserReported->CompleteName
+						);
+					}
 
 					// finding by status
 					$criteria = new CDbCriteria;
@@ -289,16 +326,15 @@ class DefaultController extends Controller
 					echo CJSON::encode(array(
 						'milestone'=>array(
 							'title'=>$model->milestone_title,
-							'description'=>nl2br(ECHtml::createLinkFromString(CHtml::encode($model->milestone_description))),
+							'description'=>nl2br(CHtml::encode($model->milestone_description)),
 							'duedate'=>Yii::app()->dateFormatter->formatDateTime($model->milestone_duedate, 'medium', false),
 							'owner'=>$model->Users->completeName,
 							'ownerUrl'=>$this->createUrl("users/view",array("id"=>$model->user_id)),
 							'completed'=>round(Milestones::model()->getMilestonePercent($model->milestone_id),2),
 							'isManager'=>Yii::app()->user->IsManager || Yii::app()->user->isOwner,
-							'milestone_editUrl'=>$this->createUrl('milestone', array('id'=>$model->milestone_id)),
-							'dataProviderTasks'=>$dataProviderTasks,
+							'dataProviderTasks'=>$tasks,
 							'TasksStatus'=>$TasksStatus,
-							'TasksPriority'=>$TasksPriority,
+							'TasksPriority'=>$TasksPriority
 						)
 					));
 					Yii::app()->end();
@@ -306,7 +342,70 @@ class DefaultController extends Controller
 			}
 
 			$this->layout = false;
-			$this->render('view');
+			$this->render('view', array(
+				'status'=>Status::model()->findAll(),
+				'model'=>$model,
+				'users'=>Projects::model()->findManagersByProject(Yii::app()->user->getState('project_selected'))
+			));
+		}
+		else
+		{
+			throw new CHttpException(403, Yii::t('site', '403_Error'));
+		}
+	}
+
+	/**
+	 * Updates a particular model.
+	 * @return update view
+	 */
+	public function actionUpdate()
+	{
+		// check if user has permissions to updateMilestones
+		if(Yii::app()->user->checkAccess('updateMilestones'))
+		{
+			// get Milestones object from $_GET['id'] parameter
+			$model=$this->loadModel();		
+
+			// only managers can update budgets
+			if (Yii::app()->user->IsManager)
+			{
+				// find all projects managers
+				$Users = Projects::model()->findManagersByProject($model->project_id);
+
+				if(isset($_POST['Milestones']))
+				{
+					// if Milestones form exist
+					$model->attributes=$_POST['Milestones'];
+
+					// validate and save
+					if($model->save())
+					{
+						// save log
+						$attributes = array(
+							'log_date' => date("Y-m-d G:i:s"),
+							'log_activity' => 'MilestoneUpdated',
+							'log_resourceid' => $model->milestone_id,
+							'log_type' => 'updated',
+							'user_id' => Yii::app()->user->id,
+							'module_id' => Yii::app()->controller->id,
+							'project_id' => $model->project_id,
+						);
+						Logs::model()->saveLog($attributes);
+
+						// to prevent F5 keypress, redirect to view page
+						$this->redirect(array('view','id'=>$model->milestone_id));
+					}
+				}
+
+				$this->render('update',array(
+					'model'=>$model,
+					'users'=>$Users,
+				));
+			}
+			else
+			{
+				throw new CHttpException(403, Yii::t('site', '403_Error'));
+			}
 		}
 		else
 		{

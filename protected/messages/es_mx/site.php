@@ -33,6 +33,7 @@ return array(
 	'WelcomeMessage' => 'Hola de nuevo',
 	'LoggedAs' => 'Sesi&oacute;n iniciada como',
 	'jquery.timeago.configuration' => '
+		jQuery.timeago.settings.allowFuture = true;
 		jQuery.timeago.settings.strings = {
 			prefixAgo: "hace",
 			refixFromNow: "dentro de",

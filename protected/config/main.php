@@ -40,7 +40,7 @@ $main = array(
 	'localeDataPath'=>'protected/i18n/data/',
 
 	// Codificacion default
-	'charset'=>'iso-8859-1',
+	'charset'=>'utf-8',
 
 	// alias shortcodes
    	'aliases' => array(

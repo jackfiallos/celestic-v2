@@ -1789,9 +1789,6 @@ p.glyphicons.envelope i:before {
 .tab-content {
     overflow:visible;
 }
-.label-important {
-    background:#37a6cd;
-}
 .label-block {
     display:block;
 }
@@ -3394,4 +3391,25 @@ figcaption.caption img.icon {
 
 figcaption.caption a {
 	font-weight: bold;
+}
+
+.milestones .ddescription {
+	margin: 0 0 12px;
+}
+
+.text-muted {
+	color: #999;
+}
+
+.showpointer {
+	cursor: pointer;
+}
+
+@media(max-width:480px) {
+	div#wrapper > div#menu {
+		display: none;
+	}
+	div#wrapper > div#content {
+		margin: 0;
+	}
 }

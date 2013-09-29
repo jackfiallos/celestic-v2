@@ -33,6 +33,7 @@ return array(
 	'WelcomeMessage' => 'Bemvindo de volta',
 	'LoggedAs' => 'Identificado como',
 	'jquery.timeago.configuration' => '
+		jQuery.timeago.settings.allowFuture = true;
 		jQuery.timeago.settings.strings = {
 		   prefixAgo: null,
 			prefixFromNow: null,
