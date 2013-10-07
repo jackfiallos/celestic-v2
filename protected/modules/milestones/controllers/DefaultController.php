@@ -36,8 +36,10 @@ class DefaultController extends Controller
 		return array(
 			array('allow', 
 				'actions'=>array(
+					'rearrange',
 					'view',
 					'create',
+					'update',
 					'index'
 				),
 				'users'=>array('@'),
@@ -136,7 +138,7 @@ class DefaultController extends Controller
 					// find project dates
 					$project_startDate = date("Ymd", strtotime($project->project_startDate));
 					$project_endDate = date("Ymd", strtotime($project->project_endDate));
-					
+
 					// If milestone dates are not within project dates ERROR!!
 					if (($milestone_startdate >= $project_startDate) && ($milestone_startdate <= $project_endDate))
 					{
@@ -176,16 +178,23 @@ class DefaultController extends Controller
 									'applicationName' => Yii::app()->name,
 									'applicationUrl' => "http://".$_SERVER['SERVER_NAME'].Yii::app()->request->baseUrl,
 								),true);
-								$mailer->pushMail($subject, $str, $recipientsList, Emails::PRIORITY_NORMAL);
+								//$mailer->pushMail($subject, $str, $recipientsList, Emails::PRIORITY_NORMAL);
 								
 								header('Content-type: application/json');
 								echo CJSON::encode(array(
 									'success'=>true,
-									'id'=>$model->milestone_id,
-									'milestone_title'=>$model->milestone_title,
-									'milestone_description'=>$model->milestone_description,
-									'milestone_startdate'=>$model->milestone_startdate,
-									'milestone_duedate'=>$model->milestone_duedate,
+									'milestones'=>array(
+										'id'=>$model->milestone_id,
+										'title'=>CHtml::encode($model->milestone_title),
+										'description'=>nl2br(CHtml::decode($model->milestone_description)),
+										'url'=>$this->createUrl('index', array('#'=>'/view/'.$model->milestone_id)),
+										'countComments'=>Logs::getCountComments($this->module->id, $model->milestone_id),
+										'userOwner'=>ucfirst(CHtml::encode($model->Users->completeName)),
+										'userOwnerUrl'=>$this->createUrl('users/view', array('id'=>$model->Users->user_id)),
+										'due_date'=>CHtml::encode($model->milestone_duedate),
+										'due_dateFormatted'=>CHtml::encode(Yii::app()->dateFormatter->format('dd.MM.yyyy', $model->milestone_duedate)),
+										'completed'=>round($model->percent, 2)
+									)
 								));
 								Yii::app()->end();
 							}
@@ -205,7 +214,7 @@ class DefaultController extends Controller
 				
 				header('Content-type: application/json');
 				echo CJSON::encode(array(
-					'error'=>json_decode(CActiveForm::validate($model))
+					'error'=>$model->getErrors()
 				));
 				Yii::app()->end();
 			}
@@ -261,21 +270,22 @@ class DefaultController extends Controller
 						$class = '';
 						switch ($data->task_priority) {
 							case Tasks::PRIORITY_LOW:
-								$class = 'blue';
+								$class = 'label-info';
 								break;
 							case Tasks::PRIORITY_MEDIUM:
-								$class = 'yellow';
+								$class = 'label-warning';
 								break;
 							case Tasks::PRIORITY_HIGH:
-								$class = 'red';
+								$class = 'label-important';
 								break;
 							default:
-								$class = 'blue';
+								$class = 'label-info';
 								break;
 						}
 
 						$tasks[] = array(
 							'status'=>$data->Status->status_name,
+							'class_status'=>'label-'.strtolower(str_replace(" ", "", $data->Status->status_name)),
 							'taskTypes_id'=>$data->taskTypes_id,
 							'task_startDate'=>Yii::app()->dateFormatter->format('MMMM d, yyy', strtotime($data->task_startDate)),
 							'task_endDate'=>$data->task_endDate,
@@ -326,9 +336,13 @@ class DefaultController extends Controller
 					echo CJSON::encode(array(
 						'milestone'=>array(
 							'title'=>$model->milestone_title,
+							'url'=>$this->createUrl('update', array('id'=>$model->milestone_id)),
 							'description'=>nl2br(CHtml::encode($model->milestone_description)),
 							'duedate'=>Yii::app()->dateFormatter->formatDateTime($model->milestone_duedate, 'medium', false),
+							'start_date'=>$model->milestone_startdate,
+							'due_date'=>$model->milestone_duedate,
 							'owner'=>$model->Users->completeName,
+							'ownerId'=>$model->user_id,
 							'ownerUrl'=>$this->createUrl("users/view",array("id"=>$model->user_id)),
 							'completed'=>round(Milestones::model()->getMilestonePercent($model->milestone_id),2),
 							'isManager'=>Yii::app()->user->IsManager || Yii::app()->user->isOwner,
@@ -364,7 +378,7 @@ class DefaultController extends Controller
 		if(Yii::app()->user->checkAccess('updateMilestones'))
 		{
 			// get Milestones object from $_GET['id'] parameter
-			$model=$this->loadModel();		
+			$model = Milestones::model()->findByPk((int)Yii::app()->request->getParam('id', 0));
 
 			// only managers can update budgets
 			if (Yii::app()->user->IsManager)
@@ -387,20 +401,35 @@ class DefaultController extends Controller
 							'log_resourceid' => $model->milestone_id,
 							'log_type' => 'updated',
 							'user_id' => Yii::app()->user->id,
-							'module_id' => Yii::app()->controller->id,
+							'module_id' => $this->module->getName(),
 							'project_id' => $model->project_id,
 						);
 						Logs::model()->saveLog($attributes);
 
-						// to prevent F5 keypress, redirect to view page
-						$this->redirect(array('view','id'=>$model->milestone_id));
+						header('Content-type: application/json');
+						echo CJSON::encode(array(
+							'success'=>true,
+							'milestone'=>array(
+								'id'=>$model->milestone_id,
+								'title'=>$model->milestone_title,
+								'description'=>$model->milestone_description,
+								'start_date'=>$model->milestone_startdate,
+								'due_date'=>$model->milestone_duedate,
+								'duedate'=>Yii::app()->dateFormatter->formatDateTime($model->milestone_duedate, 'medium', false),
+								'owner'=>$model->Users->completeName,
+								'ownerId'=>$model->user_id,
+								'isManager'=>Yii::app()->user->IsManager || Yii::app()->user->isOwner
+							)
+						));
+						Yii::app()->end();
 					}
 				}
 
-				$this->render('update',array(
-					'model'=>$model,
-					'users'=>$Users,
+				header('Content-type: application/json');
+				echo CJSON::encode(array(
+					'error'=>json_decode(CActiveForm::validate($model))
 				));
+				Yii::app()->end();
 			}
 			else
 			{

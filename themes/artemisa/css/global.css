@@ -131,6 +131,11 @@ ul.aboutModuleInformationList li {
 	color: #3a87ad;
 }
 
+.error .help-inline label {
+	font-size:11px;
+	color: #b94a48;
+}
+
 label .required {
 	color: #b94a48;
 	font-weight: bold;

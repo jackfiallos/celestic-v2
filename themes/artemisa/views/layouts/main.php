@@ -14,11 +14,11 @@
 	<link href="<?php echo Yii::app()->theme->baseUrl; ?>/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
 	<link href="<?php echo Yii::app()->theme->baseUrl; ?>/bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet" />
 	<link href="<?php echo Yii::app()->theme->baseUrl; ?>/css/glyphicons.css" rel="stylesheet" />
-	<link href="<?php echo Yii::app()->theme->baseUrl; ?>/css/style.min.css" rel="stylesheet" />
 	<link href="<?php echo Yii::app()->theme->baseUrl; ?>/css/widgets.css" rel="stylesheet" />
 	<!-- <link href="<?php echo Yii::app()->theme->baseUrl; ?>/css/font-awesome.min.css" rel="stylesheet" /> -->
 	<link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.no-icons.min.css" rel="stylesheet">
 	<link href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css" rel="stylesheet">
+	<link href="<?php echo Yii::app()->theme->baseUrl; ?>/css/style.min.css" rel="stylesheet" />
 	<link href="<?php echo Yii::app()->theme->baseUrl; ?>/css/global.css" rel="stylesheet" />
 	<link rel="shortcut icon" type="image/x-icon" href="<?php echo Yii::app()->request->baseUrl; ?>/favicon.png" />
 	<!--[if IE]>
@@ -112,11 +112,10 @@
   	Yii::app()->clientScript->registerCoreScript('jquery');
   	Yii::app()->clientScript->registerCoreScript('jquery.ui');
   	$cs->registerScriptFile(Yii::app()->theme->baseUrl.'/bootstrap/js/bootstrap.min.js', CClientScript::POS_END);
-  	$cs->registerScriptFile(Yii::app()->theme->baseUrl.'/js/lib/jquery.timeago.js',CClientScript::POS_END);
+  	$cs->registerScriptFile(Yii::app()->theme->baseUrl.'/js/lib/jquery.timeago.js', CClientScript::POS_END);
   	$cs->registerScriptFile(Yii::app()->theme->baseUrl.'/js/site.js', CClientScript::POS_END);
   	$cs->registerScript('mainScript',"
         jQuery('.dropdown-toggle').dropdown();
-
 		".Yii::t('site','jquery.timeago.configuration')."
         jQuery.timeago.settings.allowFuture = true;
         jQuery('abbr.timeago').timeago();

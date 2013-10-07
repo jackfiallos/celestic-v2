@@ -1,10 +1,10 @@
 <div class="form well" ng-show="milestonesForm">
 
 <?php $form=$this->beginWidget('CActiveForm', array(
-	'id'=>'milestones-form',
-	'action'=>$this->createUrl('create'),
+	'id'=>$id,
+	'action'=>$action,
 	'htmlOptions'=>array(
-		'name'=>'milestones-form',
+		'name'=>$id,
 		'class'=>'vertical-horizontal',
 		'ng-submit'=>'submitForm()',
 		'onsubmit'=>'return false'
@@ -17,7 +17,7 @@
 			<div class="control-group">
 				<?php echo $form->labelEx($model,'milestone_title'); ?>
 				<div class="controls">
-					<?php echo $form->textField($model,'milestone_title',array('class'=>'betterform')); ?>
+					<?php echo $form->textField($model,'milestone_title',array('class'=>'betterform', 'value'=>'{{milestone.title}}')); ?>
 					<div class="help-inline">
 						<?php echo CHtml::label(Yii::t('milestones','FormMilestoneTitle'), CHtml::activeId($model, 'milestone_title'), array('class'=>'labelhelper')); ?>
 					</div>
@@ -28,7 +28,7 @@
 			<div class="control-group">
 				<?php echo $form->labelEx($model, 'user_id'); ?>
 				<div class="controls">
-					<?php echo $form->dropDownList($model, 'user_id', CHtml::listData($users, 'user_id', 'completeName'),array('class'=>'betterform','empty'=>Yii::t('milestones', 'selectOption'))); ?>
+					<?php echo $form->dropDownList($model, 'user_id', CHtml::listData($users, 'user_id', 'completeName'),array('class'=>'betterform','empty'=>Yii::t('milestones', 'selectOption'), 'ng-model'=>'milestone.ownerId')); ?>
 					<div class="help-inline">
 						<?php echo CHtml::label(Yii::t('milestones','FormMilestoneUser'), CHtml::activeId($model, 'user_id'), array('class'=>'labelhelper')); ?>
 					</div>
@@ -47,10 +47,12 @@
 							'options'=>array(
 								'showAnim'=>'fold',
 							),
+							'name'=>$id.'_'.CHtml::activeId($model, 'milestone_startdate'),
 							'model'=>$model,
 							'attribute'=>'milestone_startdate',
 							'htmlOptions'=>array(
-								'class'=>'betterform'
+								'class'=>'betterform',
+								'value'=>'{{milestone.start_date}}'
 							),
 							'options'=>array(
 								'dateFormat'=>'yy-mm-dd',
@@ -62,7 +64,7 @@
 									var option = "minDate",
 									instance = $(this).data("datepicker");
 									date = $.datepicker.parseDate(instance.settings.dateFormat || $.datepicker._defaults.dateFormat, selectedDate, instance.settings);
-									$("#'.CHtml::activeId($model, 'milestone_duedate').'").datepicker("option", option, date);
+									$("#'.$id.'_'.CHtml::activeId($model, 'milestone_startdate').'").datepicker("option", option, date);
 								}'
 							),
 						));
@@ -82,10 +84,12 @@
 							'options'=>array(
 								'showAnim'=>'fold',
 							),
+							'name'=>$id.'_'.CHtml::activeId($model, 'milestone_duedate'),
 							'model'=>$model,
 							'attribute'=>'milestone_duedate',
 							'htmlOptions'=>array(
-								'class'=>'betterform'
+								'class'=>'betterform',
+								'value'=>'{{milestone.due_date}}'
 							),
 							'options'=>array(
 								'dateFormat'=>'yy-mm-dd',
@@ -97,7 +101,7 @@
 									var option = "maxDate",
 									instance = $(this).data("datepicker");
 									date = $.datepicker.parseDate(instance.settings.dateFormat || $.datepicker._defaults.dateFormat, selectedDate, instance.settings);
-									$("#'.CHtml::activeId($model, 'milestone_startdate').'").datepicker("option", option, date);
+									$("#'.$id.'_'.CHtml::activeId($model, 'milestone_startdate').'").datepicker("option", option, date);
 								}'
 							),
 						));
@@ -114,7 +118,7 @@
 		<div class="control-group">
 			<?php echo $form->labelEx($model,'milestone_description'); ?>
 			<div class="controls">
-				<?php echo $form->textArea($model,'milestone_description',array('style'=>'width:100%')); ?>
+				<?php echo $form->textArea($model,'milestone_description',array('style'=>'width:100%', 'value'=>'{{milestone.description}}')); ?>
 				<div class="help-inline">
 					<?php echo CHtml::label(Yii::t('milestones','FormMilestoneDescription'), CHtml::activeId($model, 'milestone_description'), array('class'=>'labelhelper')); ?>
 				</div>

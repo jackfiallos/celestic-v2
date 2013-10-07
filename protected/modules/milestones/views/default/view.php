@@ -5,13 +5,18 @@
 		</h3>
 		<div class="data-header-actions">
 			<?php echo CHtml::link("<i class=\"icon-list\"></i>", $this->createUrl('index', array('#'=>'/home')), array('class'=>'btn btn-primary', 'ng-click'=>'showHome()', 'title'=>Yii::t('milestones', 'ListMilestones'))); ?>
-			<?php if (Yii::app()->user->IsManager):?>
+			<?php if (Yii::app()->user->IsManager): ?>
 				<?php echo CHtml::link("<i class=\"icon-edit\"></i>", '', array('class'=>'btn btn-primary', 'ng-hide'=>'milestonesForm', 'ng-click'=>'showUpdate()', 'title'=>Yii::t('milestones', 'UpdateMilestones'))); ?>
-			<?php endif;?>
+			<?php endif; ?>
 		</div>
 	</header>
 	<section>
-		<?php echo $this->renderPartial('_form', array('model'=>$model, 'users'=>$users)); ?>
+		<?php echo $this->renderPartial('_form', array(
+			'model'=>$model, 
+			'users'=>$users,
+			'action'=>$this->createUrl('update'),
+			'id'=>'milestones-form-update'
+		)); ?>
 		<div ng-hide="milestonesForm">
 			<div class="ddescription" ng-bind-html-unsafe="milestone.description"></div>
 			<div>
@@ -32,33 +37,34 @@
 					<div class="bar" style="width:{{milestone.completed}}%;"></div>
 				</div>
 			</p>
-			Filters: 
-			<?php foreach($status as $item): ?>
-				<span class="showpointer label" ng-click="status='<?php echo $item->status_name; ?>'">
-					<?php echo $item->status_name; ?>
-				</span>
-			<?php endforeach; ?>
-			<span class="label" ng-click="status=''">
-				All
-			</span>
 		</div>
 		<hr />
+		<h4>Tasks</h4>
+		Filters: 
+		<?php foreach($status as $item): ?>
+			<span class="showpointer label label-<?php echo strtolower(str_replace(" ", "", $item->status_name)); ?>" ng-click="status='<?php echo $item->status_name; ?>'">
+				<?php echo $item->status_name; ?>
+			</span>
+		<?php endforeach; ?>
+		<span class="label" ng-click="status=''" style="cursor:pointer">
+			All
+		</span>
+		<hr />
 		<ul class="tickets">
-			<li class="ticket" ng-repeat="task in milestone.dataProviderTasks | filter:status">
+			<li class="ticket" ng-repeat="task in tasks | filter:status">
 				<a href="{{task.task_url}}">
 					<span class="header">
 						<span class="title">{{task.task_name}}</span>
-						<span class="number">[ #{{task.task_id}} ]</span>
 					</span>
 					<div class="row-fluid">
 						<div class="span6">
 							<div>{{task.user}}</div>
-							<div class="{{task.task_priority_class}}">
-								[ {{task.task_priority}} ]
+							<div class="label {{task.task_priority_class}}">
+								{{task.task_priority}}
 							</div>
 						</div>
 						<div class="span6" style="text-align:right">
-							<div class="text-muted">Status: <span class="blue">{{task.status}}</span></div>
+							<div class="text-muted">Status: <span class="blue label {{task.class_status}}">{{task.status}}</span></div>
 							<div>{{task.task_startDate}}</div>
 						</div>
 					</span>	                                                        

@@ -34,9 +34,9 @@ Celestic.factory('sharedService', function($rootScope) {
  */
 Celestic.controller('celestic.milestones.home.controller', function($scope, $http, sharedService) {
 	$scope.ishome = true;
-	$scope.milestones = null;
+	$scope.milestones = [];
 	$scope.hasMilestones = false;
-	$scope.milestoneform = false;
+	$scope.milestonesForm = false;
 
 	jQuery.ajax({
 		type: 'POST',
@@ -63,21 +63,21 @@ Celestic.controller('celestic.milestones.home.controller', function($scope, $htt
 		jQuery.ajax({
 			type: 'POST',
 			dataType:'json',
-			url: jQuery('#milestones-form').attr('action'),
-			data: jQuery('#milestones-form').serialize(),
+			url: jQuery('#milestones-form-create').attr('action'),
+			data: jQuery('#milestones-form-create').serialize(),
 			success:function(data){
 				if (!data.success) {
-					jQuery('.milestones .control-group').removeClass('error');
-					jQuery('.milestones .help-inline').hide();
+					jQuery('#milestones-form-create .control-group').removeClass('error');
+					jQuery('#milestones-form-create .help-inline').hide();
 					for(var fields in data.error) {
-						jQuery('#'+fields).closest('.control-group').addClass('error');
-						jQuery('#'+fields).next().html(data.error[fields][0]).show();
+						jQuery('#milestones-form-create #milestones-form-create_Milestones_'+fields).closest('.control-group').addClass('error');
+						jQuery('#milestones-form-create #milestones-form-create_Milestones_'+fields).next().html('<label class="labelhelper" for="'+fields+'">'+data.error[fields][0]+'</label>').show();
 					}
 				}
 				else {
 					$scope.$apply(function() {
-						$location.path('/');
-						sharedService.broadcast(true);
+						$scope.milestones.push(data.milestones);
+						$scope.milestonesForm = false;
 					});
 				}
 			}
@@ -93,14 +93,6 @@ Celestic.controller('celestic.milestones.view.controller', function($scope, $rou
 
 	sharedService.broadcast(false);
 
-	$scope.showHome = function() {
-		sharedService.broadcast(true);
-	};
-
-	$scope.showUpdate = function() {
-		$scope.milestonesForm = true;
-	};
-
 	jQuery.ajax({
 		type: 'POST',
 		dataType:'json',
@@ -111,47 +103,41 @@ Celestic.controller('celestic.milestones.view.controller', function($scope, $rou
 		success:function(data) {
 			$scope.$apply(function() {
 				$scope.milestone = data.milestone;
+				$scope.tasks = data.milestone.dataProviderTasks;
 			});
 		}
 	});
+
+	$scope.showHome = function() {
+		sharedService.broadcast(true);
+	};
+
+	$scope.showUpdate = function() {
+		$scope.milestonesForm = true;
+	};
+
+	$scope.submitForm = function() {
+		jQuery.ajax({
+			type: 'POST',
+			dataType:'json',
+			url: $scope.milestone.url,
+			data: jQuery('#milestones-form-update').serialize(),
+			success:function(data) {
+				if (!data.success) {
+					jQuery('#milestones-form-update .control-group').removeClass('error');
+					jQuery('#milestones-form-update .help-inline').hide();
+					for(var fields in data.error) {
+						jQuery('#milestones-form-update #'+fields).closest('.control-group').addClass('error');
+						jQuery('#milestones-form-update #'+fields).next().html('<label class="labelhelper" for="'+fields+'">'+data.error[fields][0]+'</label>').show();
+					}
+				}
+				else {
+					$scope.$apply(function() {
+						$scope.milestone = data.milestone;
+						$scope.milestonesForm = false;
+					});
+				}
+			}
+		});
+	};
 });
-
-// /**
-//  * [description]
-//  * @param  {[type]} $scope        [description]
-//  * @param  {[type]} $http         [description]
-//  * @param  {[type]} sharedService [description]
-//  * @return {[type]}               [description]
-//  */
-// Celestic.controller('celestic.milestones.create.controller', function($scope, $http, $location, sharedService) {
-// 	sharedService.broadcast(false);
-
-// 	$scope.showHome = function() {
-// 		sharedService.broadcast(true);
-// 	};
-
-// 	$scope.submitForm = function() {
-// 		jQuery.ajax({
-// 			type: 'POST',
-// 			dataType:'json',
-// 			url: jQuery('#milestones-form').attr('action'),
-// 			data: jQuery('#milestones-form').serialize(),
-// 			success:function(data){
-// 				if (!data.success) {
-// 					jQuery('.milestones .control-group').removeClass('error');
-// 					jQuery('.milestones .help-inline').hide();
-// 					for(var fields in data.error) {
-// 						jQuery('#'+fields).closest('.control-group').addClass('error');
-// 						jQuery('#'+fields).next().html(data.error[fields][0]).show();
-// 					}
-// 				}
-// 				else {
-// 					$scope.$apply(function() {
-// 						$location.path('/');
-// 						sharedService.broadcast(true);
-// 					});
-// 				}
-// 			}
-// 		});
-// 	};
-// });

@@ -3413,3 +3413,62 @@ figcaption.caption a {
 		margin: 0;
 	}
 }
+
+/**
+ * CUSTOM BADGES
+ */
+.label-pending {
+	background-color: #5E8BC0;
+}
+
+.label-toreview {
+	background-color: #9982B4;
+}
+
+.label-accepted {
+	background-color: #A2BE67;
+}
+
+.label-inprogress {
+	background-color: #F49D56;
+}
+
+.label-totest {
+	background-color: #CAB82F;
+}
+
+.label-closed {
+	background-color: #b5b5b5;
+}
+
+.label-cancelled {
+	background-color: #C35F5C;
+}
+
+/**
+ * SCROLLBAR CSS3
+ */
+::-webkit-scrollbar{
+  width: 8px;
+}
+::-webkit-scrollbar-button{
+  width: 8px;
+  height: 0;
+}
+::-webkit-scrollbar-track{
+  background: #DBDBDB;
+  -webkit-border-radius: 10px;
+  border-radius: 10px;
+}
+::-webkit-scrollbar-thumb{
+  background-color: #858484;
+  border-radius: 10px;
+  -webkit-border-radius: 10px;
+}
+::-webkit-scrollbar-thumb:hover{
+    background-color: #535353;
+}
+
+::-webkit-scrollbar-thumb:window-inactive {
+    background-color: #858484; 
+}

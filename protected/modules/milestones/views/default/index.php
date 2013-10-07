@@ -14,7 +14,12 @@ $this->pageTitle = Yii::app()->name." - ".Yii::t('milestones', 'TitleMilestones'
 		</header>
 		<section>
 
-			<?php echo $this->renderPartial('_form', array('model'=>$model, 'users'=>$users)); ?>
+			<?php echo $this->renderPartial('_form', array(
+				'model'=>$model, 
+				'users'=>$users,
+				'action'=>$this->createUrl('create'),
+				'id'=>'milestones-form-create'
+			)); ?>
 
 			<div class="input-append">
 				<input type="text" class="" placeholder="Filter Search" ng-model="search"> 
