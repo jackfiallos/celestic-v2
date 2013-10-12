@@ -3,56 +3,18 @@ $this->pageTitle = Yii::app()->name." - ".Yii::t('documents', 'TitleDocuments');
 ?>
 
 <div ng-controller="celestic.documents.home.controller">
-	<article class="data-block documents" ng-show="ishome">
-		<header>
-			<h1>
-				<?php echo Yii::t('documents', 'TitleDocuments'); ?>
-			</h1>
+	<article class="widget widget-4 data-block documents" ng-show="ishome">
+		<header class="widget-head">
+			<h3 class="module-title"><i class="icon-archive icon-2"></i><?php echo Yii::t('documents', 'Documents'); ?></h3>
 			<div class="data-header-actions">
 				<?php echo CHtml::link("<i class=\"icon-plus-sign\"></i> ".Yii::t('documents','upload'), $this->createUrl('index', array('#'=>'/create')), array('ng-click'=>'uploadform=true', 'ng-hide'=>'uploadform', 'class'=>'btn btn-primary', 'title'=>Yii::t('documents', 'CreateDocuments'))); ?>
 			</div>
 		</header>
-		<section>
-
+		<section class="widget-body">
 			<?php echo $this->renderPartial('_form', array('model'=>$model)); ?>
-
 			<div class="input-append">
 				<input type="text" class="" placeholder="Filter Search" ng-model="search"> 
 				<i class="add-on icon-search"></i>
-			</div>
-
-			<div class="view" ng-show="hasDocuments" ng-repeat="document in documents | filter:search">
-				<div class="groupdate" ng-show="CreateHeader(document.timestamp)">
-					{{document.timestamp}}
-				</div>
-				<span class="icon">
-					<img style="width:64px;height:64px" src="{{document.imageType}}">
-				</span>
-				<span class="description">
-					<h3>
-						<a href="{{document.url}}" title="{{document.name}}">
-							#{{document.id}} - {{document.name}}
-						</a>
-					</h3>
-					<div class="moduleTextDescription corners">
-						{{document.description}}
-					</div>
-					<div class="dfooter">
-						<div class="news-comments" ng-show="document.countComments > 0">
-							<img class="icon" src="<?php echo Yii::app()->theme->baseUrl; ?>/images/UI/speech-bubble-center-2.png" alt="">
-							<a href="#">{{document.countComments}} Comment(s)</a>
-						</div>
-						<span>
-							<?php echo Yii::t('documents', 'user_id'); ?> <a href="{{document.userUrl}}">{{document.userName}}</a>
-						</span>
-						<div>
-							<a href="{{document.downloadLink}}">{{labels.downloadLabel}}</a> {{labels.orLabel}}
-							<a href="{{document.url}}" title="{{document.name}}">
-								{{labels.viewDetailsLabel}}
-							</a>
-						</div>
-					</div>
-				</span>
 			</div>
 			<div class="aboutModule" ng-hide="hasDocuments">
 				<p class="aboutModuleTitle">
@@ -80,7 +42,40 @@ $this->pageTitle = Yii::app()->name." - ".Yii::t('documents', 'TitleDocuments');
 						</li>
 					</ul>
 				</div>
-			</div>			
+			</div>
+			<div class="view" ng-show="hasDocuments" ng-repeat="document in documents | filter:search">
+				<div class="groupdate" ng-show="CreateHeader(document.timestamp)">
+					{{document.timestamp}}
+				</div>
+				<span class="icon">
+					<img style="width:58px;height:60px" src="{{document.imageType}}">
+				</span>
+				<span class="description">
+					<h3>
+						<a href="{{document.url}}" title="{{document.name}}">
+							#{{document.id}} - {{document.name}}
+						</a>
+					</h3>
+					<div class="moduleTextDescription corners">
+						{{document.description}}
+					</div>
+					<div class="dfooter">
+						<div class="news-comments" ng-show="document.countComments > 0">
+							<img class="icon" src="<?php echo Yii::app()->theme->baseUrl; ?>/images/UI/speech-bubble-center-2.png" alt="">
+							<a href="#">{{document.countComments}} Comment(s)</a>
+						</div>
+						<span>
+							<?php echo Yii::t('documents', 'user_id'); ?> <a href="{{document.userUrl}}">{{document.userName}}</a>
+						</span>
+						<div>
+							<a href="{{document.downloadLink}}">{{labels.downloadLabel}}</a> {{labels.orLabel}}
+							<a href="{{document.url}}" title="{{document.name}}">
+								{{labels.viewDetailsLabel}}
+							</a>
+						</div>
+					</div>
+				</span>
+			</div>
 		</section>
 	</article>
 </div>

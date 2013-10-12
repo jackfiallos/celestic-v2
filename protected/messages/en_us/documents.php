@@ -2,7 +2,7 @@
 return array(
 	// VIEWS
 	'TitleDocuments' => 'Documents',
-	'ListDocuments' => 'List Documents',
+	'ListDocuments' => 'Documents List',
 	'CreateDocuments' => 'Create Document',
 	'UpdateDocuments' => 'Update Document',
 	'ViewDocuments' => 'View Document',

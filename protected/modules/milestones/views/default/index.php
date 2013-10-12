@@ -3,24 +3,45 @@ $this->pageTitle = Yii::app()->name." - ".Yii::t('milestones', 'TitleMilestones'
 ?>
 
 <div ng-controller="celestic.milestones.home.controller">
-	<article class="data-block milestones" ng-show="ishome">
-		<header>
-			<h1>
-				<?php echo Yii::t('milestones', 'TitleMilestones'); ?>
-			</h1>
+	<article class="widget widget-4 data-block milestones" ng-show="ishome">
+		<header class="widget-head">
+			<h3 class="module-title"><i class="icon-calendar-empty icon-2"></i><?php echo Yii::t('milestones', 'TitleMilestones'); ?></h3>
 			<div class="data-header-actions">
 				<?php echo CHtml::link("<i class=\"icon-plus-sign\"></i> ".Yii::t('milestones', 'CreateMilestones'), $this->createUrl('index', array('#'=>'/create')), array('class'=>'btn btn-primary', 'ng-click'=>'milestonesForm=true', 'ng-hide'=>'milestonesForm', 'title'=>Yii::t('milestones', 'CreateMilestones'))); ?>
 			</div>
 		</header>
-		<section>
-
+		<section class="widget-body">
 			<?php echo $this->renderPartial('_form', array(
 				'model'=>$model, 
 				'users'=>$users,
 				'action'=>$this->createUrl('create'),
 				'id'=>'milestones-form-create'
 			)); ?>
-
+			<div class="aboutModule" ng-hide="hasMilestones">
+				<p class="aboutModuleTitle">
+					No milestones has been created, you want to <?php echo CHtml::link(Yii::t('milestones','CreateOneMilestone'), $this->createUrl('index', array('#'=>'/create'))); ?> ?
+				</p>
+				<div class="aboutModuleInformation shadow corners">
+					<h2 class="aboutModuleInformationBoxTitle"><?php echo Yii::t('milestones','AboutMilestones'); ?></h2>
+					<ul class="aboutModuleInformationList">
+						<li>
+							<?php echo CHtml::image(Yii::app()->request->baseUrl.'/images/tick.png', '', array('class'=>'aboutModuleInformationIcon')); ?>
+							<span class="aboutModuleInformationTitle"><?php echo Yii::t('milestones','MilestoneInformation_l1'); ?></span>
+							<span class="aboutModuleInformationDesc"><?php echo Yii::t('milestones','MilestoneDescription_l1'); ?></span>
+						</li>
+						<li>
+							<?php echo CHtml::image(Yii::app()->request->baseUrl.'/images/tick.png', '', array('class'=>'aboutModuleInformationIcon')); ?>
+							<span class="aboutModuleInformationTitle"><?php echo Yii::t('milestones','MilestoneInformation_l2'); ?></span>
+							<span class="aboutModuleInformationDesc"><?php echo Yii::t('milestones','MilestoneDescription_l2'); ?></span>
+						</li>
+						<li>
+							<?php echo CHtml::image(Yii::app()->request->baseUrl.'/images/tick.png', '', array('class'=>'aboutModuleInformationIcon')); ?>
+							<span class="aboutModuleInformationTitle"><?php echo Yii::t('milestones','MilestoneInformation_l3'); ?></span>
+							<span class="aboutModuleInformationDesc"><?php echo Yii::t('milestones','MilestoneDescription_l3'); ?></span>
+						</li>
+					</ul>
+				</div>
+			</div>
 			<div class="input-append">
 				<input type="text" class="" placeholder="Filter Search" ng-model="search"> 
 				<i class="add-on icon-search"></i>
@@ -70,31 +91,6 @@ $this->pageTitle = Yii::app()->name." - ".Yii::t('milestones', 'TitleMilestones'
 						</div>
 					</blockquote>
 				</span>
-			</div>
-			<div class="aboutModule" ng-hide="hasMilestones">
-				<p class="aboutModuleTitle">
-					No milestones has been created, you want to <?php echo CHtml::link(Yii::t('milestones','CreateOneMilestone'), $this->createUrl('index', array('#'=>'/create'))); ?> ?
-				</p>
-				<div class="aboutModuleInformation shadow corners">
-					<h2 class="aboutModuleInformationBoxTitle"><?php echo Yii::t('milestones','AboutMilestones'); ?></h2>
-					<ul class="aboutModuleInformationList">
-						<li>
-							<?php echo CHtml::image(Yii::app()->request->baseUrl.'/images/tick.png', '', array('class'=>'aboutModuleInformationIcon')); ?>
-							<span class="aboutModuleInformationTitle"><?php echo Yii::t('milestones','MilestoneInformation_l1'); ?></span>
-							<span class="aboutModuleInformationDesc"><?php echo Yii::t('milestones','MilestoneDescription_l1'); ?></span>
-						</li>
-						<li>
-							<?php echo CHtml::image(Yii::app()->request->baseUrl.'/images/tick.png', '', array('class'=>'aboutModuleInformationIcon')); ?>
-							<span class="aboutModuleInformationTitle"><?php echo Yii::t('milestones','MilestoneInformation_l2'); ?></span>
-							<span class="aboutModuleInformationDesc"><?php echo Yii::t('milestones','MilestoneDescription_l2'); ?></span>
-						</li>
-						<li>
-							<?php echo CHtml::image(Yii::app()->request->baseUrl.'/images/tick.png', '', array('class'=>'aboutModuleInformationIcon')); ?>
-							<span class="aboutModuleInformationTitle"><?php echo Yii::t('milestones','MilestoneInformation_l3'); ?></span>
-							<span class="aboutModuleInformationDesc"><?php echo Yii::t('milestones','MilestoneDescription_l3'); ?></span>
-						</li>
-					</ul>
-				</div>
 			</div>
 		</section>
 	</article>

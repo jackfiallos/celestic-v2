@@ -13,13 +13,9 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
 	<link href="<?php echo Yii::app()->theme->baseUrl; ?>/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
 	<link href="<?php echo Yii::app()->theme->baseUrl; ?>/bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet" />
-	<link href="<?php echo Yii::app()->theme->baseUrl; ?>/css/glyphicons.css" rel="stylesheet" />
 	<link href="<?php echo Yii::app()->theme->baseUrl; ?>/css/widgets.css" rel="stylesheet" />
-	<!-- <link href="<?php echo Yii::app()->theme->baseUrl; ?>/css/font-awesome.min.css" rel="stylesheet" /> -->
-	<link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.no-icons.min.css" rel="stylesheet">
-	<link href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css" rel="stylesheet">
+	<link href="http://netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css" rel="stylesheet">
 	<link href="<?php echo Yii::app()->theme->baseUrl; ?>/css/style.min.css" rel="stylesheet" />
-	<link href="<?php echo Yii::app()->theme->baseUrl; ?>/css/global.css" rel="stylesheet" />
 	<link rel="shortcut icon" type="image/x-icon" href="<?php echo Yii::app()->request->baseUrl; ?>/favicon.png" />
 	<!--[if IE]>
     <script type="text/javascript" src="<?php echo Yii::app()->theme->baseUrl; ?>/js/libs/excanvas.js"></script>
@@ -32,7 +28,7 @@
 		<div class="navbar main">
 			<a href="<?php echo Yii::app()->createUrl('/'); ?>" class="appbrand">
 				<span>
-					<?php echo Yii::app()->name; ?> 
+					<?php echo Yii::app()->name; ?>
 					<span><?php echo Yii::app()->user->getState('project_selectedName'); ?></span>
 				</span>
 			</a>
@@ -50,16 +46,16 @@
 						?>
 					</p>
 					<?php 
-						// $this->widget('application.extensions.VGGravatarWidget.VGGravatarWidget', 
-						// 	array(
-						// 		'email' => CHtml::encode(Yii::app()->user->getState('user_email')),
-						// 		'hashed' => false,
-						// 		'default' => 'http://'.$_SERVER['SERVER_NAME'].Yii::app()->request->baseUrl.'/images/bg-avatar.png',
-						// 		'size' => 65,
-						// 		'rating' => 'PG',
-						// 		'htmlOptions' => array('class'=>'borderCaption','alt'=>'Gravatar Icon' ),
-						// 	)
-						// );
+						$this->widget('application.extensions.VGGravatarWidget.VGGravatarWidget', 
+							array(
+								'email' => CHtml::encode(Yii::app()->user->getState('user_email')),
+								'hashed' => false,
+								'default' => 'http://'.$_SERVER['SERVER_NAME'].Yii::app()->request->baseUrl.'/images/bg-avatar.png',
+								'size' => 65,
+								'rating' => 'PG',
+								'htmlOptions' => array('class'=>'borderCaption','alt'=>'Gravatar Icon' ),
+							)
+						);
 					?>
 				</div>
 			<?php endif; ?>
@@ -85,22 +81,12 @@
 		<div id="wrapper">
 			<div id="menu" class="nav-menu-item">
 				<div id="menuInner">
-					<div id="search">
-						<input type="text" placeholder="search ..." />
-						<button class="glyphicons search"><i></i></button>
-					</div>
 					<?php
 						$this->widget('widgets.applicationModules');
 					?>
 				</div>
 			</div>			
 			<div id="content">
-				<?php
-					$this->widget('zii.widgets.CBreadcrumbs', array(
-						'links'=>$this->breadcrumbs,
-						'encodeLabel'=>false
-					));
-				?>
 				<?php echo $content; ?>
 				<br/>
 			</div>

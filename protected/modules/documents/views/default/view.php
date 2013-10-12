@@ -1,14 +1,14 @@
-<article class="data-block documents">
-	<header>
-		<h3>
+<article class="widget widget-4 data-block documents">
+	<header class="widget-head">
+		<h3 class="module-title">
+			<i class="icon-download-alt icon-2"></i>
 			{{document.name}}
-			<div class="data-header-actions">
-				<?php echo CHtml::link("<i class=\"icon-list\"></i>", $this->createUrl('index', array('#'=>'/home')), array('class'=>'btn btn-primary', 'ng-click'=>'showHome()', 'title'=>Yii::t('documents', 'ListDocuments'))); ?>
-			</div>
-			<hr />
 		</h3>
 	</header>
-	<section>
+	<section class="widget-body">
+		<div class="data-header-actions pull-right">
+			<?php echo CHtml::link("<i class=\"icon-list\"></i>", $this->createUrl('index', array('#'=>'/home')), array('class'=>'btn btn-primary', 'ng-click'=>'showHome()', 'title'=>Yii::t('documents', 'ListDocuments'))); ?>
+		</div>
 		<div class="details">
 			<figure class="media-object">
                 <figcaption class="caption clearfix opensans">
@@ -18,7 +18,7 @@
                         <span class="author">by <a href="{{userUrl}}">{{document.userName}}</a></span>
                     </div>
                     <div class="news-comments right" ng-show="document.comments > 0">
-                        <img class="icon" src="<?php echo Yii::app()->theme->baseUrl; ?>/images/UI/speech-bubble-center-2.png" alt="">
+                        <i class="icon-commen icon-2"></i>
                         <a href="#">{{document.comments}} Comment(s)</a>
                     </div>
                 </figcaption>
@@ -28,8 +28,8 @@
 			</span>
 			<span class="ddescription">{{document.description}}</span>
 			<div class="dfooter">
-				<div>
-					<img class="icon" src="<?php echo Yii::app()->theme->baseUrl; ?>/images/UI/browser-download.png" alt="">
+				<div class="download">
+					<i class="icon-download icon-2"></i>
 					<a href="{{document.download}}">
 						<?php echo Yii::t("documents","downloadFile"); ?>
 					</a>

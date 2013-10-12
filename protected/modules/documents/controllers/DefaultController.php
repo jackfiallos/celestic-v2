@@ -32,6 +32,7 @@ class DefaultController extends Controller
 		'xlam' => 'application/vnd.ms-excel.addin.macroEnabled.12',
 		'xlsb' => 'application/vnd.ms-excel.sheet.binary.macroEnabled.12',
 		'doc'  => 'application/msword',
+		'vsd'  => 'application/vnd.visio',
 		'txt'  => 'text/plain'
 	);
 	
@@ -116,7 +117,7 @@ class DefaultController extends Controller
 						'description'=>CHtml::encode($item->document_description),
 						'url'=>$this->createUrl('index', array('#'=>'/view/'.$item->document_id)),
 						'downloadLink'=>$this->createUrl('download', array('id'=>$item->document_id)),
-						'imageType'=>Yii::app()->theme->baseUrl.'/images/icons/'.strtoupper(substr(strrchr($type,'/'),1)).'.png',
+						'imageType'=>Yii::app()->theme->baseUrl.'/images/icons/'.strtolower(substr(strrchr($item->document_path,'.'),1)).'.png',
 						'userName'=>ucfirst(CHtml::encode($item->User->completeName)),
 						'userUrl'=>$this->createUrl('users/view', array('id'=>$item->User->user_id)),
 						'timestamp'=>Yii::app()->dateFormatter->format('MMMM d, yyy', $timestamp),
@@ -188,7 +189,7 @@ class DefaultController extends Controller
 						'userName'=>ucfirst(CHtml::encode($model->User->completeName)),
 						'userUrl'=>$this->createUrl('users/view', array('id'=>$model->User->user_id)),
 						'countComments'=>Logs::getCountComments('documents', $model->document_id),
-						'imageType'=>Yii::app()->theme->baseUrl.'/images/icons/'.strtoupper(substr(strrchr($type,'/'),1)).'.png',
+						'imageType'=>Yii::app()->theme->baseUrl.'/images/icons/'.strtolower(substr(strrchr($model->document_path,'.'),1)).'.png',
 					));
 					Yii::app()->end();
 				}

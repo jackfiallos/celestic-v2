@@ -1,6 +1,7 @@
-<article class="data-block milestones">
-	<header>
-		<h3>
+<article class="widget widget-4 data-block milestones">
+	<header class="widget-head">
+		<h3 class="module-title">
+			<i class="icon-calendar icon-2"></i>
 			{{milestone.title}}
 		</h3>
 		<div class="data-header-actions">
@@ -10,7 +11,7 @@
 			<?php endif; ?>
 		</div>
 	</header>
-	<section>
+	<section class="widget-body">
 		<?php echo $this->renderPartial('_form', array(
 			'model'=>$model, 
 			'users'=>$users,
@@ -40,6 +41,11 @@
 		</div>
 		<hr />
 		<h4>Tasks</h4>
+		<div class="input-append">
+			<input type="text" class="" placeholder="Filter Search" ng-model="search"> 
+			<i class="add-on icon-search"></i>
+		</div>
+		<br />
 		Filters: 
 		<?php foreach($status as $item): ?>
 			<span class="showpointer label label-<?php echo strtolower(str_replace(" ", "", $item->status_name)); ?>" ng-click="status='<?php echo $item->status_name; ?>'">
@@ -51,7 +57,7 @@
 		</span>
 		<hr />
 		<ul class="tickets">
-			<li class="ticket" ng-repeat="task in tasks | filter:status">
+			<li class="ticket" ng-repeat="task in tasks | filter:status||search">
 				<a href="{{task.task_url}}">
 					<span class="header">
 						<span class="title">{{task.task_name}}</span>

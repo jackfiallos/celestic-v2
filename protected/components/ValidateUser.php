@@ -13,6 +13,16 @@
 class ValidateUser extends CWebUser
 {
 	/**
+	 * [getIsOwner description]
+	 * @return [type] [description]
+	 */
+	public function getIsOwner()
+	{
+		// TODO
+		return false;
+	}
+
+	/**
 	 * Obtain user account_id
 	 * By default user_id as unique param
 	 * @return integer account_id value

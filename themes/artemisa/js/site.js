@@ -2,7 +2,7 @@ jQuery(document).ready(function(){
 	jQuery('.projectlnk').on('click', function(e) {
 		e.preventDefault();
 		if (!jQuery(this).hasClass('open')) {
-			jQuery(this).next().css('margin-top', '120px');
+			jQuery(this).next().css('margin-top', '250px');
 			jQuery(this).css('overflow', 'visible').addClass('open');
 		}
 		else {
