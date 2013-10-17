@@ -62,7 +62,7 @@ $this->pageTitle = Yii::app()->name." - ".Yii::t('documents', 'TitleDocuments');
 					<div class="dfooter">
 						<div class="news-comments" ng-show="document.countComments > 0">
 							<img class="icon" src="<?php echo Yii::app()->theme->baseUrl; ?>/images/UI/speech-bubble-center-2.png" alt="">
-							<a href="#">{{document.countComments}} Comment(s)</a>
+							<a href="#">{{document.countComments}} <?php echo Yii::t('site','comments'); ?> <i class="icon-comment"></i> </a>
 						</div>
 						<span>
 							<?php echo Yii::t('documents', 'user_id'); ?> <a href="{{document.userUrl}}">{{document.userName}}</a>
@@ -93,9 +93,9 @@ $cs->registerScript('documentsScript', "
     	'use strict';
     	var CelesticParams = window.CelesticParams || {};
     	CelesticParams.URL = {
-    		'home':'".$this->createUrl('index')."',
-	        'create':'".$this->createUrl('create')."',
-	        'view':'".$this->createUrl('view')."'
+			'home':'".$this->createUrl('index')."',
+			'create':'".$this->createUrl('create')."',
+			'view':'".$this->createUrl('view')."'
 	    };
 	    CelesticParams.Forms = {
 	    	'CSRF_Token':'".Yii::app()->request->csrfToken."'

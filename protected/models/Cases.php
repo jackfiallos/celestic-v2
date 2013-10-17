@@ -1,6 +1,14 @@
 <?php
 
 /**
+ * Cases Model
+ * 
+ * @author		Jackfiallos
+ * @link		http://qbit.com.mx/labs/celestic
+ * @copyright 	Copyright (c) 2009-2013 Qbit Mexhico
+ * @license		http://qbit.com.mx/labs/celestic/license/
+ * @version		2.0.0
+ *
  * This is the model class for table "tb_cases".
  *
  * The followings are the available columns in table 'tb_cases':
@@ -23,11 +31,6 @@ class Cases extends CActiveRecord
 	const PRIORITY_LOW = 0;
 	const PRIORITY_MEDIUM = 1;
 	const PRIORITY_HIGH = 2;
-	
-	public function getCaseTitle()
-	{
-		return $this->case_code." - ".$this->case_name;
-	}
 	
 	/**
 	 * Returns the static model of the specified AR class.
@@ -100,27 +103,13 @@ class Cases extends CActiveRecord
 			'case_priority' => Yii::t('cases','case_priority'),
 		);
 	}
-
-	/**
-	 * Retrieves a list of models based on the current search/filter conditions.
-	 * @return CActiveDataProvider the data provider that can return the models based on the search/filter conditions.
-	 */
-	public function search()
-	{
-		// Warning: Please modify the following code to remove attributes that
-		// should not be searched.
-
-		$criteria=new CDbCriteria;
-		$criteria->compare('case_name',$this->case_name,true);
-		$criteria->compare('project_id',$this->project_id);
-		$criteria->compare('case_priority',$this->case_priority);
-
-		return new CActiveDataProvider(get_class($this), array(
-			'criteria'=>$criteria,
-		));
-	}
 	
-	public function behaviors(){
+	/**
+	 * [behaviors description]
+	 * @return [type] [description]
+	 */
+	public function behaviors()
+	{
 		return array(
 			'CSafeContentBehavor' => array( 
 				'class' => 'application.components.CSafeContentBehavior',
@@ -129,6 +118,11 @@ class Cases extends CActiveRecord
 		);
 	}
 	
+	/**
+	 * [findCasesByProject description]
+	 * @param  [type] $project_id [description]
+	 * @return [type]             [description]
+	 */
 	public function findCasesByProject($project_id)
 	{
 		return Cases::model()->findAll(array(
@@ -139,6 +133,12 @@ class Cases extends CActiveRecord
 		));
 	}
 	
+	/**
+	 * [countCasesByProject description]
+	 * @param  [type] $case_id    [description]
+	 * @param  [type] $project_id [description]
+	 * @return [type]             [description]
+	 */
 	public function countCasesByProject($case_id, $project_id)
 	{
 		return Cases::model()->count(array(
@@ -148,5 +148,14 @@ class Cases extends CActiveRecord
 				':case_id' => $case_id
 			)
 		));
+	}
+
+	/**
+	 * [getCaseTitle description]
+	 * @return [type] [description]
+	 */
+	public function getCaseTitle()
+	{
+		return $this->case_code." - ".$this->case_name;
 	}
 }

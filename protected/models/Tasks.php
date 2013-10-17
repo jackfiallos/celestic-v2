@@ -1,6 +1,14 @@
 <?php
 
 /**
+ * Tasks Model
+ * 
+ * @author		Jackfiallos
+ * @link		http://qbit.com.mx/labs/celestic
+ * @copyright 	Copyright (c) 2009-2013 Qbit Mexhico
+ * @license		http://qbit.com.mx/labs/celestic/license/
+ * @version		2.0.0
+ * 
  * This is the model class for table "tb_tasks".
  *
  * The followings are the available columns in table 'tb_tasks':
@@ -114,10 +122,18 @@ class Tasks extends CActiveRecord
 		);
 	}
 	
+	/**
+	 * [findActivity description]
+	 * @param  [type]  $user_id    [description]
+	 * @param  [type]  $project_id [description]
+	 * @param  integer $limit      [description]
+	 * @return [type]              [description]
+	 */
 	public function findActivity($user_id, $project_id, $limit = 0)
     {
         $criteria = new CDbCriteria;
-		// Si se ha seleccionado un proyecto
+		
+		// If proyect was selected
 		if (!empty($project_id))
 		{
 			$criteria->condition = 'Users.user_id = :user_id AND t.project_id = :project_id AND t.status_id NOT IN ('.implode(',',array(Status::STATUS_CANCELLED, Status::STATUS_CLOSED)).')';
@@ -139,11 +155,18 @@ class Tasks extends CActiveRecord
 		return Tasks::model()->with('Users')->together()->findAll($criteria);
     }
 	
+	/**
+	 * [findActivityGroupedByTask description]
+	 * @param  [type] $user_id    [description]
+	 * @param  [type] $project_id [description]
+	 * @return [type]             [description]
+	 */
 	public function findActivityGroupedByTask($user_id, $project_id)
     {
         $criteria = new CDbCriteria;
 		$criteria->select = 'count(t.status_id) as numstatus';
-		// Si se ha seleccionado un proyecto
+		
+		// If project was selected
 		if (!empty($project_id))
 		{
 			$criteria->condition = 'Users.user_id = :user_id AND t.project_id = :project_id';
@@ -164,11 +187,16 @@ class Tasks extends CActiveRecord
 		return Tasks::model()->with('Users','Status')->together()->findAll($criteria);
     }
 	
+	/**
+	 * [TaskCounter description]
+	 * @param [type] $user_id    [description]
+	 * @param [type] $project_id [description]
+	 */
 	public function TaskCounter($user_id, $project_id)
 	{
 		$criteria = new CDbCriteria;
 		
-		// Si se ha seleccionado un proyecto
+		// If project was selected
 		if (!empty($project_id))
 		{
 			$criteria->condition = 'Users.user_id = :user_id AND t.project_id = :project_id';
@@ -188,18 +216,23 @@ class Tasks extends CActiveRecord
 		return Tasks::model()->with('Users')->count($criteria);
 	}
 	
+	/**
+	 * [getNameOfTaskPriority description]
+	 * @param  [type] $task_priority [description]
+	 * @return [type]                [description]
+	 */
 	public static function getNameOfTaskPriority($task_priority)
 	{
 		$output = Yii::t('tasks','task_priority')." ";
 		switch($task_priority)
 		{
-			case 0:
+			case Tasks::PRIORITY_LOW;
 				$output .= Yii::t('site','lowPriority');
 				break;
-			case 1:
+			case Tasks::PRIORITY_MEDIUM:
 				$output .= Yii::t('site','mediumPriority');
 				break;
-			case 2:
+			case Tasks::PRIORITY_HIGH:
 				$output .= Yii::t('site','highPriority');
 				break;
 			default:
@@ -210,6 +243,10 @@ class Tasks extends CActiveRecord
 		return $output;
 	}
 	
+	/**
+	 * [behaviors description]
+	 * @return [type] [description]
+	 */
 	public function behaviors()
 	{
 		return array(
@@ -220,6 +257,12 @@ class Tasks extends CActiveRecord
 		);
 	}
 	
+	/**
+	 * [countTasksByProject description]
+	 * @param  [type] $task_id    [description]
+	 * @param  [type] $project_id [description]
+	 * @return [type]             [description]
+	 */
 	public function countTasksByProject($task_id, $project_id)
 	{
 		return Tasks::model()->count(array(
@@ -231,6 +274,11 @@ class Tasks extends CActiveRecord
 		));
 	}
 	
+	/**
+	 * [findTaskByMilestone description]
+	 * @param  [type] $milestone_id [description]
+	 * @return [type]               [description]
+	 */
 	public function findTaskByMilestone($milestone_id)
 	{
 		return Tasks::model()->with('Users')->findAll(array(
@@ -241,9 +289,15 @@ class Tasks extends CActiveRecord
 		));
 	}
 	
+	/**
+	 * [getTasksByMilestones description]
+	 * @param  [type] $milestone_id [description]
+	 * @param  [type] $pages        [description]
+	 * @return [type]               [description]
+	 */
 	public function getTasksByMilestones($milestone_id, $pages)
 	{
-		$criteria=new CDbCriteria;
+		$criteria = new CDbCriteria;
 		$criteria->compare('milestone_id',$milestone_id);
 		
 		return new CActiveDataProvider('Tasks', array(
@@ -254,7 +308,14 @@ class Tasks extends CActiveRecord
 		));
 	}
 	
-	public function verifyTasksInProject($project_id, $task_id){
+	/**
+	 * [verifyTasksInProject description]
+	 * @param  [type] $project_id [description]
+	 * @param  [type] $task_id    [description]
+	 * @return [type]             [description]
+	 */
+	public function verifyTasksInProject($project_id, $task_id)
+	{
 		$count = Tasks::model()->count(array(
 			'condition'=>'t.project_id = :project_id AND t.task_id = :task_id',
 			'params'=> array(
@@ -263,8 +324,10 @@ class Tasks extends CActiveRecord
 			),
 		));
 		
-		if ($count>0)
+		if ($count > 0)
+		{
 			return true;
+		}
 		
 		return false;
 	}

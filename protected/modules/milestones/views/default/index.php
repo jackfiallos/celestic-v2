@@ -42,11 +42,11 @@ $this->pageTitle = Yii::app()->name." - ".Yii::t('milestones', 'TitleMilestones'
 					</ul>
 				</div>
 			</div>
-			<div class="input-append">
+			<div class="input-append" ng-show="hasMilestones">
 				<input type="text" class="" placeholder="Filter Search" ng-model="search"> 
 				<i class="add-on icon-search"></i>
 			</div>
-			<hr />
+			<hr ng-show="hasMilestones" />
 			<div class="view" ng-show="hasMilestones" ng-repeat="milestone in milestones | filter:search">
 				<span class="description">
 					<div class="row-fluid">
@@ -81,7 +81,7 @@ $this->pageTitle = Yii::app()->name." - ".Yii::t('milestones', 'TitleMilestones'
 								</span>
 							</span>
 							<a href="{{milestone.url}}" ng-show="milestone.countComments > 0">
-								<span class="label label-info">{{milestone.countComments}}<?php Yii::t('site','comments'); ?></span>
+								<span class="label label-info">{{milestone.countComments}} <?php echo Yii::t('site','comments'); ?> <i class="icon-comment"></i> </span>
 							</a>
 							<div>
 								<a href="{{milestone.url}}">

@@ -1,6 +1,14 @@
 <?php
 
 /**
+ * Milestones Model
+ * 
+ * @author		Jackfiallos
+ * @link		http://qbit.com.mx/labs/celestic
+ * @copyright 	Copyright (c) 2009-2013 Qbit Mexhico
+ * @license		http://qbit.com.mx/labs/celestic/license/
+ * @version		2.0.0
+ * 
  * This is the model class for table "tb_milestones".
  *
  * The followings are the available columns in table 'tb_milestones':
@@ -105,6 +113,10 @@ class Milestones extends CActiveRecord
 		));
 	}
 	
+	/**
+	 * [behaviors description]
+	 * @return [type] [description]
+	 */
 	public function behaviors()
 	{
 		return array(
@@ -115,10 +127,16 @@ class Milestones extends CActiveRecord
 		);
 	}
 	
+	/**
+	 * [findActivity description]
+	 * @param  [type] $project_id [description]
+	 * @return [type]             [description]
+	 */
 	public function findActivity($project_id)
     {
         $criteria = new CDbCriteria;
-		// Si se ha seleccionado un proyecto
+
+		// if project was selected
 		if (!empty($project_id))
 		{
 			$criteria->condition = 't.milestone_duedate BETWEEN CURDATE() AND CURDATE() + INTERVAL 5 WEEK AND t.project_id = :project_id';
@@ -127,7 +145,9 @@ class Milestones extends CActiveRecord
 			);
 		}
 		else
+		{
 			$criteria->condition = 't.milestone_duedate BETWEEN CURDATE() AND CURDATE() + INTERVAL 5 WEEK';
+		}
 		
 		$criteria->order = 't.milestone_duedate ASC';
 		$criteria->limit = '5';
@@ -138,7 +158,8 @@ class Milestones extends CActiveRecord
 	public function findOverdue($project_id)
     {
         $criteria = new CDbCriteria;
-		// Si se ha seleccionado un proyecto
+		
+		// if project was selected
 		if (!empty($project_id))
 		{
 			$criteria->condition = 't.milestone_duedate < NOW() AND t.project_id = :project_id AND Tasks.status_id IN ('.implode(',',array(Status::STATUS_PENDING,Status::STATUS_ACCEPTED,Status::STATUS_TOTEST, Status::STATUS_INPROGRESS)).')';
@@ -151,7 +172,9 @@ class Milestones extends CActiveRecord
 			$WorkingProjects = Projects::model()->findMyProjects(Yii::app()->user->id);
 			$projectList = array();
 			foreach($WorkingProjects as $project)
+			{
 				array_push($projectList, $project->project_id);
+			}
 			
 			$projects = (count($WorkingProjects == 0)) ? 0 : implode(",", $projectList);
 			$criteria->condition = 't.milestone_duedate < NOW() AND Tasks.status_id IN ('.implode(',',array(Status::STATUS_PENDING,Status::STATUS_ACCEPTED,Status::STATUS_TOTEST, Status::STATUS_INPROGRESS)).') AND t.project_id IN ('.$projects.')';
@@ -161,12 +184,17 @@ class Milestones extends CActiveRecord
 		$criteria->group = 't.milestone_id';
 		$criteria->together = true;
 		$criteria->with = array(
-			'Tasks',
+			'Tasks'
 		);		
 		
 		return Milestones::model()->findAll($criteria);
     }
     
+    /**
+     * [findMyMilestones description]
+     * @param  [type] $Projects [description]
+     * @return [type]           [description]
+     */
 	public function findMyMilestones($Projects)
     {
         $projectsArray = array();
@@ -176,13 +204,20 @@ class Milestones extends CActiveRecord
         }
 		
 		if (count($projectsArray) == 0)
+		{
 			$projectsArray[] = 0;
+		}
         
     	return Milestones::model()->with('Projects')->together()->findAll(array(
             'condition'=>'t.project_id IN ('.implode(",",$projectsArray).')',
         ));
     }
 	
+	/**
+	 * [findMilestonesByProject description]
+	 * @param  [type] $project_id [description]
+	 * @return [type]             [description]
+	 */
 	public function findMilestonesByProject($project_id)
 	{
 		return Milestones::model()->findAll(array(
@@ -193,6 +228,12 @@ class Milestones extends CActiveRecord
 		));
 	}
 	
+	/**
+	 * [countMilestonesByProject description]
+	 * @param  [type] $milestone_id [description]
+	 * @param  [type] $project_id   [description]
+	 * @return [type]               [description]
+	 */
 	public function countMilestonesByProject($milestone_id, $project_id)
 	{
 		return Milestones::model()->count(array(
@@ -204,9 +245,14 @@ class Milestones extends CActiveRecord
 		));
 	}
 	
+	/**
+	 * [getMilestonePercent description]
+	 * @param  [type] $milestone_id [description]
+	 * @return [type]               [description]
+	 */
 	public function getMilestonePercent($milestone_id)
 	{
-		$criteria=new CDbCriteria;
+		$criteria = new CDbCriteria;
 		$criteria->select = '(
 			SELECT (SUM(Status.status_value)/COUNT(Tasks.task_id))
 			FROM `tb_tasks` Tasks 
@@ -222,6 +268,9 @@ class Milestones extends CActiveRecord
 		return $result;
 	}
 	
+	/**
+	 * [MilestoneWithPendingTasks description]
+	 */
 	public function MilestoneWithPendingTasks()
 	{
 		$criteria=new CDbCriteria;

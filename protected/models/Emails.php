@@ -1,6 +1,14 @@
 <?php
 
 /**
+ * Emails Model
+ * 
+ * @author		Jackfiallos
+ * @link		http://qbit.com.mx/labs/celestic
+ * @copyright 	Copyright (c) 2009-2013 Qbit Mexhico
+ * @license		http://qbit.com.mx/labs/celestic/license/
+ * @version		2.0.0
+ * 
  * This is the model class for table "tb_emails".
  *
  * The followings are the available columns in table 'tb_emails':

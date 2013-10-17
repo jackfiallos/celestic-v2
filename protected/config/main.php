@@ -4,9 +4,10 @@
  * 
  * @author		Jackfiallos
  * @link		http://qbit.com.mx/labs/celestic
- * @copyright Copyright (c) 2009-2011 Qbit Mexhico
- * @license http://qbit.com.mx/labs/celestic/license/
+ * @copyright 	Copyright (c) 2009-2013 Qbit Mexhico
+ * @license		http://qbit.com.mx/labs/celestic/license/
  * @description
+ * 
  * This is the main Web application configuration
  * CWebApplication properties can be configured here.
  *

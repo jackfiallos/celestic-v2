@@ -20,20 +20,64 @@ class DefaultController extends Controller
 		// check if user has permission to indexCases
 		if(Yii::app()->user->checkAccess('indexCases'))
 		{
+			$criteria = new CDbCriteria();
+			$criteria->compare('project_id', (int)Yii::app()->user->getState('project_selected'));
+
 			// create Cases form search
-			$model = new CasesSearchForm;
-			$model->search();
-			$model->unsetAttributes();  // clear any default values
-			
-			// set model attributes from Cases form
-			if(isset($_GET['CasesSearchForm']))
+			$cases = Cases::model()->findAll($criteria);
+
+			if(Yii::app()->request->isPostRequest)
 			{
-				$model->attributes=$_GET['CasesSearchForm'];
+				$case = array();
+				foreach($cases as $item)
+				{
+					$timestamp = strtotime($item->case_date);
+					$priority = '';
+					$class = '';
+
+					switch($item->case_priority)
+                   	{
+						case Cases::PRIORITY_LOW:
+							$priority = Yii::t('site','lowPriority');
+							$class = 'label-info';
+							break;
+						case Cases::PRIORITY_MEDIUM:
+							$priority = Yii::t('site','mediumPriority');
+							$class = 'label-warning';
+							break;
+						case Cases::PRIORITY_HIGH:
+							$priority = Yii::t('site','highPriority');
+							$class = 'label-important';
+							break;
+						default:
+							$priority = Yii::t('site','lowPriority');
+							$class = 'label-info';
+							break;
+                    }
+
+					array_push($case, array(
+						'id'=>$item->case_id,
+						'name'=>CHtml::encode($item->case_name),
+						'code'=>CHtml::encode($item->case_code),
+						'actors'=>CHtml::encode($item->case_actors),
+						'description'=>CHtml::encode($item->case_description),
+						'url'=>$this->createUrl('index', array('#'=>'/view/'.$item->case_id)),
+						'timestamp'=>Yii::app()->dateFormatter->format('MMMM d, yyy', $timestamp),
+						'countComments'=>Logs::getCountComments('cases', $item->case_id),
+						'priority'=>$priority,
+						'cssClass'=>$class
+					));
+				}
+				
+				header('Content-type: application/json');
+				echo CJSON::encode(array(
+					'cases'=>$case
+				));
+				Yii::app()->end();
 			}
 			
-			$this->render('index',array(
-				'model'=>$model,
-				'status'=>Status::model()->findAllRequired(true)
+			$this->render('index', array(
+				'model'=>new Cases
 			));
 		}
 		else

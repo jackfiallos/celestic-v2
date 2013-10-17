@@ -15,7 +15,7 @@
 	
 	<div class="row-fluid">
 		<div class="control-group">
-			<?php echo $form->labelEx($model,'image'); ?>
+			<?php echo $form->labelEx($model,'image', array('class'=>'control-label')); ?>
 			<div class="controls">
 				<?php echo CHtml::activeFileField($model, 'image', array('class'=>'filestyle', 'data-classInput'=>'input-small', 'data-buttonText'=>'Find file', 'data-classIcon'=>'icon-plus')); ?>
 				<div class="help-inline">
@@ -25,7 +25,7 @@
 		</div>
 
 		<div class="control-group">
-			<?php echo $form->labelEx($model,'document_description'); ?>
+			<?php echo $form->labelEx($model,'document_description', array('class'=>'control-label')); ?>
 			<div class="controls">
 				<?php echo $form->textArea($model,'document_description',array('class'=>'span12')); ?>
 				<div class="help-inline">
@@ -36,7 +36,7 @@
 
 		<div class="form-actions">
 			<div class="span6">
-				<?php echo CHtml::htmlButton($model->isNewRecord ? "<i class=\"icon-plus-sign\"></i> ".Yii::t('documents','upload') : Yii::t('site','save'), array('type'=>'submit', 'class'=>'btn btn-primary')); ?>
+				<?php echo CHtml::htmlButton("<i class=\"icon-plus-sign\"></i> ".Yii::t('documents','upload'), array('type'=>'submit', 'class'=>'btn btn-primary')); ?>
 				<?php echo CHtml::button(Yii::t('site','reset'), array('type'=>'reset', 'class'=>'btn')); ?>
 			</div>
 			<div class="span6">

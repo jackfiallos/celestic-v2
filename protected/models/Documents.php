@@ -1,6 +1,14 @@
 <?php
 
 /**
+ * Documents Model
+ * 
+ * @author		Jackfiallos
+ * @link		http://qbit.com.mx/labs/celestic
+ * @copyright 	Copyright (c) 2009-2013 Qbit Mexhico
+ * @license		http://qbit.com.mx/labs/celestic/license/
+ * @version		2.0.0
+ * 
  * This is the model class for table "tb_documents".
  *
  * The followings are the available columns in table 'tb_documents':
@@ -143,10 +151,16 @@ class Documents extends CActiveRecord
 				':project_id'=>(!empty($project_id)) ? $project_id : 0,
 			),
 			'order'=>'t.document_id DESC',
-			'limit'=>5,
+			'limit'=>5
 		));
     }
     
+    /**
+     * [countDocumentsByProject description]
+     * @param  [type] $document_id [description]
+     * @param  [type] $project_id  [description]
+     * @return [type]              [description]
+     */
 	public function countDocumentsByProject($document_id, $project_id)
 	{
 		return Documents::model()->count(array(

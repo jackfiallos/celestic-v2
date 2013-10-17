@@ -1,6 +1,14 @@
 <?php
 
 /**
+ * Companies Model
+ * 
+ * @author		Jackfiallos
+ * @link		http://qbit.com.mx/labs/celestic
+ * @copyright 	Copyright (c) 2009-2013 Qbit Mexhico
+ * @license		http://qbit.com.mx/labs/celestic/license/
+ * @version		2.0.0
+ * 
  * This is the model class for table "tb_companies".
  */
 class Companies extends CActiveRecord
@@ -110,7 +118,12 @@ class Companies extends CActiveRecord
 		));
 	}
 	
-	public function behaviors(){
+	/**
+	 * [behaviors description]
+	 * @return [type] [description]
+	 */
+	public function behaviors()
+	{
 		return array(
 			'CSafeContentBehavor' => array( 
 				'class' => 'application.components.CSafeContentBehavior',
@@ -119,6 +132,11 @@ class Companies extends CActiveRecord
 		);
 	}
 	
+	/**
+	 * [findCompanyList description]
+	 * @param  [type] $user_id [description]
+	 * @return [type]          [description]
+	 */
 	public function findCompanyList($user_id)
 	{
 		return Companies::model()->with('Cusers.Accounts')->findAll(array(
@@ -130,6 +148,12 @@ class Companies extends CActiveRecord
 		));
 	}
 	
+	/**
+	 * [hasCompanyRelation description]
+	 * @param  [type]  $user_id    [description]
+	 * @param  [type]  $company_id [description]
+	 * @return boolean             [description]
+	 */
 	public function hasCompanyRelation($user_id, $company_id)
 	{
 		return Companies::model()->with('Cusers.Accounts')->count(array(
@@ -138,10 +162,16 @@ class Companies extends CActiveRecord
 				':user_id' => $user_id,
 				':company_id' => $company_id,
 			),
-			'together' => true,
+			'together' => true
 		));
 	}
 	
+	/**
+	 * [countCompaniesByAccount description]
+	 * @param  [type] $company_id [description]
+	 * @param  [type] $account_id [description]
+	 * @return [type]             [description]
+	 */
 	public function countCompaniesByAccount($company_id, $account_id)
 	{
 		return Companies::model()->count(array(

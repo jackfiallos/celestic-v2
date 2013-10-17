@@ -1,6 +1,14 @@
 <?php
 
 /**
+ * Comments Model
+ * 
+ * @author		Jackfiallos
+ * @link		http://qbit.com.mx/labs/celestic
+ * @copyright 	Copyright (c) 2009-2013 Qbit Mexhico
+ * @license		http://qbit.com.mx/labs/celestic/license/
+ * @version		2.0.0
+ * 
  * This is the model class for table "tb_comments".
  *
  * The followings are the available columns in table 'tb_comments':
@@ -104,6 +112,12 @@ class Comments extends CActiveRecord
 		));
 	}
 	
+	/**
+	 * [findComments description]
+	 * @param  [type] $module   [description]
+	 * @param  [type] $resource [description]
+	 * @return [type]           [description]
+	 */
 	public function findComments($module, $resource)
     {
         return Comments::model()->with('Module')->findAll(array(
@@ -117,6 +131,11 @@ class Comments extends CActiveRecord
         ));
     }
 	
+	/**
+	 * [findAttachments description]
+	 * @param  [type] $comment_id [description]
+	 * @return [type]             [description]
+	 */
 	public function findAttachments($comment_id)
 	{
 		return Documents::model()->findAll(array(
@@ -124,10 +143,15 @@ class Comments extends CActiveRecord
 			'params'=>array(
 				'comment_id'=>$comment_id,
 			),
-            'order'=>'t.document_id',
+            'order'=>'t.document_id'
         ));
 	}
 	
+	/**
+	 * [CommentPropietary description]
+	 * @param [type] $user_id    [description]
+	 * @param [type] $comment_id [description]
+	 */
 	public function CommentPropietary($user_id, $comment_id)
 	{
 		$isPropietary = self::model()->count(array(
@@ -136,11 +160,17 @@ class Comments extends CActiveRecord
 				':user_id'=>$user_id,
 				':comment_id'=>$comment_id,
 			),
-			'limit'=>1,
+			'limit'=>1
 		));
 		return (bool)$isPropietary;
 	}
 	
+	/**
+	 * [findActivity description]
+	 * @param  [type]  $project_id [description]
+	 * @param  integer $limit      [description]
+	 * @return [type]              [description]
+	 */
 	public function findActivity($project_id, $limit = 10)
 	{
 		if (isset($project_id) || !empty($project_id))
@@ -160,7 +190,9 @@ class Comments extends CActiveRecord
 			$projects = Yii::app()->user->getProjects();
 			$InProjects = array(0);
 			foreach ($projects as $project)
+			{
 				array_push($InProjects, $project->project_id);
+			}
 			
 			$comments = Comments::model()->with('Module')->findAll(array(
 	            'condition'=>'t.project_id IN ('.implode(",", $InProjects).') AND t.comment_text NOT LIKE "%Status%"',
@@ -173,7 +205,12 @@ class Comments extends CActiveRecord
 		return $comments;
 	}
 	
-	public function behaviors(){
+	/**
+	 * [behaviors description]
+	 * @return [type] [description]
+	 */
+	public function behaviors()
+	{
 		return array(
 			'CSafeContentBehavor' => array( 
 				'class' => 'application.components.CSafeContentBehavior',

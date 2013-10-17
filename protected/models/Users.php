@@ -1,15 +1,18 @@
 <?php
 
 /**
+ * Users Model
+ * 
+ * @author		Jackfiallos
+ * @link		http://qbit.com.mx/labs/celestic
+ * @copyright 	Copyright (c) 2009-2013 Qbit Mexhico
+ * @license		http://qbit.com.mx/labs/celestic/license/
+ * @version		2.0.0
+ * 
  * This is the model class for table "tb_users".
  */
 class Users extends CActiveRecord
 {
-	public function getCompleteName()
-	{
-		return $this->user_name." ".$this->user_lastname;
-	}
-	
 	/**
 	 * The followings are the available columns in table 'tb_users':
 	 * @var integer $user_id
@@ -77,12 +80,10 @@ class Users extends CActiveRecord
 			'Clients'=>array(self::HAS_ONE, 'Clients', 'user_id'),
 			'Accounts'=>array(self::BELONGS_TO, 'Accounts', 'account_id'),
 			'Companies'=>array(self::MANY_MANY, 'Companies', 'tb_companies_has_tb_users(user_id,company_id)'),
-			//'Cuser'=>array(self::HAS_MANY, 'CompaniesHasUsers', 'user_id)'),
 			'Cuser'=>array(self::HAS_MANY, 'CompaniesHasUsers', 'user_id'),
 			'Managers'=>array(self::MANY_MANY, 'ProjectsHasUsers', 'tb_projects_has_tb_users(user_id,project_id)'),
 			'ClientsManagers'=>array(self::MANY_MANY, 'Projects', 'tb_projects_has_tb_users(user_id,project_id)'),
 			'Tasks'=>array(self::MANY_MANY, 'Tasks', 'tb_users_has_tb_tasks(user_id,task_id)'),
-			//'Workers'=>array(self::MANY_MANY, 'UsersHasTasks', 'tb_users_has_tb_tasks(user_id,task_id)'),
 			'Address'=>array(self::BELONGS_TO, 'Address', 'address_id'),
 		);
 	}
@@ -117,7 +118,7 @@ class Users extends CActiveRecord
 		// Warning: Please modify the following code to remove attributes that
 		// should not be searched.
 
-		$criteria=new CDbCriteria;
+		$criteria = new CDbCriteria;
 		$criteria->compare('user_name',Users::user_name,true);
 		$criteria->compare('user_lastname',Users::user_lastname,true);
 		$criteria->compare('user_email',Users::user_email,true);
@@ -129,7 +130,12 @@ class Users extends CActiveRecord
 		));
 	}
 	
-	public function behaviors(){
+	/**
+	 * [behaviors description]
+	 * @return [type] [description]
+	 */
+	public function behaviors()
+	{
 		return array(
 			'CSafeContentBehavor' => array( 
 				'class' => 'application.components.CSafeContentBehavior',
@@ -138,6 +144,11 @@ class Users extends CActiveRecord
 		);
 	}
 	
+	/**
+	 * [findUsersAndClientsByAccount description]
+	 * @param  [type] $account_id [description]
+	 * @return [type]             [description]
+	 */
 	public function findUsersAndClientsByAccount($account_id)
 	{
 		return Users::model()->with('Accounts')->findAll(array(
@@ -149,6 +160,10 @@ class Users extends CActiveRecord
 		));
 	}
 	
+	/**
+	 * [findUserWithoutAccountManager description]
+	 * @return [type] [description]
+	 */
 	public function findUserWithoutAccountManager()
 	{
 		return Users::model()->findAll(array(
@@ -159,36 +174,18 @@ class Users extends CActiveRecord
 		));
 	}
 	
+	/**
+	 * [findUsersByAccount description]
+	 * @param  [type] $account_id [description]
+	 * @param  [type] $company_id [description]
+	 * @return [type]             [description]
+	 */
 	public function findUsersByAccount($account_id, $company_id)
     {
         return Users::model()->with('Clients','Companies')->findAll(array(
 			'select'=>'t.user_id, t.user_name, t.user_lastname',
-			//'condition'=>'t.account_id = :account_id AND Clients.client_id IS NULL AND Companies_Companies.user_id IS NULL',
 			'condition'=>'t.account_id = :account_id 
 				AND Clients.client_id IS NULL 
-				/*AND Companies_Companies.company_id != :company_id */
-				AND t.user_id NOT IN (
-					SELECT tbc.user_id  
-					FROM tb_companies_has_tb_users tbc
-					WHERE tbc.company_id = :company_id 
-				)',
-			'params'=>array(
-				':account_id'=>$account_id,
-				':company_id'=>$company_id,//$_GET['owner'],
-			),
-			'together'=>true,
-			'order'=>'t.user_name',
-			'group'=>'t.user_id',
-		));
-    }
-	
-	public function findClientsByAccount($account_id, $company_id)
-    {
-        return Users::model()->with('Clients','Companies')->findAll(array(
-			//'condition'=>'t.account_id = :account_id AND Clients.client_id IS NOT NULL AND Companies_Companies.user_id IS NULL',
-			'select'=>'t.user_id, t.user_name, t.user_lastname',
-			'condition'=>'t.account_id = :account_id 
-				AND Clients.client_id IS NOT NULL 
 				/*AND Companies_Companies.company_id != :company_id */
 				AND t.user_id NOT IN (
 					SELECT tbc.user_id  
@@ -205,6 +202,38 @@ class Users extends CActiveRecord
 		));
     }
 	
+	/**
+	 * [findClientsByAccount description]
+	 * @param  [type] $account_id [description]
+	 * @param  [type] $company_id [description]
+	 * @return [type]             [description]
+	 */
+	public function findClientsByAccount($account_id, $company_id)
+    {
+        return Users::model()->with('Clients','Companies')->findAll(array(
+			'select'=>'t.user_id, t.user_name, t.user_lastname',
+			'condition'=>'t.account_id = :account_id 
+				AND Clients.client_id IS NOT NULL 
+				AND t.user_id NOT IN (
+					SELECT tbc.user_id  
+					FROM tb_companies_has_tb_users tbc
+					WHERE tbc.company_id = :company_id 
+				)',
+			'params'=>array(
+				':account_id'=>$account_id,
+				':company_id'=>$company_id,
+			),
+			'together'=>true,
+			'order'=>'t.user_name',
+			'group'=>'t.user_id',
+		));
+    }
+	
+	/**
+	 * [findUsersByProject description]
+	 * @param  [type] $project_id [description]
+	 * @return [type]             [description]
+	 */
 	public function findUsersByProject($project_id)
 	{
 		return Users::model()->with('Clients','Companies.Projects')->findAll(array(
@@ -217,6 +246,11 @@ class Users extends CActiveRecord
 		));
 	}
 	
+	/**
+	 * [findClientsByProject description]
+	 * @param  [type] $project_id [description]
+	 * @return [type]             [description]
+	 */
 	public function findClientsByProject($project_id)
 	{
 		return Users::model()->with('Clients','Companies.Projects')->findAll(array(
@@ -229,6 +263,11 @@ class Users extends CActiveRecord
 		));
 	}
 	
+	/**
+	 * [findUsersAndClientsByProject description]
+	 * @param  [type] $project_id [description]
+	 * @return [type]             [description]
+	 */
 	public function findUsersAndClientsByProject($project_id)
 	{
 		return Users::model()->with('Companies.Projects')->findAll(array(
@@ -242,8 +281,9 @@ class Users extends CActiveRecord
 	}
 	
 	/**
-	 * 
-	 * Scope filterManagers
+	 * Scope
+	 * @param  [type] $list [description]
+	 * @return [type]       [description]
 	 */
 	public function filterManagers($list)
 	{
@@ -254,20 +294,23 @@ class Users extends CActiveRecord
         return $this;
     }
 	
-	/*public function findManagersByProject($project_id)
+	/**
+	 * [getCompleteName description]
+	 * @return [type] [description]
+	 */
+	public function getCompleteName()
 	{
-		return Users::model()->with('Managers')->findAll(array(
-			//'select'=>'t.user_id',
-			'condition'=>'Managers.project_id = :project_id',
-			'params'=>array(
-				':project_id' => $project_id,
-			),
-			'together'=>true,
-			'group'=>'t.user_id',
-		));
-	}*/
+		return $this->user_name." ".$this->user_lastname;
+	}
 	
-	public function verifyUserInProject($project_id, $user_id){
+	/**
+	 * [verifyUserInProject description]
+	 * @param  [type] $project_id [description]
+	 * @param  [type] $user_id    [description]
+	 * @return [type]             [description]
+	 */
+	public function verifyUserInProject($project_id, $user_id)
+	{
 		$count = Users::model()->with('ClientsManagers')->count(array(
 			'condition'=>'ClientsManagers.project_id = :project_id AND t.user_id = :user_id AND 1=1',
 			'params'=> array(
@@ -277,16 +320,22 @@ class Users extends CActiveRecord
 			'together'=>true
 		));
 		
-		if ($count>0)
+		if ($count > 0)
+		{
 			return true;
+		}
 		
 		return false;
 	}
 	
+	/**
+	 * [findWorkersByTask description]
+	 * @param  [type] $task_id [description]
+	 * @return [type]          [description]
+	 */
 	public function findWorkersByTask($task_id)
 	{
 		return Users::model()->with('Tasks')->findAll(array(
-			//'select'=>'t.user_id',
 			'condition'=>'Tasks.task_id = :task_id',
 			'params'=>array(
 				':task_id' => $task_id,
@@ -296,6 +345,11 @@ class Users extends CActiveRecord
 		));
 	}
 	
+	/**
+	 * [countWorkersByTask description]
+	 * @param  [type] $task_id [description]
+	 * @return [type]          [description]
+	 */
 	public function countWorkersByTask($task_id)
 	{
 		return Users::model()->with('Tasks')->count(array(
@@ -309,6 +363,12 @@ class Users extends CActiveRecord
 		));
 	}
 	
+	/**
+	 * [countUsersByAccount description]
+	 * @param  [type] $user_id    [description]
+	 * @param  [type] $account_id [description]
+	 * @return [type]             [description]
+	 */
 	public function countUsersByAccount($user_id, $account_id)
 	{
 		return Users::model()->count(array(
@@ -319,7 +379,13 @@ class Users extends CActiveRecord
 			)
 		));
 	}
-	
+
+	/**
+	 * [availablesUsersToTakeTask description]
+	 * @param  [type] $project_id [description]
+	 * @param  [type] $task_id    [description]
+	 * @return [type]             [description]
+	 */
 	public function availablesUsersToTakeTask($project_id, $task_id)
 	{
 		$Users = Users::model()->with('Tasks')->findAll(array(
@@ -330,6 +396,7 @@ class Users extends CActiveRecord
 		));
 		
 		$usersArray = array(0);
+		
 		foreach($Users as $user)
 		{
 			array_push($usersArray, $user->user_id);

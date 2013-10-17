@@ -11,26 +11,28 @@
 	),
 	'enableAjaxValidation'=>false
 )); ?>
+
+	<?php echo $form->errorSummary($model,null,null,array('class'=>'errorSummary stick'))."<br />"; ?>
 	
 	<div class="row-fluid">
 		<div class="span6">
 			<div class="control-group">
-				<?php echo $form->labelEx($model,'milestone_title'); ?>
+				<?php echo $form->labelEx($model, 'milestone_title', array('class'=>'control-label', 'for'=>$id.'_'.CHtml::activeId($model, 'milestone_title'))); ?>
 				<div class="controls">
-					<?php echo $form->textField($model,'milestone_title',array('class'=>'betterform', 'value'=>'{{milestone.title}}')); ?>
+					<?php echo $form->textField($model,'milestone_title',array('class'=>'betterform', 'value'=>'{{milestone.title}}', 'id'=>$id.'_'.CHtml::activeId($model, 'milestone_title'))); ?>
 					<div class="help-inline">
-						<?php echo CHtml::label(Yii::t('milestones','FormMilestoneTitle'), CHtml::activeId($model, 'milestone_title'), array('class'=>'labelhelper')); ?>
+						<?php echo CHtml::label(Yii::t('milestones','FormMilestoneTitle'), $id.'_'.CHtml::activeId($model, 'milestone_title'), array('class'=>'labelhelper')); ?>
 					</div>
 				</div>
 			</div>
 		</div>
 		<div class="span6">
 			<div class="control-group">
-				<?php echo $form->labelEx($model, 'user_id'); ?>
+				<?php echo $form->labelEx($model, 'user_id', array('class'=>'control-label', 'for'=>$id.'_'.CHtml::activeId($model, 'user_id'))); ?>
 				<div class="controls">
-					<?php echo $form->dropDownList($model, 'user_id', CHtml::listData($users, 'user_id', 'completeName'),array('class'=>'betterform','empty'=>Yii::t('milestones', 'selectOption'), 'ng-model'=>'milestone.ownerId')); ?>
+					<?php echo $form->dropDownList($model, 'user_id', CHtml::listData($users, 'user_id', 'completeName'),array('class'=>'betterform','empty'=>Yii::t('milestones', 'selectOption'), 'ng-model'=>'milestone.ownerId', 'id'=>$id.'_'.CHtml::activeId($model, 'user_id'))); ?>
 					<div class="help-inline">
-						<?php echo CHtml::label(Yii::t('milestones','FormMilestoneUser'), CHtml::activeId($model, 'user_id'), array('class'=>'labelhelper')); ?>
+						<?php echo CHtml::label(Yii::t('milestones','FormMilestoneUser'), $id.'_'.CHtml::activeId($model, 'user_id'), array('class'=>'labelhelper')); ?>
 					</div>
 				</div>
 			</div>
@@ -40,7 +42,7 @@
 	<div class="row-fluid">
 		<div class="span6">
 			<div class="control-group">
-				<?php echo $form->labelEx($model,'milestone_startdate'); ?>
+				<?php echo $form->labelEx($model,'milestone_startdate', array('class'=>'control-label', 'for'=>$id.'_'.CHtml::activeId($model, 'milestone_startdate'))); ?>
 				<div class="controls">
 					<?php
 						$this->widget('zii.widgets.jui.CJuiDatePicker', array(
@@ -70,14 +72,14 @@
 						));
 					?>
 					<div class="help-inline">
-						<?php echo CHtml::label(Yii::t('milestones','FormMilestoneStartDate'), CHtml::activeId($model, 'milestone_startdate'), array('class'=>'labelhelper')); ?>
+						<?php echo CHtml::label(Yii::t('milestones','FormMilestoneStartDate'), $id.'_'.CHtml::activeId($model, 'milestone_startdate'), array('class'=>'labelhelper')); ?>
 					</div>
 				</div>
 			</div>
 		</div>
 		<div class="span6">
 			<div class="control-group">
-				<?php echo $form->labelEx($model,'milestone_duedate'); ?>
+				<?php echo $form->labelEx($model,'milestone_duedate', array('class'=>'control-label', 'for'=>$id.'_'.CHtml::activeId($model, 'milestone_duedate'))); ?>
 				<div class="controls">
 					<?php
 						$this->widget('zii.widgets.jui.CJuiDatePicker', array(
@@ -107,7 +109,7 @@
 						));
 					?>
 					<div class="help-inline">
-						<?php echo CHtml::label(Yii::t('milestones','FormMilestoneDueDate'), CHtml::activeId($model, 'milestone_duedate'), array('class'=>'labelhelper')); ?>
+						<?php echo CHtml::label(Yii::t('milestones','FormMilestoneDueDate'), $id.'_'.CHtml::activeId($model, 'milestone_duedate'), array('class'=>'labelhelper')); ?>
 					</div>
 				</div>
 			</div>
@@ -116,18 +118,18 @@
 
 	<div class="row-fluid">
 		<div class="control-group">
-			<?php echo $form->labelEx($model,'milestone_description'); ?>
+			<?php echo $form->labelEx($model,'milestone_description', array('class'=>'control-label', 'for'=>$id.'_'.CHtml::activeId($model, 'milestone_description'))); ?>
 			<div class="controls">
-				<?php echo $form->textArea($model,'milestone_description',array('style'=>'width:100%', 'value'=>'{{milestone.description}}')); ?>
+				<?php echo $form->textArea($model,'milestone_description',array('style'=>'width:100%', 'value'=>'{{milestone.description}}', 'id'=>$id.'_'.CHtml::activeId($model, 'milestone_description'))); ?>
 				<div class="help-inline">
-					<?php echo CHtml::label(Yii::t('milestones','FormMilestoneDescription'), CHtml::activeId($model, 'milestone_description'), array('class'=>'labelhelper')); ?>
+					<?php echo CHtml::label(Yii::t('milestones','FormMilestoneDescription'), $id.'_'.CHtml::activeId($model, 'milestone_description'), array('class'=>'labelhelper')); ?>
 				</div>
 			</div>
 		</div>
 
 		<div class="form-actions">
 			<div class="span6">
-				<?php echo CHtml::button($model->isNewRecord ? Yii::t('site','create') : Yii::t('site','save'), array('type'=>'submit', 'class'=>'btn btn-primary')); ?>
+				<?php echo CHtml::htmlButton("<i class=\"icon-plus-sign\"></i> ".Yii::t('site','save'), array('type'=>'submit', 'class'=>'btn btn-primary')); ?>
 				<?php echo CHtml::button(Yii::t('site','reset'), array('type'=>'reset', 'class'=>'btn')); ?>
 			</div>
 			<div class="span6">

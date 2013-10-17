@@ -15,26 +15,6 @@ class DefaultController extends Controller
 	 * @var CActiveRecord the currently loaded data model instance.
 	 */
 	private $_model;
-
-	/**
-	 * [$officeDocs description]
-	 * @var array
-	 */
-	private $officeDocs = array(
-		'xlsx' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-		'xltx' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.template',
-		'potx' => 'application/vnd.openxmlformats-officedocument.presentationml.template',
-		'ppsx' => 'application/vnd.openxmlformats-officedocument.presentationml.slideshow',
-		'pptx' => 'application/vnd.openxmlformats-officedocument.presentationml.presentation',
-		'sldx' => 'application/vnd.openxmlformats-officedocument.presentationml.slide',
-		'docx' => 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-		'dotx' => 'application/vnd.openxmlformats-officedocument.wordprocessingml.template',
-		'xlam' => 'application/vnd.ms-excel.addin.macroEnabled.12',
-		'xlsb' => 'application/vnd.ms-excel.sheet.binary.macroEnabled.12',
-		'doc'  => 'application/msword',
-		'vsd'  => 'application/vnd.visio',
-		'txt'  => 'text/plain'
-	);
 	
 	/**
 	 * @var resourceFolder saved inside all uploaded images
@@ -104,13 +84,6 @@ class DefaultController extends Controller
 				{
 					$timestamp = strtotime($item->document_uploadDate);
 
-					$type = $item->document_type;
-					if (in_array($type, $this->officeDocs))
-					{
-						$key = array_search($item->document_type, $this->officeDocs);
-						$type = 'office/'.$key;
-					}
-
 					array_push($document, array(
 						'id'=>$item->document_id,
 						'name'=>CHtml::encode($item->document_name),
@@ -172,14 +145,7 @@ class DefaultController extends Controller
 					throw new CHttpException(404, Yii::t('site', '404_Error'));
 				}
 				else 
-				{
-					$type = $model->document_type;
-					if (in_array($type, $this->officeDocs))
-					{
-						$key = array_search($model->document_type, $this->officeDocs);
-						$type = 'office/'.$key;
-					}
-					
+				{					
 					header('Content-type: application/json');
 					echo CJSON::encode(array(
 						'name' => $model->document_name,
@@ -316,20 +282,13 @@ class DefaultController extends Controller
 						
 						$mailer->pushMail($subject, $str, $recipientsList, Emails::PRIORITY_NORMAL);
 
-						$type = $model->document_type;
-						if (in_array($type, $this->officeDocs))
-						{
-							$key = array_search($model->document_type, $this->officeDocs);
-							$type = 'office/'.$key;
-						}
-
 						$document = array(
 							'id'=>$model->document_id,
 							'name'=>$model->document_name,
 							'description'=>$model->document_description,
 							'url'=>$this->createUrl('index', array('#'=>'/view/'.$model->document_id)),
 							'downloadLink'=>$this->createUrl('download', array('id'=>$model->document_id)),
-							'imageType'=>Yii::app()->theme->baseUrl.'/images/icons/'.strtoupper(substr(strrchr($type,'/'),1)).'.png',
+							'imageType'=>Yii::app()->theme->baseUrl.'/images/icons/'.strtolower(substr(strrchr($model->document_path,'.'),1)).'.png',
 							'userName'=>ucfirst(CHtml::encode($model->User->user_name)),
 							'userUrl'=>$this->createUrl('users/view', array('id'=>$model->User->user_id)),
 							'timestamp'=>Yii::app()->dateFormatter->format('MMMM d, yyy', strtotime($model->document_uploadDate))

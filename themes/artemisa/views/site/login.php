@@ -5,7 +5,7 @@
 	<div class="login-widget login-login" ng-switch-when="home">
 		<header class="login-header">
 			<a href="#">
-				<img src="<?php echo Yii::app()->baseUrl; ?>images/celestic.png" alt="<?php echo CHtml::encode(Yii::app()->name).' v.'.Yii::app()->params['appVersion']?>">
+				<img src="<?php echo Yii::app()->getBaseUrl(true); ?>/images/celestic.png" alt="<?php echo CHtml::encode(Yii::app()->name).' v.'.Yii::app()->params['appVersion']?>">
 			</a>
 		</header>
 		<h4 class="typo login-title">Login 
@@ -62,7 +62,7 @@
 	<div class="login-widget new-account" ng-switch-when="new">
 		<header class="login-header">
 			<a href="#">
-				<img src="<?php echo Yii::app()->baseUrl; ?>images/celestic.png" alt="<?php echo CHtml::encode(Yii::app()->name).' v.'.Yii::app()->params['appVersion']?>">
+				<img src="<?php echo Yii::app()->getBaseUrl(true); ?>/images/celestic.png" alt="<?php echo CHtml::encode(Yii::app()->name).' v.'.Yii::app()->params['appVersion']?>">
 			</a>
 		</header>
 		<h4 class="typo login-title">New Account <a href="#/home" class="login-w">Login?</a></h4>
@@ -100,7 +100,7 @@
 	<div class="login-widget forget-pass" ng-switch-when="forget">
 		<header class="login-header">
 			<a href="#">
-				<img src="<?php echo Yii::app()->baseUrl; ?>images/celestic.png" alt="<?php echo CHtml::encode(Yii::app()->name).' v.'.Yii::app()->params['appVersion']?>">
+				<img src="<?php echo Yii::app()->getBaseUrl(true); ?>/images/celestic.png" alt="<?php echo CHtml::encode(Yii::app()->name).' v.'.Yii::app()->params['appVersion']?>">
 			</a>
 		</header>
 		<h4 class="typo login-title">Forget Pass? <a href="#/home" class="login-w">Login?</a></h4>
@@ -131,8 +131,4 @@ $cs=Yii::app()->clientScript;
 $cs->registerScriptFile(Yii::app()->theme->baseUrl.'/js/lib/angular.min.js', CClientScript::POS_END);
 $cs->registerScriptFile(Yii::app()->theme->baseUrl.'/js/lib/angular-cookies.min.js', CClientScript::POS_END);
 $cs->registerScriptFile(Yii::app()->theme->baseUrl.'/js/login.configuration.js', CClientScript::POS_END);
-$cs->registerScript('loginScript', "
-	// Celestic.loginUrl = '".Yii::app()->createAbsoluteUrl('site/login')."';
-	// Celestic.CSRF_Token = '".Yii::app()->request->csrfToken."';
-");
 ?>

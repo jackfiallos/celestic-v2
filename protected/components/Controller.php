@@ -5,8 +5,9 @@
  * @author		Jackfiallos
  * @link		http://qbit.com.mx/labs/celestic
  * @copyright 	Copyright (c) 2009-2013 Qbit Mexhico
- * @license 	http://qbit.com.mx/labs/celestic/license/
+ * @license		http://qbit.com.mx/labs/celestic/license/
  * @description
+ * 
  * Controller is the customized base controller class.
  * All controller classes for this application should extend from this base class. 
  * @property string $layout

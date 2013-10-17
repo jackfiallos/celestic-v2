@@ -1,6 +1,14 @@
 <?php
 
 /**
+ * Logs Model
+ * 
+ * @author		Jackfiallos
+ * @link		http://qbit.com.mx/labs/celestic
+ * @copyright 	Copyright (c) 2009-2013 Qbit Mexhico
+ * @license		http://qbit.com.mx/labs/celestic/license/
+ * @version		2.0.0
+ * 
  * This is the model class for table "tb_logs".
  *
  * The followings are the available columns in table 'tb_logs':
@@ -24,17 +32,6 @@ class Logs extends CActiveRecord
 	const LOG_COMMENTED = 'comment';
 	const LOG_ASSIGNED = 'assigned';
 	const LOG_REVOKED = 'revoked';
-		
-	public function getTitleFromLogItem($id, $className, $itemTitle)
-	{
-		if (class_exists($className))
-		{
-			$class = new $className;
-			return $class->findByPk($id)->$itemTitle;
-		}
-		else
-			return "";
-	}
 	
 	/**
 	 * Returns the static model of the specified AR class.
@@ -129,6 +126,10 @@ class Logs extends CActiveRecord
 		));
 	}
 	
+	/**
+	 * [behaviors description]
+	 * @return [type] [description]
+	 */
 	public function behaviors()
 	{
 		return array(
@@ -139,10 +140,19 @@ class Logs extends CActiveRecord
 		);
 	}
 	
+	/**
+	 * [findActivity description]
+	 * @param  [type]  $module      [description]
+	 * @param  [type]  $projectList [description]
+	 * @param  integer $limit       [description]
+	 * @return [type]               [description]
+	 */
 	public function findActivity($module, $projectList, $limit = 7)
     {
 		if (count($projectList) <= 0)
+		{
 			$projectList = array(-1);
+		}
 		
     	return Logs::model()->with('Module')->findAll(array(
 			'condition'=>'t.log_activity NOT LIKE "%Comment%" AND t.project_id <> 0 AND t.project_id IN ('.implode(",", $projectList).')', //AND Module.module_name LIKE ("'.$module.'")',
@@ -156,6 +166,12 @@ class Logs extends CActiveRecord
 		));
     }
 	
+	/**
+	 * [saveLog description]
+	 * @param  [type]  $modelAttributes [description]
+	 * @param  boolean $sendMail        [description]
+	 * @return [type]                   [description]
+	 */
 	public function saveLog($modelAttributes, $sendMail = false)
 	{	
 		$module = Modules::model()->find(array(
@@ -177,6 +193,11 @@ class Logs extends CActiveRecord
 		}
 	}
 	
+	/**
+	 * [sendEmailAlert description]
+	 * @param  [type] $attributes [description]
+	 * @return [type]             [description]
+	 */
 	private function sendEmailAlert($attributes)
 	{
 		$recipients = Users::model()->with('Companies.Projects')->findAll(array(
@@ -186,7 +207,9 @@ class Logs extends CActiveRecord
 		
 		$recipientsList = array();
 		foreach($recipients as $user)
+		{
 			array_push($recipientsList, $user->user_email);
+		}
 			
 		$str;
 		Yii::import('application.extensions.miniTemplator.miniTemplator');
@@ -222,5 +245,23 @@ class Logs extends CActiveRecord
 				':resource_id' => (int)$resource_id,
 			)
 		));
+	}
+
+	/**
+	 * [getTitleFromLogItem description]
+	 * @param  [type] $id        [description]
+	 * @param  [type] $className [description]
+	 * @param  [type] $itemTitle [description]
+	 * @return [type]            [description]
+	 */
+	public function getTitleFromLogItem($id, $className, $itemTitle)
+	{
+		if (class_exists($className))
+		{
+			$class = new $className;
+			return $class->findByPk($id)->$itemTitle;
+		}
+		
+		return "";
 	}
 }

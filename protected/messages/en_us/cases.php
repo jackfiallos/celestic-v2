@@ -14,7 +14,7 @@ return array(
 	// MODEL
 	'case_id' => 'Case',
 	'case_date' => 'Creation Date',
-	'case_code' => 'Identification Code',
+	'case_code' => 'Code ID',
 	'case_name' => 'Title',
 	'case_actors' => 'Actors',
 	'case_description' => 'Description',

@@ -1,6 +1,14 @@
 <?php
 
 /**
+ * Timezones Model
+ * 
+ * @author		Jackfiallos
+ * @link		http://qbit.com.mx/labs/celestic
+ * @copyright 	Copyright (c) 2009-2013 Qbit Mexhico
+ * @license		http://qbit.com.mx/labs/celestic/license/
+ * @version		2.0.0
+ * 
  * This is the model class for table "tb_timezones".
  *
  * The followings are the available columns in table 'tb_timezones':
@@ -64,6 +72,11 @@ class Timezones extends CActiveRecord
 		);
 	}
 	
+	/**
+	 * [getTimezoneSelected description]
+	 * @param  [type] $account_id [description]
+	 * @return [type]             [description]
+	 */
 	public static function getTimezoneSelected($account_id)
 	{
 		$criteria = new CDbCriteria;
@@ -71,6 +84,7 @@ class Timezones extends CActiveRecord
 		$criteria->params = array(
 			':account_id'=>$account_id,
 		);
+		
 		return Timezones::model()->with('Accounts')->together()->find($criteria);
 	}
 }

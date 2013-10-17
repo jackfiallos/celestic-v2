@@ -1,6 +1,14 @@
 <?php
 
 /**
+ * Projects Model
+ * 
+ * @author		Jackfiallos
+ * @link		http://qbit.com.mx/labs/celestic
+ * @copyright 	Copyright (c) 2009-2013 Qbit Mexhico
+ * @license		http://qbit.com.mx/labs/celestic/license/
+ * @version		2.0.0
+ * 
  * This is the model class for table "tb_projects".
  *
  * The followings are the available columns in table 'tb_projects':
@@ -161,7 +169,12 @@ class Projects extends CActiveRecord
 		));
 	}
 	
-	public function behaviors(){
+	/**
+	 * [behaviors description]
+	 * @return [type] [description]
+	 */
+	public function behaviors()
+	{
 		return array(
 			'CSafeContentBehavor' => array( 
 				'class' => 'application.components.CSafeContentBehavior',
@@ -196,6 +209,11 @@ class Projects extends CActiveRecord
 		);
 	}
 	
+	/**
+	 * [countProjects description]
+	 * @param  [type] $project_id [description]
+	 * @return [type]             [description]
+	 */
 	public function countProjects($project_id)
 	{
 		return Projects::model()->count(array(
@@ -206,6 +224,11 @@ class Projects extends CActiveRecord
 		));
 	}
 	
+	/**
+	 * [findMyProjects description]
+	 * @param  [type] $userId [description]
+	 * @return [type]         [description]
+	 */
 	public function findMyProjects($userId)
     {
     	$projects = Projects::model()->with('Company.Cusers')->together()->findAll(array(
@@ -222,10 +245,16 @@ class Projects extends CActiveRecord
 		return $projects;
     }
 	
+	/**
+	 * [hasProject description]
+	 * @param  [type]  $user_id    [description]
+	 * @param  [type]  $project_id [description]
+	 * @return boolean             [description]
+	 */
 	public function hasProject($user_id, $project_id)
 	{
 		$criteria = new CDbCriteria;
-		$criteria->condition = "Cusers.user_id = :user_id AND t.project_id = :project_id AND t.project_active = 1 AND 1=1";
+		$criteria->condition = "Cusers.user_id = :user_id AND t.project_id = :project_id AND t.project_active = 1";
 		$criteria->params = array(
 			':user_id' => $user_id,
 			':project_id' => $project_id,
@@ -234,6 +263,11 @@ class Projects extends CActiveRecord
 		return Projects::model()->with('Company.Cusers')->together()->find($criteria);
 	}
 	
+	/**
+	 * [getProjectCost description]
+	 * @param  [type] $project_id [description]
+	 * @return [type]             [description]
+	 */
 	public function getProjectCost($project_id)
 	{
 		return Budgets::model()->with('BudgetsConcepts')->find(array(
@@ -247,12 +281,17 @@ class Projects extends CActiveRecord
 		));
 	}
 	
+	/**
+	 * [getProjectProgress description]
+	 * @param  [type] $project_id [description]
+	 * @return [type]             [description]
+	 */
 	public function getProjectProgress($project_id)
 	{
 		// ( total_tasks_per_status / total_tasks ) / status_value
 		$criteria = new CDbCriteria;
 		$criteria->select = '(ROUND((COUNT(t.task_id)/(SELECT COUNT(*) FROM tb_tasks tb WHERE tb.project_id = :project_id))*Status.status_value)) AS progress';
-		$criteria->condition = 't.project_id = :project_id AND 200=200';
+		$criteria->condition = 't.project_id = :project_id';
 		$criteria->params = array(
 			':project_id' => $project_id,
 		);
@@ -262,6 +301,11 @@ class Projects extends CActiveRecord
 		return Tasks::model()->with('Status')->together()->find($criteria);
 	}
 	
+	/**
+	 * [findManagersByProject description]
+	 * @param  [type] $project_id [description]
+	 * @return [type]             [description]
+	 */
 	public function findManagersByProject($project_id)
 	{
 		return Users::model()->findAll(array(
@@ -275,33 +319,42 @@ class Projects extends CActiveRecord
 		));
 	}
 	
+	/**
+	 * [findAvailablesManagersByProject description]
+	 * @param  [type] $project_id [description]
+	 * @return [type]             [description]
+	 */
 	public function findAvailablesManagersByProject($project_id)
 	{
 		$Managers = $this->findManagersByProject($project_id);
 		
 		$managerList = array();
-		if(count($Managers)>0)
+		if(count($Managers) > 0)
 		{
 			foreach($Managers as $users)
 				array_push($managerList, $users->user_id);
 		}
 		else
+		{
 			array_push($managerList, -1);
+		}
 		
-		
-		return Users::model()->findAll(
-			array(
-				'condition'=>'Companies.company_id = :company_id AND t.user_id NOT IN ('.implode(",", $managerList).')',
-				'params'=>array(
-					':company_id'=>Projects::model()->findByPk(Yii::app()->user->getState('project_selected'))->company_id,
-				),
-				'together'=>true,
-				'order'=>'t.user_name ASC',
-				'with'=>array('Companies'),
-			)
-		);
+		return Users::model()->findAll(array(
+			'condition'=>'Companies.company_id = :company_id AND t.user_id NOT IN ('.implode(",", $managerList).')',
+			'params'=>array(
+				':company_id'=>Projects::model()->findByPk(Yii::app()->user->getState('project_selected'))->company_id,
+			),
+			'together'=>true,
+			'order'=>'t.user_name ASC',
+			'with'=>array('Companies'),
+		));
 	}
 	
+	/**
+	 * [findAllUsersByProject description]
+	 * @param  [type] $project_id [description]
+	 * @return [type]             [description]
+	 */
 	public function findAllUsersByProject($project_id)
 	{
 		return Users::model()->with('ClientsManagers')->findAll(array(

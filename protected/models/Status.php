@@ -1,6 +1,14 @@
 <?php
 
 /**
+ * Status Model
+ * 
+ * @author		Jackfiallos
+ * @link		http://qbit.com.mx/labs/celestic
+ * @copyright 	Copyright (c) 2009-2013 Qbit Mexhico
+ * @license		http://qbit.com.mx/labs/celestic/license/
+ * @version		2.0.0
+ * 
  * This is the model class for table "tb_status".
  *
  * The followings are the available columns in table 'tb_status':
@@ -12,20 +20,20 @@
  */
 class Status extends CActiveRecord
 {
-	const STATUS_PENDING	=	1;
-	const STATUS_CANCELLED	=	2;
-	const STATUS_ACCEPTED	=	3;
-	const STATUS_CLOSED		=	4;
-	const STATUS_TOTEST		=	5;
-	const STATUS_INPROGRESS	=	6;
-	const STATUS_TOREVIEW	=	7;
+	const STATUS_PENDING    =	1;
+	const STATUS_CANCELLED  =	2;
+	const STATUS_ACCEPTED   =	3;
+	const STATUS_CLOSED     =	4;
+	const STATUS_TOTEST     =	5;
+	const STATUS_INPROGRESS =	6;
+	const STATUS_TOREVIEW   =	7;
 	
-	const STATUS_PENDING_WORK		=	0;
-	const STATUS_CANCELLED_WORK		=	100;
-	const STATUS_ACCEPTED_WORK		=	25;
-	const STATUS_CLOSED_WORK		=	100;
-	const STATUS_TOTEST_WORK		=	75;
-	const STATUS_INPROGRESS_WORK	=	50;
+	const STATUS_PENDING_WORK    =	0;
+	const STATUS_CANCELLED_WORK  =	100;
+	const STATUS_ACCEPTED_WORK   =	25;
+	const STATUS_CLOSED_WORK     =	100;
+	const STATUS_TOTEST_WORK     =	75;
+	const STATUS_INPROGRESS_WORK =	50;
 	
 	const STATUS_COMMENT = 'StatusChanged';
 	
@@ -73,6 +81,10 @@ class Status extends CActiveRecord
 		);
 	}
 	
+	/**
+	 * [behaviors description]
+	 * @return [type] [description]
+	 */
 	public function behaviors()
 	{
 		return array(
@@ -83,12 +95,20 @@ class Status extends CActiveRecord
 		);
 	}
 	
+	/**
+	 * [afterFind description]
+	 * @return [type] [description]
+	 */
 	public function afterFind()
 	{
 		$this->status_name = Yii::t('status',$this->status_name);
 		return parent::afterFind();
 	}
 	
+	/**
+	 * [findAllOrdered description]
+	 * @return [type] [description]
+	 */
 	public function findAllOrdered()
 	{
 		return Status::model()->findAll(array(
@@ -96,6 +116,11 @@ class Status extends CActiveRecord
 		));
 	}
 	
+	/**
+	 * [findAllRequired description]
+	 * @param  [type] $required [description]
+	 * @return [type]           [description]
+	 */
 	public function findAllRequired($required)
 	{
 		return Status::model()->findAll(array(

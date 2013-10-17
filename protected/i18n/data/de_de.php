@@ -6,7 +6,6 @@
  * ( that are stored in <framework_dir>/i18n/data/ )
  */
 
-
 return CMap::mergeArray(
 	require(dirname($GLOBALS['yii']).'/i18n/data/'.basename(__FILE__)),
 	array(

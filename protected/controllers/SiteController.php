@@ -5,7 +5,7 @@
  * @author		Jackfiallos
  * @link		http://qbit.com.mx/labs/celestic
  * @copyright 	Copyright (c) 2009-2013 Qbit Mexhico
- * @license 	http://qbit.com.mx/labs/celestic/license/
+ * @license		http://qbit.com.mx/labs/celestic/license/
  * @description
  *
  **/
