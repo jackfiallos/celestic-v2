@@ -1,5 +1,16 @@
 <?php
 $this->pageTitle = Yii::app()->name." - ".Yii::t('cases', 'TitleCases');
+
+$createIdForm = 'cases-form-create';
+$updateIdForm = 'cases-form-update';
+$formFields = array(
+	'case_name'=>CHtml::activeId($model, 'case_name'),
+	'case_actors'=>CHtml::activeId($model, 'case_actors'),
+	'case_code'=>CHtml::activeId($model, 'case_code'),
+	'case_priority'=>CHtml::activeId($model, 'case_priority'),
+	'case_description'=>CHtml::activeId($model, 'case_description'),
+	'case_requirements'=>CHtml::activeId($model, 'case_requirements')
+);
 ?>
 
 <div ng-controller="celestic.cases.home.controller">
@@ -7,14 +18,15 @@ $this->pageTitle = Yii::app()->name." - ".Yii::t('cases', 'TitleCases');
 		<header class="widget-head">
 			<h3 class="module-title"><i class="icon-gear icon-2"></i><?php echo Yii::t('cases', 'TitleCases'); ?></h3>
 			<div class="data-header-actions">
-				<?php echo CHtml::link("<i class=\"icon-plus-sign\"></i> ".Yii::t('cases','CreateCases'), $this->createUrl('index', array('#'=>'/create')), array('ng-click'=>'casesForm=true', 'ng-hide'=>'casesForm', 'class'=>'btn btn-primary', 'title'=>Yii::t('cases', 'CreateCases'))); ?>
+				<?php echo CHtml::link("<i class=\"icon-plus-sign\"></i>", $this->createUrl('index', array('#'=>'/create')), array('ng-click'=>'casesForm=true', 'ng-hide'=>'casesForm', 'class'=>'btn btn-primary', 'title'=>Yii::t('cases', 'CreateCases'))); ?>
 			</div>
 		</header>
 		<section class="widget-body">
 			<?php echo $this->renderPartial('_form', array(
 				'model'=>$model, 
 				'action'=>$this->createUrl('create'),
-				'id'=>'cases-form-create'
+				'id'=>$createIdForm,
+				'formFields'=>$formFields
 			)); ?>
 			<div class="aboutModule" ng-hide="hasCases">
 				<p class="aboutModuleTitle">
@@ -75,15 +87,15 @@ $this->pageTitle = Yii::app()->name." - ".Yii::t('cases', 'TitleCases');
 							<span>
 								<?php echo Yii::t('cases','case_actors'); ?>: {{case.actors}}
 							</span><br />
+							<div class="label {{case.statusCss}}">
+								{{case.status}}
+							</div>
 							<div class="label {{case.cssClass}}">
 								{{case.priority}}
 							</div>
-							<a href="{{case.url}}" ng-show="case.countComments > 0">
-								<span class="label label-info">{{case.countComments}} <?php echo Yii::t('site','comments'); ?> <i class="icon-comment"></i> </span>
-							</a>
-							<div>
-								<a href="{{case.url}}">
-									<?php echo Yii::t('cases','ViewDetails'); ?>
+							<div class="pull-right">
+								<a href="{{case.url}}" ng-show="case.countComments > 0">
+									<span class="label label-info">{{case.countComments}} <?php echo Yii::t('site','comments'); ?> <i class="icon-comment"></i> </span>
 								</a>
 							</div>
 						</div>
@@ -112,7 +124,10 @@ $cs->registerScript('casesScript', "
 			'view':'".$this->createUrl('view')."'
 	    };
 	    CelesticParams.Forms = {
-	    	'CSRF_Token':'".Yii::app()->request->csrfToken."'
+	    	'CSRF_Token':'".Yii::app()->request->csrfToken."',
+	    	'createForm': '".$createIdForm."',
+	    	'updateForm': '".$updateIdForm."',
+	    	'fields': ".CJSON::encode($formFields)."
 	    };
 	    window.CelesticParams = CelesticParams;
     }(window));

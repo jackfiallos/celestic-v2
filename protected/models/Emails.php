@@ -4,10 +4,11 @@
  * Emails Model
  * 
  * @author		Jackfiallos
+ * @version		2.0.0
  * @link		http://qbit.com.mx/labs/celestic
  * @copyright 	Copyright (c) 2009-2013 Qbit Mexhico
  * @license		http://qbit.com.mx/labs/celestic/license/
- * @version		2.0.0
+ * @description
  * 
  * This is the model class for table "tb_emails".
  *
@@ -24,21 +25,23 @@
  */
 class Emails extends CActiveRecord
 {
-    const PRIORITY_LOW = 5;
+	const PRIORITY_LOW    = 5;
 	const PRIORITY_NORMAL = 3;
-	const PRIORITY_HIGH = 1;
+	const PRIORITY_HIGH   = 1;
 
 	/**
-     * Returns the static model of the specified AR class.
-     * @return Emails the static model class
-     */
+	 * [model description]
+	 * @param  [type] $className [description]
+	 * @return [type]            [description]
+	 */
     public static function model($className=__CLASS__)
     {
         return parent::model($className);
     }
 
     /**
-     * @return string the associated database table name
+     * [tableName description]
+     * @return [type] [description]
      */
     public function tableName()
     {
@@ -46,23 +49,23 @@ class Emails extends CActiveRecord
     }
 
     /**
-     * @return array validation rules for model attributes.
+     * [rules description]
+     * @return [type] [description]
      */
     public function rules()
     {
-        // NOTE: you should only define rules for those attributes that
-        // will receive user inputs.
         return array(
             array('email_subject, email_body, email_priority, email_creationDate, email_toName, email_toMail', 'required'),
             array('email_priority, email_status', 'numerical', 'integerOnly'=>true),
             array('email_subject', 'length', 'max'=>80),
-            array('email_toName, email_toMail', 'length', 'max'=>100),
+            array('email_toName, email_toMail', 'length', 'max'=>100)
         );
     }
 
-    /**
-     * @return array customized attribute labels (name=>label)
-     */
+   /**
+    * [attributeLabels description]
+    * @return [type] [description]
+    */
     public function attributeLabels()
     {
         return array(
@@ -74,7 +77,7 @@ class Emails extends CActiveRecord
             'email_creationDate' => 'Email Creation Date',
             'email_sentDate' => 'Email Sent Date',
         	'email_toName' => 'Name',
-        	'email_toMail' => 'Email',
+        	'email_toMail' => 'Email'
         );
     }
 } 

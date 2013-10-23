@@ -3,30 +3,21 @@
  * ListComments class file
  * 
  * @author		Jackfiallos
- * @link		http://jackfiallos.com
+ * @version		2.0.0
+ * @link		http://qbit.com.mx/labs/celestic
+ * @copyright 	Copyright (c) 2009-2013 Qbit Mexhico
+ * @license		http://qbit.com.mx/labs/celestic/license/
  * @description
  *
  * @property int $resourceid
  * @property int $moduleid
  *
  **/ 
-// Yii::import('zii.widgets.CPortlet');
 class ListComments extends CWidget
 {
 	public $resourceid;
 	public $moduleid;
 	public $htmlOptions;
-	
-	// /**
-	//  * Class object initialization
-	//  */
-	// public function init()
-	// {
-	// 	$this->title=Yii::t('comments','CommentsTitle');
-	// 	$this->decorationCssClass = "portlet-header";
-	// 	$this->titleCssClass = "portlet-title";
-	// 	parent::init();
-	// }
 	
 	/**
 	 * Get all comments from module

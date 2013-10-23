@@ -4922,13 +4922,15 @@ a.thumbnail:hover,a.thumbnail:focus {
 	text-shadow: 0 -1px 0 rgba(0,0,0,0.25);
 	white-space: nowrap;
 	vertical-align: baseline;
-	background-color: #999
+	background-color: #999;
+
 }
 
 .label {
-	/*-webkit-border-radius: 3px;
+	-webkit-border-radius: 3px;
 	-moz-border-radius: 3px;
-	border-radius: 3px*/
+	border-radius: 3px;
+	font-weight: 400;
 }
 
 .badge {

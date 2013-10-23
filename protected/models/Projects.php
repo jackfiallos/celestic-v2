@@ -4,10 +4,11 @@
  * Projects Model
  * 
  * @author		Jackfiallos
+ * @version		2.0.0
  * @link		http://qbit.com.mx/labs/celestic
  * @copyright 	Copyright (c) 2009-2013 Qbit Mexhico
  * @license		http://qbit.com.mx/labs/celestic/license/
- * @version		2.0.0
+ * @description
  * 
  * This is the model class for table "tb_projects".
  *
@@ -45,8 +46,9 @@
 class Projects extends CActiveRecord
 {
 	/**
-	 * Returns the static model of the specified AR class.
-	 * @return Projects the static model class
+	 * [model description]
+	 * @param  [type] $className [description]
+	 * @return [type]            [description]
 	 */
 	public static function model($className=__CLASS__)
 	{
@@ -54,7 +56,8 @@ class Projects extends CActiveRecord
 	}
 
 	/**
-	 * @return string the associated database table name
+	 * [tableName description]
+	 * @return [type] [description]
 	 */
 	public function tableName()
 	{
@@ -62,12 +65,11 @@ class Projects extends CActiveRecord
 	}
 
 	/**
-	 * @return array validation rules for model attributes.
+	 * [rules description]
+	 * @return [type] [description]
 	 */
 	public function rules()
 	{
-		// NOTE: you should only define rules for those attributes that
-		// will receive user inputs.
 		return array(
 			array('project_name, project_description, project_plataform, project_startDate, project_endDate, company_id, currency_id', 'required', 'message'=>Yii::t('inputValidations','RequireValidation')),
 			array('project_active', 'numerical', 'integerOnly'=>true),
@@ -75,31 +77,28 @@ class Projects extends CActiveRecord
 			array('currency_id', 'numerical', 'integerOnly'=>true),
 			array('project_name', 'length', 'max'=>100, 'message'=>Yii::t('inputValidations','MaxValidation')),
 			array('project_name', 'length', 'min'=>10, 'message'=>Yii::t('inputValidations','MinValidation')),
-			array('project_restrictions, project_scope, project_swRequirements, project_hwRequirements, project_functionalReq, project_performanceReq, project_additionalComments, project_userInterfaces, project_hardwareInterfaces, project_softwareInterfaces, project_communicationInterfaces, project_backupRecovery, project_dataMigration, project_userTraining, project_installation, project_assumptions, project_outReach, project_responsibilities, project_warranty, project_additionalCosts', 'length', 'max'=>4000, 'message'=>Yii::t('inputValidations','MaxValidation')),
-			// The following rule is used by search().
-			// Please remove those attributes that should not be searched.
-			array('project_id, project_name, project_description, project_scope, project_restrictions, project_plataform, project_swRequirements, project_hwRequirements, project_startDate, project_endDate, project_active, company_id, currency_id', 'safe', 'on'=>'search'),
+			array('project_restrictions, project_scope, project_swRequirements, project_hwRequirements, project_functionalReq, project_performanceReq, project_additionalComments, project_userInterfaces, project_hardwareInterfaces, project_softwareInterfaces, project_communicationInterfaces, project_backupRecovery, project_dataMigration, project_userTraining, project_installation, project_assumptions, project_outReach, project_responsibilities, project_warranty, project_additionalCosts', 'length', 'max'=>4000, 'message'=>Yii::t('inputValidations','MaxValidation'))
 		);
 	}
 
 	/**
-	 * @return array relational rules.
+	 * [relations description]
+	 * @return [type] [description]
 	 */
 	public function relations()
 	{
-		// NOTE: you may need to adjust the relation name and the related
-		// class name for the relations automatically generated below.
 		return array(
 			'Company'=>array(self::BELONGS_TO, 'Companies', 'company_id'),
 			'Currency'=>array(self::BELONGS_TO, 'Currencies', 'currency_id'),
 			'Users'=>array(self::MANY_MANY, 'Users', 'tb_projects_has_tb_users(user_id,project_id)'),
 			'Cusers'=>array(self::MANY_MANY, 'Users', 'tb_projects_has_tb_users(project_id,user_id)'),
-			'Budgets'=>array(self::HAS_MANY, 'Budgets', 'project_id'),
+			'Budgets'=>array(self::HAS_MANY, 'Budgets', 'project_id')
 		);
 	}
 
 	/**
-	 * @return array customized attribute labels (name=>label)
+	 * [attributeLabels description]
+	 * @return [type] [description]
 	 */
 	public function attributeLabels()
 	{
@@ -137,36 +136,8 @@ class Projects extends CActiveRecord
 			//Special Considerations
 			'project_assumptions' => Yii::t('projects','project_assumptions'),
 			'project_outReach' => Yii::t('projects','project_outReach'),
-			'project_warranty' => Yii::t('projects','project_warranty'),
+			'project_warranty' => Yii::t('projects','project_warranty')
 		);
-	}
-
-	/**
-	 * Retrieves a list of models based on the current search/filter conditions.
-	 * @return CActiveDataProvider the data provider that can return the models based on the search/filter conditions.
-	 */
-	public function search()
-	{
-		// Warning: Please modify the following code to remove attributes that
-		// should not be searched.
-
-		$criteria=new CDbCriteria;
-
-		$criteria->compare('project_id',$this->project_id);
-		$criteria->compare('project_name',$this->project_name,true);
-		$criteria->compare('project_description',$this->project_description,true);
-		$criteria->compare('project_restrictions',$this->project_restrictions,true);
-		$criteria->compare('project_scope',$this->project_scope,true);
-		$criteria->compare('project_plataform',$this->project_plataform,true);
-		$criteria->compare('project_swRequirements',$this->project_swRequirements,true);
-		$criteria->compare('project_hwRequirements',$this->project_hwRequirements,true);
-		$criteria->compare('project_startDate',$this->project_startDate,true);
-		$criteria->compare('project_endDate',$this->project_endDate,true);
-		$criteria->compare('project_active',$this->project_active);
-
-		return new CActiveDataProvider(get_class($this), array(
-			'criteria'=>$criteria,
-		));
 	}
 	
 	/**
@@ -203,9 +174,9 @@ class Projects extends CActiveRecord
 					'project_outReach',
 					'project_responsibilities',
 					'project_warranty',
-					'project_additionalCosts',
-				),
-			),
+					'project_additionalCosts'
+				)
+			)
 		);
 	}
 	
@@ -219,7 +190,7 @@ class Projects extends CActiveRecord
 		return Projects::model()->count(array(
 			'condition'=>'t.project_id = :project_id',
 			'params'=>array(
-				':project_id' => $project_id,
+				':project_id' => $project_id
 			)	
 		));
 	}
@@ -234,13 +205,15 @@ class Projects extends CActiveRecord
     	$projects = Projects::model()->with('Company.Cusers')->together()->findAll(array(
 			'condition'=>'Cusers.user_id = :user_id AND t.project_active = 1',
 			'params'=>array(
-				':user_id' => $userId,
+				':user_id' => $userId
 			),
-			'group'=>'t.project_id',
+			'group'=>'t.project_id'
 		));
 		
-		if (count($projects)<=0)
+		if (count($projects) <= 0)
+		{
 			return array();
+		}
 		
 		return $projects;
     }
@@ -257,7 +230,7 @@ class Projects extends CActiveRecord
 		$criteria->condition = "Cusers.user_id = :user_id AND t.project_id = :project_id AND t.project_active = 1";
 		$criteria->params = array(
 			':user_id' => $user_id,
-			':project_id' => $project_id,
+			':project_id' => $project_id
 		);
 		
 		return Projects::model()->with('Company.Cusers')->together()->find($criteria);
@@ -270,14 +243,13 @@ class Projects extends CActiveRecord
 	 */
 	public function getProjectCost($project_id)
 	{
-		return Budgets::model()->with('BudgetsConcepts')->find(array(
+		return Budgets::model()->with('BudgetsConcepts')->together()->find(array(
 			'select'=>'t.budget_id AS c, SUM(BudgetsConcepts.budgetsConcept_amount) AS total',
 			'condition'=>'t.project_id = :project_id AND t.status_id IN ('.implode(',', array(Status::STATUS_ACCEPTED, Status::STATUS_PENDING)).')',
 			'params'=>array(
-				':project_id' => $project_id,
+				':project_id' => $project_id
 			),
-			'group'=>'t.budget_id',
-			'together'=>true,
+			'group'=>'t.budget_id'
 		));
 	}
 	
@@ -293,7 +265,7 @@ class Projects extends CActiveRecord
 		$criteria->select = '(ROUND((COUNT(t.task_id)/(SELECT COUNT(*) FROM tb_tasks tb WHERE tb.project_id = :project_id))*Status.status_value)) AS progress';
 		$criteria->condition = 't.project_id = :project_id';
 		$criteria->params = array(
-			':project_id' => $project_id,
+			':project_id' => $project_id
 		);
 		$criteria->group = 't.status_id';
 		$criteria->order = 't.task_startDate ASC';
@@ -308,14 +280,12 @@ class Projects extends CActiveRecord
 	 */
 	public function findManagersByProject($project_id)
 	{
-		return Users::model()->findAll(array(
+		return Users::model()->with('ClientsManagers')->together()->findAll(array(
 			'condition'=>'ClientsManagers.project_id = :project_id',//AND ClientsManagers_ClientsManagers.isManager = 1',
 			'params'=>array(
-				':project_id' => $project_id,
+				':project_id' => $project_id
 			),
-			'together'=>true,
-			'order'=>'t.user_name',
-			'with'=>array('ClientsManagers'),
+			'order'=>'t.user_name'
 		));
 	}
 	
@@ -329,24 +299,25 @@ class Projects extends CActiveRecord
 		$Managers = $this->findManagersByProject($project_id);
 		
 		$managerList = array();
+
 		if(count($Managers) > 0)
 		{
 			foreach($Managers as $users)
+			{
 				array_push($managerList, $users->user_id);
+			}
 		}
 		else
 		{
 			array_push($managerList, -1);
 		}
 		
-		return Users::model()->findAll(array(
+		return Users::model()->with('Companies')->together()->findAll(array(
 			'condition'=>'Companies.company_id = :company_id AND t.user_id NOT IN ('.implode(",", $managerList).')',
 			'params'=>array(
 				':company_id'=>Projects::model()->findByPk(Yii::app()->user->getState('project_selected'))->company_id,
 			),
-			'together'=>true,
-			'order'=>'t.user_name ASC',
-			'with'=>array('Companies'),
+			'order'=>'t.user_name ASC'
 		));
 	}
 	
@@ -357,13 +328,12 @@ class Projects extends CActiveRecord
 	 */
 	public function findAllUsersByProject($project_id)
 	{
-		return Users::model()->with('ClientsManagers')->findAll(array(
+		return Users::model()->with('ClientsManagers')->together()->findAll(array(
 			'condition'=>'ClientsManagers.project_id = :project_id',
 			'params'=>array(
-				':project_id' => $project_id,
+				':project_id' => $project_id
 			),
-			'together'=>true,
-			'group'=>'t.user_id',
+			'group'=>'t.user_id'
 		));
 	}
 }

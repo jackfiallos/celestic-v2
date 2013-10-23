@@ -1,5 +1,12 @@
 <?php
 /**
+ * @author		Jackfiallos
+ * @version		2.0.0
+ * @link		http://qbit.com.mx/labs/celestic
+ * @copyright 	Copyright (c) 2009-2013 Qbit Mexhico
+ * @license		http://qbit.com.mx/labs/celestic/license/
+ * @description
+ * 
  * Extends Locale data for 'pt_BR'.
  * In this file you can put custom locale settings that will be
  * merged with the ones provided by the framework

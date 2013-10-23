@@ -4,10 +4,11 @@
  * Status Model
  * 
  * @author		Jackfiallos
+ * @version		2.0.0
  * @link		http://qbit.com.mx/labs/celestic
  * @copyright 	Copyright (c) 2009-2013 Qbit Mexhico
  * @license		http://qbit.com.mx/labs/celestic/license/
- * @version		2.0.0
+ * @description
  * 
  * This is the model class for table "tb_status".
  *
@@ -20,13 +21,13 @@
  */
 class Status extends CActiveRecord
 {
-	const STATUS_PENDING    =	1;
-	const STATUS_CANCELLED  =	2;
-	const STATUS_ACCEPTED   =	3;
-	const STATUS_CLOSED     =	4;
-	const STATUS_TOTEST     =	5;
-	const STATUS_INPROGRESS =	6;
-	const STATUS_TOREVIEW   =	7;
+	const STATUS_PENDING         =	1;
+	const STATUS_CANCELLED       =	2;
+	const STATUS_ACCEPTED        =	3;
+	const STATUS_CLOSED          =	4;
+	const STATUS_TOTEST          =	5;
+	const STATUS_INPROGRESS      =	6;
+	const STATUS_TOREVIEW        =	7;
 	
 	const STATUS_PENDING_WORK    =	0;
 	const STATUS_CANCELLED_WORK  =	100;
@@ -35,11 +36,12 @@ class Status extends CActiveRecord
 	const STATUS_TOTEST_WORK     =	75;
 	const STATUS_INPROGRESS_WORK =	50;
 	
-	const STATUS_COMMENT = 'StatusChanged';
+	const STATUS_COMMENT         = 'StatusChanged';
 	
 	/**
-	 * Returns the static model of the specified AR class.
-	 * @return Status the static model class
+	 * [model description]
+	 * @param  [type] $className [description]
+	 * @return [type]            [description]
 	 */
 	public static function model($className=__CLASS__)
 	{
@@ -47,7 +49,8 @@ class Status extends CActiveRecord
 	}
 
 	/**
-	 * @return string the associated database table name
+	 * [tableName description]
+	 * @return [type] [description]
 	 */
 	public function tableName()
 	{
@@ -55,20 +58,20 @@ class Status extends CActiveRecord
 	}
 
 	/**
-	 * @return array validation rules for model attributes.
+	 * [rules description]
+	 * @return [type] [description]
 	 */
 	public function rules()
 	{
-		// NOTE: you should only define rules for those attributes that
-		// will receive user inputs.
 		return array(
 			array('status_name', 'required'),
-			array('status_name', 'length', 'max'=>45),
+			array('status_name', 'length', 'max'=>45)
 		);
 	}
 
 	/**
-	 * @return array customized attribute labels (name=>label)
+	 * [attributeLabels description]
+	 * @return [type] [description]
 	 */
 	public function attributeLabels()
 	{
@@ -77,7 +80,7 @@ class Status extends CActiveRecord
 			'status_name' => 'Status Name',
 			'status_order' => 'Status Order',
 			'status_value' => 'Status Value',
-			'status_required' => 'Status Required',
+			'status_required' => 'Status Required'
 		);
 	}
 	
@@ -90,7 +93,7 @@ class Status extends CActiveRecord
 		return array(
 			'CSafeContentBehavor' => array( 
 				'class' => 'application.components.CSafeContentBehavior',
-				'attributes' => array('status_name'),
+				'attributes' => array('status_name')
 			),
 		);
 	}
@@ -125,7 +128,7 @@ class Status extends CActiveRecord
 	{
 		return Status::model()->findAll(array(
 			'order'=>'t.status_order ASC',
-			'condition'=>(!(bool)$required) ? 't.status_id != 1' : 't.status_required = '.$required,
+			'condition'=>(!(bool)$required) ? 't.status_id != 1' : 't.status_required = '.$required
 		));
 	}
 }

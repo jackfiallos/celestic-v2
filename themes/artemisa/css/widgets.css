@@ -27,10 +27,6 @@
 	color: #FABB3D;
 }
 
-.box, .widget {
-margin: 20px 0px;
-}
-
 .box-header {
 	height: 16px;
 	font-size: 16px;
@@ -193,6 +189,10 @@ border-bottom: 1px solid #eee;
 font-size: 13px;
 }
 
+ul.tickets li:hover {
+	background: #E5FDEB;
+}
+
 ul.tickets li:last-child {
 border-bottom: none;
 }
@@ -207,6 +207,11 @@ font-size: 13px;
 ul.tickets li.ticket .header .title {
 float: left;
 text-align: left;
+font-weight: 300;
+}
+
+ul.tickets li.ticket .header .title.done {
+	text-decoration: line-through;
 }
 
 ul.tickets li.ticket .header .number {

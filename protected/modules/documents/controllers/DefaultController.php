@@ -3,9 +3,10 @@
  * DefaultController class file
  * 
  * @author		Jackfiallos
+ * @version		2.0.0
  * @link		http://qbit.com.mx/labs/celestic
  * @copyright 	Copyright (c) 2009-2013 Qbit Mexhico
- * @license 	http://qbit.com.mx/labs/celestic/license/
+ * @license		http://qbit.com.mx/labs/celestic/license/
  * @description
  *
  **/
@@ -27,7 +28,8 @@ class DefaultController extends Controller
 	private $tmpFileName = '';
 
 	/**
-	 * @return array action filters
+	 * [filters description]
+	 * @return [type] [description]
 	 */
 	public function filters()
 	{
@@ -43,8 +45,8 @@ class DefaultController extends Controller
 	}
 
 	/**
-	 * Especify access control rights
-	 * @return array access rules
+	 * [accessRules description]
+	 * @return [type] [description]
 	 */
 	public function accessRules()
 	{
@@ -56,11 +58,11 @@ class DefaultController extends Controller
 					'create'
 				),
 				'users'=>array('@'),
-				'expression'=>'!$user->isGuest',
+				'expression'=>'!$user->isGuest'
 			),
 			array('deny',
-				'users'=>array('*'),
-			),
+				'users'=>array('*')
+			)
 		);
 	}
 
@@ -71,16 +73,16 @@ class DefaultController extends Controller
 	public function actionIndex()
 	{
 		// verify if user has permissions to indexDownloads
-		if(Yii::app()->user->checkAccess('indexDownloads'))
+		if (Yii::app()->user->checkAccess('indexDownloads'))
 		{			
-			if(Yii::app()->request->isPostRequest)
+			if (Yii::app()->request->isPostRequest)
 			{
-				// create object Documents search form
-				$model = new DocumentsSearchForm;
-				$documents = $model->search();
+				$criteria = new CDbCriteria();
+				$criteria->compare('project_id', (int)Yii::app()->user->getState('project_selected'));
+				$documents = Documents::model()->findAll($criteria);
 				$document = array();
 
-				foreach($documents as $item)
+				foreach ($documents as $item)
 				{
 					$timestamp = strtotime($item->document_uploadDate);
 
@@ -129,7 +131,7 @@ class DefaultController extends Controller
 	public function actionView()
 	{
 		// verify if user has permissions to viewDownloads
-		if(Yii::app()->user->checkAccess('viewDownloads'))
+		if (Yii::app()->user->checkAccess('viewDownloads'))
 		{
 			if (($_POST) && (Yii::app()->request->isPostRequest))
 			{
@@ -177,7 +179,7 @@ class DefaultController extends Controller
 	public function actionCreate()
 	{
 		// verify if user has permissions to createDownloads
-		if(Yii::app()->user->checkAccess('createDownloads'))
+		if (Yii::app()->user->checkAccess('createDownloads'))
 		{
 			// create object model Documents
 			$model=new Documents;
@@ -203,7 +205,7 @@ class DefaultController extends Controller
 						$this->tmpFileName = str_replace(" ","",date('dmYHis-z-').microtime());
 						// get the file extension
 						$extension=$model->image->getExtensionName();
-						if($model->image->saveAs($this::FOLDERIMAGES.$this->tmpFileName.'.'.$extension))
+						if ($model->image->saveAs($this::FOLDERIMAGES.$this->tmpFileName.'.'.$extension))
 						{
 							// set other attributes
 							$model->document_name = $model->image->getName();
@@ -240,7 +242,7 @@ class DefaultController extends Controller
 				else 
 				{
 					// validate and save
-					if($model->save())
+					if ($model->save())
 					{
 						// save log
 						$attributes = array(
@@ -264,7 +266,7 @@ class DefaultController extends Controller
 						
 						// create array of users destinations
 						$recipientsList = array();
-						foreach($Users as $client)
+						foreach ($Users as $client)
 						{			
 							$recipientsList[] = array(
 								'name'=>$client->CompleteName,

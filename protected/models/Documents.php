@@ -4,10 +4,11 @@
  * Documents Model
  * 
  * @author		Jackfiallos
+ * @version		2.0.0
  * @link		http://qbit.com.mx/labs/celestic
  * @copyright 	Copyright (c) 2009-2013 Qbit Mexhico
  * @license		http://qbit.com.mx/labs/celestic/license/
- * @version		2.0.0
+ * @description
  * 
  * This is the model class for table "tb_documents".
  *
@@ -28,8 +29,9 @@ class Documents extends CActiveRecord
 	public $image;
 	
 	/**
-	 * Returns the static model of the specified AR class.
-	 * @return Documents the static model class
+	 * [model description]
+	 * @param  [type] $className [description]
+	 * @return [type]            [description]
 	 */
 	public static function model($className=__CLASS__)
 	{
@@ -37,7 +39,8 @@ class Documents extends CActiveRecord
 	}
 
 	/**
-	 * @return string the associated database table name
+	 * [tableName description]
+	 * @return [type] [description]
 	 */
 	public function tableName()
 	{
@@ -45,41 +48,37 @@ class Documents extends CActiveRecord
 	}
 
 	/**
-	 * @return array validation rules for model attributes.
+	 * [rules description]
+	 * @return [type] [description]
 	 */
 	public function rules()
 	{
-		// NOTE: you should only define rules for those attributes that
-		// will receive user inputs.
 		return array(
 			array('project_id, document_name, document_description, image, user_id', 'required', 'message'=>Yii::t('inputValidations','RequireValidation')),
 			array('project_id, document_revision, document_baseRevision, comment_id, user_id', 'numerical', 'integerOnly'=>true),
 			array('document_name, document_type', 'length', 'max'=>100, 'message'=>Yii::t('inputValidations','MaxValidation')),
 			array('document_path', 'length', 'max'=>255, 'message'=>Yii::t('inputValidations','MaxValidation')),
 			array('document_name', 'length', 'min'=>8, 'message'=>Yii::t('inputValidations','MinValidation')),
-			array('image', 'file', 'types'=>'doc, docx, rtf, ppt, pptx, odt, ods, xls, xlsx, sql, wav, ogg, pdf, psd, ai, txt, bmp, jpg, jpeg, gif, png, svg, zip, rar, bz, bz2, z, tar, vsd', 'message'=>Yii::t('inputValidations','FileTypeValidation')),
-			// The following rule is used by search().
-			// Please remove those attributes that should not be searched.
-			array('document_id, project_id, document_name, document_description, document_path, document_revision, document_uploadDate, document_type, document_baseRevision, comment_id, user_id', 'safe', 'on'=>'search'),
+			array('image', 'file', 'types'=>'doc, docx, rtf, ppt, pptx, odt, ods, xls, xlsx, sql, wav, ogg, pdf, psd, ai, txt, bmp, jpg, jpeg, gif, png, svg, zip, rar, bz, bz2, z, tar, vsd', 'message'=>Yii::t('inputValidations','FileTypeValidation'))
 		);
 	}
 
 	/**
-	 * @return array relational rules.
+	 * [relations description]
+	 * @return [type] [description]
 	 */
 	public function relations()
 	{
-		// NOTE: you may need to adjust the relation name and the related
-		// class name for the relations automatically generated below.
 		return array(
 			'Projects'=>array(self::BELONGS_TO, 'Projects', 'project_id'),
 			'Comment'=>array(self::BELONGS_TO, 'Comments', 'comment_id'),
-			'User'=>array(self::BELONGS_TO, 'Users', 'user_id'),
+			'User'=>array(self::BELONGS_TO, 'Users', 'user_id')
 		);
 	}
 
 	/**
-	 * @return array customized attribute labels (name=>label)
+	 * [attributeLabels description]
+	 * @return [type] [description]
 	 */
 	public function attributeLabels()
 	{
@@ -95,40 +94,20 @@ class Documents extends CActiveRecord
 			'document_baseRevision' => Yii::t('documents','document_baseRevision'),
 			'comment_id' => Yii::t('documents','comment_id'),
 			'user_id' => Yii::t('documents','user_id'),
-			'image' => Yii::t('documents','image'),
+			'image' => Yii::t('documents','image')
 		);
-	}
-
-	/**
-	 * Retrieves a list of models based on the current search/filter conditions.
-	 * @return CActiveDataProvider the data provider that can return the models based on the search/filter conditions.
-	 */
-	public function search()
-	{
-		// Warning: Please modify the following code to remove attributes that
-		// should not be searched.
-
-		$criteria=new CDbCriteria;
-		$criteria->compare('project_id',$this->project_id);
-		$criteria->compare('document_description',$this->document_description,true);
-		$criteria->compare('document_revision',$this->document_revision);
-		$criteria->compare('document_type',$this->document_type,true);
-		$criteria->group = 'date(document_uploadDate)';
-
-		return new CActiveDataProvider(get_class($this), array(
-			'criteria'=>$criteria,
-		));
 	}
 	
 	/**
 	 * [behaviors description]
 	 * @return [type] [description]
 	 */
-	public function behaviors(){
+	public function behaviors()
+	{
 		return array(
 			'CSafeContentBehavor' => array( 
 				'class' => 'application.components.CSafeContentBehavior',
-				'attributes' => array('document_name', 'document_description', 'document_path', 'document_revision', 'document_uploadDate', 'document_type'),
+				'attributes' => array('document_name', 'document_description', 'document_path', 'document_revision', 'document_uploadDate', 'document_type')
 			),
 		);
 	}

@@ -3,6 +3,7 @@
  * ECHtml class file
  * 
  * @author		Jackfiallos
+ * @version		2.0.0
  * @link		http://qbit.com.mx/labs/celestic
  * @copyright 	Copyright (c) 2009-2013 Qbit Mexhico
  * @license		http://qbit.com.mx/labs/celestic/license/
@@ -22,7 +23,7 @@ class ECHtml extends CHtml
 	 * @param int $words
 	 * @return string new string splitted
 	 */
-	public static function word_split($str,$words=15)
+	public static function word_split($str, $words = 15)
 	{
 		$arr = preg_split("/[\s]+/", $str,$words+1);
 		$arr = array_slice($arr,0,$words);
@@ -56,17 +57,21 @@ class ECHtml extends CHtml
 	 * @param string $directory
 	 * @param boolean $format
 	 */
-	function directory_size($directory, $format=false)
+	function directory_size($directory, $format = false)
 	{
 		$size = 0;
 	
 		// if the path has a slash at the end we remove it here
 		if(substr($directory,-1) == '/')
+		{
 			$directory = substr($directory,0,-1);
+		}
 	
 		// if the path is not valid or is not a directory ...
 		if(!file_exists($directory) || !is_dir($directory) || !is_readable($directory))
+		{
 			return -1;
+		}
 		
 		// we open the directory
 		if($handle = opendir($directory))
@@ -83,7 +88,9 @@ class ECHtml extends CHtml
 				{
 					// if the new path is a file, add the filesize to the total size
 					if(is_file($path))
+					{
 						$size += filesize($path);
+					}
 					elseif(is_dir($path)) //if the new path is a directory
 					{
 						// we call this function with the new path
@@ -91,9 +98,13 @@ class ECHtml extends CHtml
 	
 						// if the function returns more than zero, we add the result to the total size
 						if($handlesize >= 0)
+						{
 							$size += $handlesize;
+						}
 						else //else we return -1 and exit the function
+						{
 							return -1;
+						}
 					}
 				}
 			}
@@ -104,14 +115,22 @@ class ECHtml extends CHtml
 		if($format == true)
 		{
 			if($size / 1048576 > 1)
+			{
 				return round($size / 1048576, 1).' MB';
+			}
 			elseif($size / 1024 > 1)
+			{
 				return round($size / 1024, 1).' KB';
+			}
 			else
+			{
 				return round($size, 1).' bytes';
+			}
 		}
 		else
+		{
 			return $size;
+		}
 	}
 	
 }

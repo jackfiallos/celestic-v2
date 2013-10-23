@@ -4,10 +4,11 @@
  * Tasks Model
  * 
  * @author		Jackfiallos
+ * @version		2.0.0
  * @link		http://qbit.com.mx/labs/celestic
  * @copyright 	Copyright (c) 2009-2013 Qbit Mexhico
  * @license		http://qbit.com.mx/labs/celestic/license/
- * @version		2.0.0
+ * @description
  * 
  * This is the model class for table "tb_tasks".
  *
@@ -37,13 +38,14 @@ class Tasks extends CActiveRecord
 	public $numstatus;
 	public $progress;
 	
-	const PRIORITY_LOW = 0;
+	const PRIORITY_LOW    = 0;
 	const PRIORITY_MEDIUM = 1;
-	const PRIORITY_HIGH = 2;
+	const PRIORITY_HIGH   = 2;
 	
 	/**
-	 * Returns the static model of the specified AR class.
-	 * @return Tasks the static model class
+	 * [model description]
+	 * @param  [type] $className [description]
+	 * @return [type]            [description]
 	 */
 	public static function model($className=__CLASS__)
 	{
@@ -51,7 +53,8 @@ class Tasks extends CActiveRecord
 	}
 
 	/**
-	 * @return string the associated database table name
+	 * [tableName description]
+	 * @return [type] [description]
 	 */
 	public function tableName()
 	{
@@ -59,24 +62,24 @@ class Tasks extends CActiveRecord
 	}
 
 	/**
-	 * @return array validation rules for model attributes.
+	 * [rules description]
+	 * @return [type] [description]
 	 */
 	public function rules()
 	{
-		// NOTE: you should only define rules for those attributes that
-		// will receive user inputs.
 		return array(
 			array('task_name, task_description, task_priority, status_id, taskTypes_id, project_id, user_id, taskStage_id', 'required', 'message'=>Yii::t('inputValidations','RequireValidation')),
 			array('task_priority, task_position, status_id, taskTypes_id, case_id, project_id, milestone_id, user_id, taskStage_id', 'numerical', 'integerOnly'=>true),
 			array('task_name', 'length', 'max'=>100, 'message'=>Yii::t('inputValidations','MaxValidation')),
 			array('task_name', 'length', 'min'=>10, 'message'=>Yii::t('inputValidations','MinValidation')),
 			array('task_buildNumber', 'length', 'max'=>20, 'message'=>Yii::t('inputValidations','MaxValidation')),
-			array('task_startDate, task_endDate', 'length', 'max'=>19, 'message'=>Yii::t('inputValidations','MaxValidation')),
+			array('task_startDate, task_endDate', 'length', 'max'=>19, 'message'=>Yii::t('inputValidations','MaxValidation'))
 		);
 	}
 
 	/**
-	 * @return array relational rules.
+	 * [relations description]
+	 * @return [type] [description]
 	 */
 	public function relations()
 	{
@@ -90,12 +93,13 @@ class Tasks extends CActiveRecord
 			'Milestones'=>array(self::BELONGS_TO, 'Milestones', 'milestone_id'),
 			'Users'=>array(self::MANY_MANY, 'Users', 'tb_users_has_tb_tasks(task_id,user_id)'),
 			'UserReported'=>array(self::BELONGS_TO, 'Users', 'user_id'),
-			'Stage'=>array(self::BELONGS_TO, 'TaskStages', 'taskStage_id'),
+			'Stage'=>array(self::BELONGS_TO, 'TaskStages', 'taskStage_id')
 		);
 	}
 
 	/**
-	 * @return array customized attribute labels (name=>label)
+	 * [attributeLabels description]
+	 * @return [type] [description]
 	 */
 	public function attributeLabels()
 	{
@@ -118,7 +122,7 @@ class Tasks extends CActiveRecord
 			'dependant' => Yii::t('tasks','dependant'),
 			'total' => Yii::t('tasks','total'),
 			'progress' => Yii::t('tasks','progress'),
-			'numstatus'=>'numstatus',
+			'numstatus'=>'numstatus'
 		);
 	}
 	
@@ -139,14 +143,14 @@ class Tasks extends CActiveRecord
 			$criteria->condition = 'Users.user_id = :user_id AND t.project_id = :project_id AND t.status_id NOT IN ('.implode(',',array(Status::STATUS_CANCELLED, Status::STATUS_CLOSED)).')';
 			$criteria->params = array(
 				':user_id'=>$user_id,
-				'project_id'=>$project_id,
+				'project_id'=>$project_id
 			);
 		}
 		else
 		{
 			$criteria->condition = 'Users.user_id = :user_id AND t.status_id NOT IN ('.implode(',',array(Status::STATUS_CANCELLED, Status::STATUS_CLOSED)).')';
 			$criteria->params = array(
-				':user_id'=>$user_id,
+				':user_id'=>$user_id
 			);
 		}
 		$criteria->order = 't.task_startDate ASC';
@@ -172,14 +176,14 @@ class Tasks extends CActiveRecord
 			$criteria->condition = 'Users.user_id = :user_id AND t.project_id = :project_id';
 			$criteria->params = array(
 				':user_id'=>$user_id,
-				'project_id'=>$project_id,
+				'project_id'=>$project_id
 			);
 		}
 		else
 		{
 			$criteria->condition = 'Users.user_id = :user_id';
 			$criteria->params = array(
-				':user_id'=>$user_id,
+				':user_id'=>$user_id
 			);
 		}
 		$criteria->group = 't.status_id';
@@ -202,14 +206,14 @@ class Tasks extends CActiveRecord
 			$criteria->condition = 'Users.user_id = :user_id AND t.project_id = :project_id';
 			$criteria->params = array(
 				':user_id'=>$user_id,
-				'project_id'=>$project_id,
+				'project_id'=>$project_id
 			);
 		}
 		else
 		{
 			$criteria->condition = 'Users.user_id = :user_id';
 			$criteria->params = array(
-				':user_id'=>$user_id,
+				':user_id'=>$user_id
 			);
 		}
 		
@@ -252,7 +256,7 @@ class Tasks extends CActiveRecord
 		return array(
 			'CSafeContentBehavor' => array( 
 				'class' => 'application.components.CSafeContentBehavior',
-				'attributes' => array('task_name', 'task_description', 'task_startDate', 'task_endDate', 'task_buildNumber'),
+				'attributes' => array('task_name', 'task_description', 'task_startDate', 'task_endDate', 'task_buildNumber')
 			),
 		);
 	}
@@ -284,7 +288,7 @@ class Tasks extends CActiveRecord
 		return Tasks::model()->with('Users')->findAll(array(
 			'condition'=>'t.milestone_id = :milestone_id AND t.status_id IN ('.implode(',',array(Status::STATUS_PENDING,Status::STATUS_ACCEPTED,Status::STATUS_TOTEST, Status::STATUS_INPROGRESS)).')',
 			'params'=>array(
-				':milestone_id' => $milestone_id,
+				':milestone_id' => $milestone_id
 			)
 		));
 	}
@@ -320,7 +324,7 @@ class Tasks extends CActiveRecord
 			'condition'=>'t.project_id = :project_id AND t.task_id = :task_id',
 			'params'=> array(
 				':project_id'=>$project_id,
-				':task_id'=>$task_id,
+				':task_id'=>$task_id
 			),
 		));
 		

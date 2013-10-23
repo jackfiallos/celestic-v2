@@ -3,10 +3,11 @@
  * UserIdentity class file
  * 
  * @author		Jackfiallos
+ * @version		2.0.0
  * @link		http://qbit.com.mx/labs/celestic
  * @copyright 	Copyright (c) 2009-2013 Qbit Mexhico
  * @license		http://qbit.com.mx/labs/celestic/license/
- * @description	
+ * @description
  * 
  * Represents the data needed to identity a user.
  * It contains the authentication method that checks if the provided
@@ -16,6 +17,7 @@
 class UserIdentity extends CUserIdentity
 {
 	const ERROR_USER_INACTIVE = 3;
+
 	/**
 	 * @var set as private unique user id
 	 */
@@ -49,7 +51,7 @@ class UserIdentity extends CUserIdentity
 		}
 		else
 		{
-			$this->errorCode=self::ERROR_NONE;
+			$this->errorCode = self::ERROR_NONE;
 			$this->_id = $users->user_id;
 			
 			// Set state variables
@@ -63,7 +65,7 @@ class UserIdentity extends CUserIdentity
 		}
 		
 		//initializes the authManager
-		$auth=Yii::app()->authManager;
+		$auth = Yii::app()->authManager;
 		
 		return !$this->errorCode;
 	}

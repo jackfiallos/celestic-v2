@@ -52,8 +52,8 @@ $main = array(
         'documents',
         'milestones',
         'cases',
-        /*'tasks',
-        'tests',
+        'tasks',
+        /*'tests',
         'install'*/
 	),
 
@@ -133,6 +133,10 @@ $main = array(
 			'cases'=>array(
 				'title'=>'Cases',
 				'iconClass'=>'cogwheels'
+			),
+			'tasks'=>array(
+				'title'=>'Tasks',
+				'iconClass'=>'tasks'
 			),
 			'tests'=>array(
 				'title'=>'Tests',

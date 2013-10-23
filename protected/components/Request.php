@@ -3,6 +3,7 @@
  * Request class file
  * 
  * @author		Jackfiallos
+ * @version		2.0.0
  * @link		http://qbit.com.mx/labs/celestic
  * @copyright 	Copyright (c) 2009-2013 Qbit Mexhico
  * @license		http://qbit.com.mx/labs/celestic/license/
@@ -24,6 +25,7 @@ class Request
 			if(Yii::app()->user->getState('timezone_name') == null)
 			{
 				$timezone = Timezones::getTimezoneSelected(Yii::app()->user->Accountid);
+				
 				if (!empty($timezone->timezone_name))
 				{
 					Yii::app()->user->setState('timezone_name', $timezone->timezone_name);

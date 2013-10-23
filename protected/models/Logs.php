@@ -4,10 +4,11 @@
  * Logs Model
  * 
  * @author		Jackfiallos
+ * @version		2.0.0
  * @link		http://qbit.com.mx/labs/celestic
  * @copyright 	Copyright (c) 2009-2013 Qbit Mexhico
  * @license		http://qbit.com.mx/labs/celestic/license/
- * @version		2.0.0
+ * @description
  * 
  * This is the model class for table "tb_logs".
  *
@@ -26,16 +27,17 @@
  */
 class Logs extends CActiveRecord
 {
-	const LOG_CREATED = 'created';
-	const LOG_UPDATED = 'updated';
-	const LOG_DELETED = 'deleted';
+	const LOG_CREATED   = 'created';
+	const LOG_UPDATED   = 'updated';
+	const LOG_DELETED   = 'deleted';
 	const LOG_COMMENTED = 'comment';
-	const LOG_ASSIGNED = 'assigned';
-	const LOG_REVOKED = 'revoked';
+	const LOG_ASSIGNED  = 'assigned';
+	const LOG_REVOKED   = 'revoked';
 	
 	/**
-	 * Returns the static model of the specified AR class.
-	 * @return Logs the static model class
+	 * [model description]
+	 * @param  [type] $className [description]
+	 * @return [type]            [description]
 	 */
 	public static function model($className=__CLASS__)
 	{
@@ -43,7 +45,8 @@ class Logs extends CActiveRecord
 	}
 
 	/**
-	 * @return string the associated database table name
+	 * [tableName description]
+	 * @return [type] [description]
 	 */
 	public function tableName()
 	{
@@ -51,39 +54,35 @@ class Logs extends CActiveRecord
 	}
 
 	/**
-	 * @return array validation rules for model attributes.
+	 * [rules description]
+	 * @return [type] [description]
 	 */
 	public function rules()
 	{
-		// NOTE: you should only define rules for those attributes that
-		// will receive user inputs.
 		return array(
 			array('log_date, log_activity, log_resourceid, log_type, user_id, module_id', 'required'),
 			array('log_commentid, log_resourceid, user_id, module_id, project_id', 'numerical', 'integerOnly'=>true),
 			array('log_activity', 'length', 'max'=>45),
-			array('log_type', 'length', 'max'=>20),
-			// The following rule is used by search().
-			// Please remove those attributes that should not be searched.
-			array('log_id, log_date, log_activity, log_resourceid, log_type, log_commentid, user_id, module_id, project_id', 'safe', 'on'=>'search'),
+			array('log_type', 'length', 'max'=>20)
 		);
 	}
 
 	/**
-	 * @return array relational rules.
+	 * [relations description]
+	 * @return [type] [description]
 	 */
 	public function relations()
 	{
-		// NOTE: you may need to adjust the relation name and the related
-		// class name for the relations automatically generated below.
 		return array(
 			'User'=>array(self::BELONGS_TO, 'Users', 'user_id'),
 			'Module'=>array(self::BELONGS_TO, 'Modules', 'module_id'),
-			'Project'=>array(self::BELONGS_TO, 'Projects', 'project_id'),
+			'Project'=>array(self::BELONGS_TO, 'Projects', 'project_id')
 		);
 	}
 
 	/**
-	 * @return array customized attribute labels (name=>label)
+	 * [attributeLabels description]
+	 * @return [type] [description]
 	 */
 	public function attributeLabels()
 	{
@@ -96,34 +95,8 @@ class Logs extends CActiveRecord
 			'log_commentid' => 'Comment id',
 			'user_id' => 'User',
 			'module_id' => 'Module',
-			'project_id'=>'Project',
+			'project_id'=>'Project'
 		);
-	}
-
-	/**
-	 * Retrieves a list of models based on the current search/filter conditions.
-	 * @return CActiveDataProvider the data provider that can return the models based on the search/filter conditions.
-	 */
-	public function search()
-	{
-		// Warning: Please modify the following code to remove attributes that
-		// should not be searched.
-
-		$criteria=new CDbCriteria;
-
-		$criteria->compare('log_id',$this->log_id);
-		$criteria->compare('log_date',$this->log_date,true);
-		$criteria->compare('log_activity',$this->log_activity,true);
-		$criteria->compare('log_resourceid',$this->log_resourceid);
-		$criteria->compare('log_type',$this->log_type);
-		$criteria->compare('log_commentid',$this->log_commentid);
-		$criteria->compare('user_id',$this->user_id);
-		$criteria->compare('module_id',$this->module_id);
-		$criteria->compare('project_id',$this->project_id);
-
-		return new CActiveDataProvider(get_class($this), array(
-			'criteria'=>$criteria,
-		));
 	}
 	
 	/**
@@ -135,7 +108,7 @@ class Logs extends CActiveRecord
 		return array(
 			'CSafeContentBehavor' => array( 
 				'class' => 'application.components.CSafeContentBehavior',
-				'attributes' => array('log_date', 'log_activity', 'log_resourceid', 'log_type', 'user_id', 'module_id', 'project_id'),
+				'attributes' => array('log_date', 'log_activity', 'log_resourceid', 'log_type', 'user_id', 'module_id', 'project_id')
 			),
 		);
 	}
@@ -154,15 +127,14 @@ class Logs extends CActiveRecord
 			$projectList = array(-1);
 		}
 		
-    	return Logs::model()->with('Module')->findAll(array(
+    	return Logs::model()->with('Module')->together()->findAll(array(
 			'condition'=>'t.log_activity NOT LIKE "%Comment%" AND t.project_id <> 0 AND t.project_id IN ('.implode(",", $projectList).')', //AND Module.module_name LIKE ("'.$module.'")',
 			'params'=>array(
 				':module_name'=>$module,
-				':project_id'=>implode(",", $projectList),
+				':project_id'=>implode(",", $projectList)
 			),
 			'order'=>'t.log_id DESC',
-			'limit'=>$limit,
-			'together' => true,
+			'limit'=>$limit
 		));
     }
 	
@@ -177,8 +149,8 @@ class Logs extends CActiveRecord
 		$module = Modules::model()->find(array(
 			'condition'=>'t.module_name = :module_name',
 			'params'=>array(
-				':module_name'=>$modelAttributes['module_id'],
-			),
+				':module_name'=>$modelAttributes['module_id']
+			)
 		));
 		
 		$modelAttributes['module_id'] = $module->module_id;
@@ -200,9 +172,8 @@ class Logs extends CActiveRecord
 	 */
 	private function sendEmailAlert($attributes)
 	{
-		$recipients = Users::model()->with('Companies.Projects')->findAll(array(
-			'condition'=>'Projects.project_id = '.$attributes['project_id'],
-			'together' => true,
+		$recipients = Users::model()->with('Companies.Projects')->together()->findAll(array(
+			'condition'=>'Projects.project_id = '.$attributes['project_id']
 		));
 		
 		$recipientsList = array();
@@ -242,7 +213,7 @@ class Logs extends CActiveRecord
 			'condition'=>'Module.module_name = :module_name AND t.log_resourceid = :resource_id AND t.log_commentid <> 0',
 			'params'=>array(
 				':module_name' => $module_name,
-				':resource_id' => (int)$resource_id,
+				':resource_id' => (int)$resource_id
 			)
 		));
 	}

@@ -1,4 +1,7 @@
 <?php
+/**
+ * CasesSearchForm
+ */
 class CasesSearchForm extends CFormModel
 {
 	public $case_code;

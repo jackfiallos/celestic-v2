@@ -4,10 +4,11 @@
  * Comments Model
  * 
  * @author		Jackfiallos
+ * @version		2.0.0
  * @link		http://qbit.com.mx/labs/celestic
  * @copyright 	Copyright (c) 2009-2013 Qbit Mexhico
  * @license		http://qbit.com.mx/labs/celestic/license/
- * @version		2.0.0
+ * @description
  * 
  * This is the model class for table "tb_comments".
  *
@@ -25,9 +26,11 @@
 class Comments extends CActiveRecord
 {
 	public $image;
+
 	/**
-	 * Returns the static model of the specified AR class.
-	 * @return Comments the static model class
+	 * [model description]
+	 * @param  [type] $className [description]
+	 * @return [type]            [description]
 	 */
 	public static function model($className=__CLASS__)
 	{
@@ -35,7 +38,8 @@ class Comments extends CActiveRecord
 	}
 
 	/**
-	 * @return string the associated database table name
+	 * [tableName description]
+	 * @return [type] [description]
 	 */
 	public function tableName()
 	{
@@ -43,38 +47,34 @@ class Comments extends CActiveRecord
 	}
 
 	/**
-	 * @return array validation rules for model attributes.
+	 * [rules description]
+	 * @return [type] [description]
 	 */
 	public function rules()
 	{
-		// NOTE: you should only define rules for those attributes that
-		// will receive user inputs.
 		return array(
 			array('comment_date, comment_text, user_id, module_id, comment_resourceid', 'required', 'message'=>Yii::t('inputValidations','RequireValidation')),
-			array('user_id, module_id, comment_resourceid, project_id', 'numerical', 'integerOnly'=>true),
-			// The following rule is used by search().
-			// Please remove those attributes that should not be searched.
-			array('comment_id, comment_date, comment_text, user_id, module_id, comment_resourceid', 'safe', 'on'=>'search'),
+			array('user_id, module_id, comment_resourceid, project_id', 'numerical', 'integerOnly'=>true)
 		);
 	}
 
 	/**
-	 * @return array relational rules.
+	 * [relations description]
+	 * @return [type] [description]
 	 */
 	public function relations()
 	{
-		// NOTE: you may need to adjust the relation name and the related
-		// class name for the relations automatically generated below.
 		return array(
 			'User'=>array(self::BELONGS_TO, 'Users', 'user_id'),
 			'Module'=>array(self::BELONGS_TO, 'Modules', 'module_id'),
 			'Project'=>array(self::BELONGS_TO, 'Projects', 'project_id'),
-			'Documents'=>array(self::HAS_MANY, 'Documents', 'comment_id', 'joinType'=>'INNER JOIN'),
+			'Documents'=>array(self::HAS_MANY, 'Documents', 'comment_id', 'joinType'=>'INNER JOIN')
 		);
 	}
 
 	/**
-	 * @return array customized attribute labels (name=>label)
+	 * [attributeLabels description]
+	 * @return [type] [description]
 	 */
 	public function attributeLabels()
 	{
@@ -85,31 +85,8 @@ class Comments extends CActiveRecord
 			'comment_resourceid' => Yii::t('comments','Resource'),
 			'project_id' => Yii::t('comments','Project'),
 			'user_id' => Yii::t('comments','User'),
-			'module_id' => Yii::t('comments','Module'),
+			'module_id' => Yii::t('comments','Module')
 		);
-	}
-
-	/**
-	 * Retrieves a list of models based on the current search/filter conditions.
-	 * @return CActiveDataProvider the data provider that can return the models based on the search/filter conditions.
-	 */
-	public function search()
-	{
-		// Warning: Please modify the following code to remove attributes that
-		// should not be searched.
-
-		$criteria=new CDbCriteria;
-
-		$criteria->compare('comment_id',$this->comment_id);
-		$criteria->compare('comment_date',$this->comment_date,true);
-		$criteria->compare('comment_text',$this->comment_text,true);
-		$criteria->compare('comment_resourceid',$this->comment_resourceid,true);
-		$criteria->compare('user_id',$this->user_id);
-		$criteria->compare('module_id',$this->module_id);
-
-		return new CActiveDataProvider(get_class($this), array(
-			'criteria'=>$criteria,
-		));
 	}
 	
 	/**
@@ -120,14 +97,13 @@ class Comments extends CActiveRecord
 	 */
 	public function findComments($module, $resource)
     {
-        return Comments::model()->with('Module')->findAll(array(
+        return Comments::model()->with('Module')->together()->findAll(array(
             'condition'=>'Module.module_name = :module AND t.comment_resourceid = :resource',
 			'params'=>array(
 				':module'=>$module,
-				':resource'=>$resource,
+				':resource'=>$resource
 			),
-            'order'=>'t.comment_id ASC',
-			'together' => true,
+            'order'=>'t.comment_id ASC'
         ));
     }
 	
@@ -141,7 +117,7 @@ class Comments extends CActiveRecord
 		return Documents::model()->findAll(array(
 			'condition'=>'t.comment_id = :comment_id',
 			'params'=>array(
-				'comment_id'=>$comment_id,
+				'comment_id'=>$comment_id
 			),
             'order'=>'t.document_id'
         ));
@@ -189,6 +165,7 @@ class Comments extends CActiveRecord
 		{
 			$projects = Yii::app()->user->getProjects();
 			$InProjects = array(0);
+
 			foreach ($projects as $project)
 			{
 				array_push($InProjects, $project->project_id);
@@ -214,7 +191,7 @@ class Comments extends CActiveRecord
 		return array(
 			'CSafeContentBehavor' => array( 
 				'class' => 'application.components.CSafeContentBehavior',
-				'attributes' => array('comment_date', 'comment_text', 'comment_resourceid', 'user_id', 'module_id'),
+				'attributes' => array('comment_date', 'comment_text', 'comment_resourceid', 'user_id', 'module_id')
 			),
 		);
 	}

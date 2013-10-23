@@ -8,7 +8,7 @@ This is the second version using a lot of javascript and angularjs
 http://qbit.com.mx/labs/celestic/
 
 File type icons from
-http://jrdng.deviantart.com/art/File-Icons-Version-3-68597653
+@Jackfiallos
 
 UI icons from
-http://adamwhitcroft.com/batch/
+http://fortawesome.github.io/Font-Awesome/

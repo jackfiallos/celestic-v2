@@ -3,7 +3,10 @@
  * projectList class file
  * 
  * @author		Jackfiallos
- * @link		http://jackfiallos.com
+ * @version		2.0.0
+ * @link		http://qbit.com.mx/labs/celestic
+ * @copyright 	Copyright (c) 2009-2013 Qbit Mexhico
+ * @license		http://qbit.com.mx/labs/celestic/license/
  * @description
  *
  **/

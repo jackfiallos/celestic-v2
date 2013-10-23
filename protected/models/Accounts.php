@@ -4,10 +4,11 @@
  * Accounts Model
  * 
  * @author		Jackfiallos
+ * @version		2.0.0
  * @link		http://qbit.com.mx/labs/celestic
  * @copyright 	Copyright (c) 2009-2013 Qbit Mexhico
  * @license		http://qbit.com.mx/labs/celestic/license/
- * @version		2.0.0
+ * @description
  * 
  * This is the model class for table "stb_accounts".
  */
@@ -30,8 +31,9 @@ class Accounts extends CActiveRecord
 	 */
 
 	/**
-	 * Returns the static model of the specified AR class.
-	 * @return Accounts the static model class
+	 * [model description]
+	 * @param  [type] $className [description]
+	 * @return [type]            [description]
 	 */
 	public static function model($className=__CLASS__)
 	{
@@ -39,7 +41,8 @@ class Accounts extends CActiveRecord
 	}
 
 	/**
-	 * @return string the associated database table name
+	 * [tableName description]
+	 * @return [type] [description]
 	 */
 	public function tableName()
 	{
@@ -47,24 +50,23 @@ class Accounts extends CActiveRecord
 	}
 
 	/**
-	 * @return array validation rules for model attributes.
+	 * [rules description]
+	 * @return [type] [description]
 	 */
 	public function rules()
 	{
-		// NOTE: you should only define rules for those attributes that
-		// will receive user inputs.
 		return array(
 			array('account_name', 'required', 'message'=>Yii::t('inputValidations','RequireValidation')),
 			array('account_name, account_companyName', 'length', 'max'=>45, 'message'=>Yii::t('inputValidations','MaxValidation')),
 			array('account_uniqueId', 'length', 'max'=>20, 'message'=>Yii::t('inputValidations','MaxValidation')),
 			array('account_logo', 'length', 'max'=>255, 'message'=>Yii::t('inputValidations','MaxValidation')),
-			array('timezone_id, account_projectNumbers, account_storageSize', 'numerical', 'integerOnly'=>true),
-			//array('image', 'file', 'types'=>'jpg, jpeg, png'),
+			array('timezone_id, account_projectNumbers, account_storageSize', 'numerical', 'integerOnly'=>true)
 		);
 	}
 
 	/**
-	 * @return array relational rules.
+	 * [relations description]
+	 * @return [type] [description]
 	 */
 	public function relations()
 	{
@@ -72,12 +74,13 @@ class Accounts extends CActiveRecord
 		// class name for the relations automatically generated below.
 		return array(
 			'Users'=>array(self::HAS_MANY, 'Users', 'account_id'),
-			'Address'=>array(self::BELONGS_TO, 'Address', 'address_id'),
+			'Address'=>array(self::BELONGS_TO, 'Address', 'address_id')
 		);
 	}
 
 	/**
-	 * @return array customized attribute labels (name=>label)
+	 * [attributeLabels description]
+	 * @return [type] [description]
 	 */
 	public function attributeLabels()
 	{
@@ -91,15 +94,20 @@ class Accounts extends CActiveRecord
 			'account_storageSize' => Yii::t('accounts','account_storageSize'),
 			'account_uniqueId' => Yii::t('accounts','account_uniqueId'),
 			'address_id' => Yii::t('accounts','address_id'),
-			'timezone_id'=> Yii::t('accounts','timezone_id'),
+			'timezone_id'=> Yii::t('accounts','timezone_id')
 		);
 	}
 	
-	public function behaviors(){
+	/**
+	 * [behaviors description]
+	 * @return [type] [description]
+	 */
+	public function behaviors()
+	{
 		return array(
 			'CSafeContentBehavor' => array( 
 				'class' => 'application.components.CSafeContentBehavior',
-				'attributes' => array('account_name', 'account_companyName'),
+				'attributes' => array('account_name', 'account_companyName')
 			),
 		);
 	}

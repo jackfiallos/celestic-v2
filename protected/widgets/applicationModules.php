@@ -3,7 +3,10 @@
  * modules class file
  * 
  * @author		Jackfiallos
- * @link		http://qbit.com.mx
+ * @version		2.0.0
+ * @link		http://qbit.com.mx/labs/celestic
+ * @copyright 	Copyright (c) 2009-2013 Qbit Mexhico
+ * @license		http://qbit.com.mx/labs/celestic/license/
  * @description
  *
  * @property array $htmlOptions
@@ -15,6 +18,10 @@ class applicationModules extends CWidget
 	public $htmlOptions;
 	public $modules;
 
+	/**
+	 * [init description]
+	 * @return [type] [description]
+	 */
 	public function init()
 	{
 		$this->modules = Yii::app()->modules;

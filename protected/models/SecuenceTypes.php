@@ -1,6 +1,15 @@
 <?php
 
 /**
+ * SecuenceTypes
+ * 
+ * @author		Jackfiallos
+ * @version		2.0.0
+ * @link		http://qbit.com.mx/labs/celestic
+ * @copyright 	Copyright (c) 2009-2013 Qbit Mexhico
+ * @license		http://qbit.com.mx/labs/celestic/license/
+ * @description
+ * 
  * This is the model class for table "tb_secuenseTypes".
  *
  * The followings are the available columns in table 'tb_secuenceTypes':
@@ -11,13 +20,14 @@
  */
 class SecuenceTypes extends CActiveRecord
 {
-	const NORMAL = 1;
+	const NORMAL      = 1;
 	const ALTERNATIVE = 2;
-	const EXCEPTION = 3;
+	const EXCEPTION   = 3;
 
 	/**
-	 * Returns the static model of the specified AR class.
-	 * @return SecuenseTypes the static model class
+	 * [model description]
+	 * @param  [type] $className [description]
+	 * @return [type]            [description]
 	 */
 	public static function model($className=__CLASS__)
 	{
@@ -25,7 +35,8 @@ class SecuenceTypes extends CActiveRecord
 	}
 
 	/**
-	 * @return string the associated database table name
+	 * [tableName description]
+	 * @return [type] [description]
 	 */
 	public function tableName()
 	{
@@ -33,59 +44,36 @@ class SecuenceTypes extends CActiveRecord
 	}
 
 	/**
-	 * @return array validation rules for model attributes.
+	 * [rules description]
+	 * @return [type] [description]
 	 */
 	public function rules()
 	{
-		// NOTE: you should only define rules for those attributes that
-		// will receive user inputs.
 		return array(
 			array('secuenceTypes_name', 'required'),
-			array('secuenceTypes_name', 'length', 'max'=>45),
-			// The following rule is used by search().
-			// Please remove those attributes that should not be searched.
-			array('secuenceTypes_id, secuenceTypes_name', 'safe', 'on'=>'search'),
+			array('secuenceTypes_name', 'length', 'max'=>45)
 		);
 	}
 
 	/**
-	 * @return array relational rules.
+	 * [relations description]
+	 * @return [type] [description]
 	 */
 	public function relations()
 	{
-		// NOTE: you may need to adjust the relation name and the related
-		// class name for the relations automatically generated below.
 		return array(
 		);
 	}
 
 	/**
-	 * @return array customized attribute labels (name=>label)
+	 * [attributeLabels description]
+	 * @return [type] [description]
 	 */
 	public function attributeLabels()
 	{
 		return array(
 			'secuenceTypes_id' => 'Secuence Types',
-			'secuenceTypes_name' => 'Secuence Types Name',
+			'secuenceTypes_name' => 'Secuence Types Name'
 		);
-	}
-
-	/**
-	 * Retrieves a list of models based on the current search/filter conditions.
-	 * @return CActiveDataProvider the data provider that can return the models based on the search/filter conditions.
-	 */
-	public function search()
-	{
-		// Warning: Please modify the following code to remove attributes that
-		// should not be searched.
-
-		$criteria=new CDbCriteria;
-
-		$criteria->compare('secuenceTypes_id',$this->secuenceTypes_id);
-		$criteria->compare('secuenceTypes_name',$this->secuenceTypes_name,true);
-
-		return new CActiveDataProvider(get_class($this), array(
-			'criteria'=>$criteria,
-		));
 	}
 }

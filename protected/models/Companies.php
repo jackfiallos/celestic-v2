@@ -4,10 +4,11 @@
  * Companies Model
  * 
  * @author		Jackfiallos
+ * @version		2.0.0
  * @link		http://qbit.com.mx/labs/celestic
  * @copyright 	Copyright (c) 2009-2013 Qbit Mexhico
  * @license		http://qbit.com.mx/labs/celestic/license/
- * @version		2.0.0
+ * @description
  * 
  * This is the model class for table "tb_companies".
  */
@@ -25,8 +26,9 @@ class Companies extends CActiveRecord
 	 */
 
 	/**
-	 * Returns the static model of the specified AR class.
-	 * @return Companies the static model class
+	 * [model description]
+	 * @param  [type] $className [description]
+	 * @return [type]            [description]
 	 */
 	public static function model($className=__CLASS__)
 	{
@@ -34,7 +36,8 @@ class Companies extends CActiveRecord
 	}
 
 	/**
-	 * @return string the associated database table name
+	 * [tableName description]
+	 * @return [type] [description]
 	 */
 	public function tableName()
 	{
@@ -42,12 +45,11 @@ class Companies extends CActiveRecord
 	}
 
 	/**
-	 * @return array validation rules for model attributes.
+	 * [rules description]
+	 * @return [type] [description]
 	 */
 	public function rules()
 	{
-		// NOTE: you should only define rules for those attributes that
-		// will receive user inputs.
 		return array(
 			array('company_name', 'required', 'message'=>Yii::t('inputValidations','RequireValidation')),
 			array('company_uniqueId', 'required', 'on'=>'update', 'message'=>Yii::t('inputValidations','RequireValidation')),
@@ -56,30 +58,27 @@ class Companies extends CActiveRecord
 			array('company_name', 'length', 'max'=>100, 'message'=>Yii::t('inputValidations','MaxValidation')),
 			array('company_name', 'length', 'min'=>9, 'message'=>Yii::t('inputValidations','MinValidation')),
 			array('company_uniqueId', 'length', 'max'=>20, 'message'=>Yii::t('inputValidations','MaxValidation')),
-			array('company_url', 'length', 'max'=>100, 'message'=>Yii::t('inputValidations','MaxValidation')),
-			// The following rule is used by search().
-			// Please remove those attributes that should not be searched.
-			array('company_id, company_name, company_url, company_uniqueId, company_latitude, company_longitude, address_id', 'safe', 'on'=>'search'),
+			array('company_url', 'length', 'max'=>100, 'message'=>Yii::t('inputValidations','MaxValidation'))
 		);
 	}
 
 	/**
-	 * @return array relational rules.
+	 * [relations description]
+	 * @return [type] [description]
 	 */
 	public function relations()
 	{
-		// NOTE: you may need to adjust the relation name and the related
-		// class name for the relations automatically generated below.
 		return array(
 			'Users'=>array(self::MANY_MANY, 'Users', 'tb_companies_has_tb_users(user_id,company_id)'),
 			'Cusers'=>array(self::MANY_MANY, 'Users', 'tb_companies_has_tb_users(company_id,user_id)'),
 			'Address'=>array(self::BELONGS_TO, 'Address', 'address_id'),
-			'Projects'=>array(self::HAS_MANY, 'Projects', 'company_id'),
+			'Projects'=>array(self::HAS_MANY, 'Projects', 'company_id')
 		);
 	}
 
 	/**
-	 * @return array customized attribute labels (name=>label)
+	 * [attributeLabels description]
+	 * @return [type] [description]
 	 */
 	public function attributeLabels()
 	{
@@ -90,32 +89,8 @@ class Companies extends CActiveRecord
 			'company_uniqueId' => Yii::t('companies','company_uniqueId'),
 			'company_latitude' => Yii::t('companies','company_latitude'),
 			'company_longitude' => Yii::t('companies','company_longitude'),
-			'address_id' => Yii::t('companies','address_id'),
+			'address_id' => Yii::t('companies','address_id')
 		);
-	}
-
-	/**
-	 * Retrieves a list of models based on the current search/filter conditions.
-	 * @return CActiveDataProvider the data provider that can return the models based on the search/filter conditions.
-	 */
-	public function search()
-	{
-		// Warning: Please modify the following code to remove attributes that
-		// should not be searched.
-
-		$criteria=new CDbCriteria;
-
-		$criteria->compare('company_id',$this->company_id);
-		$criteria->compare('company_name',$this->company_name,true);
-		$criteria->compare('company_url',$this->company_url,true);
-		$criteria->compare('company_uniqueId',$this->company_uniqueId,true);
-		$criteria->compare('company_latitude',$this->company_latitude);
-		$criteria->compare('company_longitude',$this->company_longitude);
-		$criteria->compare('address_id',$this->address_id);
-
-		return new CActiveDataProvider(get_class($this), array(
-			'criteria'=>$criteria,
-		));
 	}
 	
 	/**
@@ -127,7 +102,7 @@ class Companies extends CActiveRecord
 		return array(
 			'CSafeContentBehavor' => array( 
 				'class' => 'application.components.CSafeContentBehavior',
-				'attributes' => array('company_name', 'company_url', 'company_uniqueId', 'company_latitude', 'company_longitude'),
+				'attributes' => array('company_name', 'company_url', 'company_uniqueId', 'company_latitude', 'company_longitude')
 			),
 		);
 	}
@@ -139,12 +114,11 @@ class Companies extends CActiveRecord
 	 */
 	public function findCompanyList($user_id)
 	{
-		return Companies::model()->with('Cusers.Accounts')->findAll(array(
+		return Companies::model()->with('Cusers.Accounts')->together()->findAll(array(
 			'condition'=>'Cusers.user_id= :user_id',
 			'params'=>array(
-				':user_id' => $user_id,
-			),
-			'together' => true,
+				':user_id' => $user_id
+			)
 		));
 	}
 	

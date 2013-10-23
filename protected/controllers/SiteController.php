@@ -3,6 +3,7 @@
  * SiteController class file
  * 
  * @author		Jackfiallos
+ * @version		2.0.0
  * @link		http://qbit.com.mx/labs/celestic
  * @copyright 	Copyright (c) 2009-2013 Qbit Mexhico
  * @license		http://qbit.com.mx/labs/celestic/license/
@@ -17,11 +18,6 @@ class SiteController extends Controller
 	public function actions()
 	{
 		return array(
-			// captcha action renders the CAPTCHA image displayed on the contact page
-			'captcha'=>array(
-				'class'=>'CCaptchaAction',
-				'backColor'=>0xFFFFFF,
-			),
 			// page action renders "static" pages stored under 'protected/views/site/pages'
 			// They can be accessed via: index.php?r=site/page&view=FileName
 			'page'=>array(
@@ -48,6 +44,7 @@ class SiteController extends Controller
 			{ 
 				// verify is user has project send via GET params
 				$Project = Projects::model()->hasProject(Yii::app()->user->id, Yii::app()->request->getParam('infoproject', 0));
+
 				// project_id has relation with user_id then, save project information inside session
 				if (isset($Project->project_id))
 				{
@@ -115,6 +112,7 @@ class SiteController extends Controller
 	public function actionError()
 	{
 		$this->layout = 'error';
+		
 		if ($error = Yii::app()->errorHandler->error)
 		{
 			if(Yii::app()->request->isAjaxRequest)

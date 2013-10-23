@@ -4,10 +4,11 @@
  * Users Model
  * 
  * @author		Jackfiallos
+ * @version		2.0.0
  * @link		http://qbit.com.mx/labs/celestic
  * @copyright 	Copyright (c) 2009-2013 Qbit Mexhico
  * @license		http://qbit.com.mx/labs/celestic/license/
- * @version		2.0.0
+ * @description
  * 
  * This is the model class for table "tb_users".
  */
@@ -30,8 +31,9 @@ class Users extends CActiveRecord
 	 */
 
 	/**
-	 * Returns the static model of the specified AR class.
-	 * @return Users the static model class
+	 * [model description]
+	 * @param  [type] $className [description]
+	 * @return [type]            [description]
 	 */
 	public static function model($className=__CLASS__)
 	{
@@ -39,7 +41,8 @@ class Users extends CActiveRecord
 	}
 
 	/**
-	 * @return string the associated database table name
+	 * [tableName description]
+	 * @return [type] [description]
 	 */
 	public function tableName()
 	{
@@ -47,12 +50,11 @@ class Users extends CActiveRecord
 	}
 
 	/**
-	 * @return array validation rules for model attributes.
+	 * [rules description]
+	 * @return [type] [description]
 	 */
 	public function rules()
 	{
-		// NOTE: you should only define rules for those attributes that
-		// will receive user inputs.
 		return array(
 			array('user_name, user_lastname, user_email, user_admin, user_active, account_id, user_accountManager, user_password', 'required', 'message'=>Yii::t('inputValidations','RequireValidation')),
 			array('user_name, user_lastname', 'length', 'min'=>3, 'message'=>Yii::t('inputValidations','MinValidation')),
@@ -62,20 +64,16 @@ class Users extends CActiveRecord
 			array('user_password', 'length', 'max'=>20, 'min'=>6, 'on'=>array('create'), 'message'=>Yii::t('inputValidations','BetweenValidation')),
 			array('user_password', 'length', 'min'=>6, 'on'=>array('update'), 'message'=>Yii::t('inputValidations','MinValidation')),
 			array('user_email', 'email', 'message'=>Yii::t('inputValidations','EmailValidation')),
-			array('user_email', 'unique', 'message'=>Yii::t('inputValidations','UniqueValidation')),
-			// The following rule is used by search().
-			// Please remove those attributes that should not be searched.
-			array('user_id, user_name, user_lastname, user_email, user_phone, user_admin, user_active, account_id, address_id, user_accountManager', 'safe', 'on'=>'search'),
+			array('user_email', 'unique', 'message'=>Yii::t('inputValidations','UniqueValidation'))
 		);
 	}
 
 	/**
-	 * @return array relational rules.
+	 * [relations description]
+	 * @return [type] [description]
 	 */
 	public function relations()
 	{
-		// NOTE: you may need to adjust the relation name and the related
-		// class name for the relations automatically generated below.
 		return array(
 			'Clients'=>array(self::HAS_ONE, 'Clients', 'user_id'),
 			'Accounts'=>array(self::BELONGS_TO, 'Accounts', 'account_id'),
@@ -84,12 +82,13 @@ class Users extends CActiveRecord
 			'Managers'=>array(self::MANY_MANY, 'ProjectsHasUsers', 'tb_projects_has_tb_users(user_id,project_id)'),
 			'ClientsManagers'=>array(self::MANY_MANY, 'Projects', 'tb_projects_has_tb_users(user_id,project_id)'),
 			'Tasks'=>array(self::MANY_MANY, 'Tasks', 'tb_users_has_tb_tasks(user_id,task_id)'),
-			'Address'=>array(self::BELONGS_TO, 'Address', 'address_id'),
+			'Address'=>array(self::BELONGS_TO, 'Address', 'address_id')
 		);
 	}
 
 	/**
-	 * @return array customized attribute labels (name=>label)
+	 * [attributeLabels description]
+	 * @return [type] [description]
 	 */
 	public function attributeLabels()
 	{
@@ -105,29 +104,8 @@ class Users extends CActiveRecord
 			'account_id' => Yii::t('users','account_id'),
 			'address_id' => Yii::t('users','address_id'),
 			'user_accountManager' => Yii::t('users','user_accountManager'),
-			'user_lastLogin' => Yii::t('users','user_lastLogin'),
+			'user_lastLogin' => Yii::t('users','user_lastLogin')
 		);
-	}
-
-	/**
-	 * Retrieves a list of models based on the current search/filter conditions.
-	 * @return CActiveDataProvider the data provider that can return the models based on the search/filter conditions.
-	 */
-	public function search()
-	{
-		// Warning: Please modify the following code to remove attributes that
-		// should not be searched.
-
-		$criteria = new CDbCriteria;
-		$criteria->compare('user_name',Users::user_name,true);
-		$criteria->compare('user_lastname',Users::user_lastname,true);
-		$criteria->compare('user_email',Users::user_email,true);
-		$criteria->compare('user_phone',Users::user_phone,true);
-		$criteria->compare('user_active',Users::user_active);
-
-		return new CActiveDataProvider(get_class(Users), array(
-			'criteria'=>$criteria,
-		));
 	}
 	
 	/**
@@ -139,8 +117,8 @@ class Users extends CActiveRecord
 		return array(
 			'CSafeContentBehavor' => array( 
 				'class' => 'application.components.CSafeContentBehavior',
-				'attributes' => array('user_name', 'user_lastname', 'user_email', 'user_phone'),
-			),
+				'attributes' => array('user_name', 'user_lastname', 'user_email', 'user_phone')
+			)
 		);
 	}
 	
@@ -151,12 +129,11 @@ class Users extends CActiveRecord
 	 */
 	public function findUsersAndClientsByAccount($account_id)
 	{
-		return Users::model()->with('Accounts')->findAll(array(
+		return Users::model()->with('Accounts')->together()->findAll(array(
 			'condition'=>'t.account_id = :account_id',
 			'params'=>array(
-				':account_id' => $account_id,
-			),
-			'together' => true,
+				':account_id' => $account_id
+			)
 		));
 	}
 	
@@ -169,7 +146,7 @@ class Users extends CActiveRecord
 		return Users::model()->findAll(array(
 			'condition'=>'t.account_id = :account_id AND t.user_accountManager <> 1',
 			'params'=>array(
-				':account_id' => Yii::app()->user->Accountid,
+				':account_id' => Yii::app()->user->Accountid
 			),
 		));
 	}
@@ -182,7 +159,7 @@ class Users extends CActiveRecord
 	 */
 	public function findUsersByAccount($account_id, $company_id)
     {
-        return Users::model()->with('Clients','Companies')->findAll(array(
+        return Users::model()->with('Clients','Companies')->together()->findAll(array(
 			'select'=>'t.user_id, t.user_name, t.user_lastname',
 			'condition'=>'t.account_id = :account_id 
 				AND Clients.client_id IS NULL 
@@ -194,11 +171,10 @@ class Users extends CActiveRecord
 				)',
 			'params'=>array(
 				':account_id'=>$account_id,
-				':company_id'=>$company_id,
+				':company_id'=>$company_id
 			),
-			'together'=>true,
 			'order'=>'t.user_name',
-			'group'=>'t.user_id',
+			'group'=>'t.user_id'
 		));
     }
 	
@@ -210,7 +186,7 @@ class Users extends CActiveRecord
 	 */
 	public function findClientsByAccount($account_id, $company_id)
     {
-        return Users::model()->with('Clients','Companies')->findAll(array(
+        return Users::model()->with('Clients','Companies')->together()->findAll(array(
 			'select'=>'t.user_id, t.user_name, t.user_lastname',
 			'condition'=>'t.account_id = :account_id 
 				AND Clients.client_id IS NOT NULL 
@@ -221,11 +197,10 @@ class Users extends CActiveRecord
 				)',
 			'params'=>array(
 				':account_id'=>$account_id,
-				':company_id'=>$company_id,
+				':company_id'=>$company_id
 			),
-			'together'=>true,
 			'order'=>'t.user_name',
-			'group'=>'t.user_id',
+			'group'=>'t.user_id'
 		));
     }
 	
@@ -236,13 +211,12 @@ class Users extends CActiveRecord
 	 */
 	public function findUsersByProject($project_id)
 	{
-		return Users::model()->with('Clients','Companies.Projects')->findAll(array(
+		return Users::model()->with('Clients','Companies.Projects')->together()->findAll(array(
 			'condition'=>'Projects.project_id = :project_id AND Clients.client_id IS NULL',
 			'params'=>array(
-				':project_id' => $project_id,
+				':project_id' => $project_id
 			),
-			'together'=>true,
-			'order'=>'t.user_name',
+			'order'=>'t.user_name'
 		));
 	}
 	
@@ -253,13 +227,12 @@ class Users extends CActiveRecord
 	 */
 	public function findClientsByProject($project_id)
 	{
-		return Users::model()->with('Clients','Companies.Projects')->findAll(array(
+		return Users::model()->with('Clients','Companies.Projects')->together()->findAll(array(
 			'condition'=>'Projects.project_id = :project_id AND Clients.client_id IS NOT NULL',
 			'params'=>array(
-				':project_id' => $project_id,
+				':project_id' => $project_id
 			),
-			'together'=>true,
-			'order'=>'t.user_name',
+			'order'=>'t.user_name'
 		));
 	}
 	
@@ -270,12 +243,11 @@ class Users extends CActiveRecord
 	 */
 	public function findUsersAndClientsByProject($project_id)
 	{
-		return Users::model()->with('Companies.Projects')->findAll(array(
+		return Users::model()->with('Companies.Projects')->together()->findAll(array(
 			'addCondition'=>'Projects.project_id = :project_id',
 			'params'=>array(
-				':project_id' => $project_id,
+				':project_id' => $project_id
 			),
-			'together'=>true,
 			'order'=>'t.user_name',
 		));
 	}
@@ -311,13 +283,12 @@ class Users extends CActiveRecord
 	 */
 	public function verifyUserInProject($project_id, $user_id)
 	{
-		$count = Users::model()->with('ClientsManagers')->count(array(
+		$count = Users::model()->with('ClientsManagers')->together()->count(array(
 			'condition'=>'ClientsManagers.project_id = :project_id AND t.user_id = :user_id AND 1=1',
 			'params'=> array(
 				':project_id'=>$project_id,
-				':user_id'=>$user_id,
-			),
-			'together'=>true
+				':user_id'=>$user_id
+			)
 		));
 		
 		if ($count > 0)
@@ -335,13 +306,12 @@ class Users extends CActiveRecord
 	 */
 	public function findWorkersByTask($task_id)
 	{
-		return Users::model()->with('Tasks')->findAll(array(
+		return Users::model()->with('Tasks')->together()->findAll(array(
 			'condition'=>'Tasks.task_id = :task_id',
 			'params'=>array(
-				':task_id' => $task_id,
+				':task_id' => $task_id
 			),
-			'together'=>true,
-			'group'=>'t.user_id',
+			'group'=>'t.user_id'
 		));
 	}
 	
@@ -352,14 +322,13 @@ class Users extends CActiveRecord
 	 */
 	public function countWorkersByTask($task_id)
 	{
-		return Users::model()->with('Tasks')->count(array(
+		return Users::model()->with('Tasks')->together()->count(array(
 			'select'=>'t.user_id',
 			'condition'=>'Tasks.task_id = :task_id',
 			'params'=>array(
-				':task_id' => $task_id,
+				':task_id' => $task_id
 			),
-			'together'=>true,
-			'group'=>'t.user_id',
+			'group'=>'t.user_id'
 		));
 	}
 	
@@ -391,8 +360,8 @@ class Users extends CActiveRecord
 		$Users = Users::model()->with('Tasks')->findAll(array(
 			'condition'=>'Tasks.task_id = :task_id',
 			'params'=>array(
-				':task_id'=>$task_id, 
-			),
+				':task_id'=>$task_id
+			)
 		));
 		
 		$usersArray = array(0);
@@ -402,12 +371,11 @@ class Users extends CActiveRecord
 			array_push($usersArray, $user->user_id);
 		}
 		
-		return Users::model()->with('ClientsManagers')->findAll(array(
+		return Users::model()->with('ClientsManagers')->together()->findAll(array(
 			'condition'=>'ClientsManagers.project_id = :project_id AND t.user_id NOT IN ('.implode(",",$usersArray).')',
 			'params'=>array(
-				':project_id'=>$project_id, 
-			),
-			'together'=>true,
+				':project_id'=>$project_id
+			)
 		));
 	}
 }

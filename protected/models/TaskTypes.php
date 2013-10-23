@@ -1,8 +1,8 @@
 <?php
 
 /**
- * Timezones Model
- * 
+ * TaskTypes
+ *
  * @author		Jackfiallos
  * @version		2.0.0
  * @link		http://qbit.com.mx/labs/celestic
@@ -10,13 +10,15 @@
  * @license		http://qbit.com.mx/labs/celestic/license/
  * @description
  * 
- * This is the model class for table "tb_timezones".
+ * This is the model class for table "tb_taskTypes".
  *
- * The followings are the available columns in table 'tb_timezones':
- * @property integer $timezone_id
- * @property string $timezone_name
+ * The followings are the available columns in table 'tb_taskTypes':
+ * @property integer $taskTypes_id
+ * @property string $taskTypes_name
+ *
+ * The followings are the available model relations:
  */
-class Timezones extends CActiveRecord
+class TaskTypes extends CActiveRecord
 {
 	/**
 	 * [model description]
@@ -34,7 +36,7 @@ class Timezones extends CActiveRecord
 	 */
 	public function tableName()
 	{
-		return 'tb_timezones';
+		return 'tb_taskTypes';
 	}
 
 	/**
@@ -44,7 +46,8 @@ class Timezones extends CActiveRecord
 	public function rules()
 	{
 		return array(
-			array('timezone_name', 'length', 'max'=>45)
+			array('taskTypes_name', 'required'),
+			array('taskTypes_name', 'length', 'max'=>45)
 		);
 	}
 
@@ -55,7 +58,6 @@ class Timezones extends CActiveRecord
 	public function relations()
 	{
 		return array(
-			'Accounts'=>array(self::HAS_MANY, 'Accounts', 'timezone_id')
 		);
 	}
 
@@ -66,24 +68,32 @@ class Timezones extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'timezone_id' => 'Timezone',
-			'timezone_name' => 'Timezone Name'
+			'taskTypes_id' => 'Task Types',
+			'taskTypes_name' => 'Task Types Name',
 		);
 	}
 	
 	/**
-	 * [getTimezoneSelected description]
-	 * @param  [type] $account_id [description]
-	 * @return [type]             [description]
+	 * [behaviors description]
+	 * @return [type] [description]
 	 */
-	public static function getTimezoneSelected($account_id)
+	public function behaviors()
 	{
-		$criteria = new CDbCriteria;
-		$criteria->condition = 'Accounts.account_id = 1';
-		$criteria->params = array(
-			':account_id'=>$account_id
+		return array(
+			'CSafeContentBehavor' => array( 
+				'class' => 'application.components.CSafeContentBehavior',
+				'attributes' => array('taskTypes_name')
+			)
 		);
-		
-		return Timezones::model()->with('Accounts')->together()->find($criteria);
+	}
+	
+	/**
+	 * [afterFind description]
+	 * @return [type] [description]
+	 */
+	public function afterFind()
+	{
+		$this->taskTypes_name = Yii::t('taskTypes',$this->taskTypes_name);
+		return parent::afterFind();
 	}
 }

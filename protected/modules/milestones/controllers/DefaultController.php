@@ -3,16 +3,18 @@
  * DefaultController class file
  * 
  * @author		Jackfiallos
+ * @version		2.0.0
  * @link		http://qbit.com.mx/labs/celestic
  * @copyright 	Copyright (c) 2009-2013 Qbit Mexhico
- * @license 	http://qbit.com.mx/labs/celestic/license/
+ * @license		http://qbit.com.mx/labs/celestic/license/
  * @description
  *
  **/
 class DefaultController extends Controller
 {
 	/**
-	 * @return array action filters
+	 * [filters description]
+	 * @return [type] [description]
 	 */
 	public function filters()
 	{
@@ -43,10 +45,10 @@ class DefaultController extends Controller
 					'index'
 				),
 				'users'=>array('@'),
-				'expression'=>'!$user->isGuest',
+				'expression'=>'!$user->isGuest'
 			),
 			array('deny',
-				'users'=>array('*'),
+				'users'=>array('*')
 			),
 		);
 	}
@@ -58,14 +60,14 @@ class DefaultController extends Controller
 	public function actionIndex()
 	{
 		// check if user has permission to indexMilestones
-		if(Yii::app()->user->checkAccess('indexMilestones'))
+		if (Yii::app()->user->checkAccess('indexMilestones'))
 		{
-			// create Milestones form search
-			$model = new MilestonesSearchForm;
-			$milestones = $model->search();
+			$criteria = new CDbCriteria();
+			$criteria->compare('project_id', (int)Yii::app()->user->getState('project_selected'));
+			$milestones = Milestones::model()->findAll($criteria);
 			
 			// set model attributes from milestones form
-			if(Yii::app()->request->isPostRequest)
+			if (Yii::app()->request->isPostRequest)
 			{
 				$milestone = array();
 				foreach($milestones as $item)
@@ -78,7 +80,9 @@ class DefaultController extends Controller
 						'countComments'=>Logs::getCountComments($this->module->id, $item->milestone_id),
 						'userOwner'=>ucfirst(CHtml::encode($item->Users->completeName)),
 						'userOwnerUrl'=>$this->createUrl('users/view', array('id'=>$item->Users->user_id)),
-						'due_date'=>CHtml::encode($item->milestone_duedate),
+						'due_date_day'=>CHtml::encode(Yii::app()->dateFormatter->format('dd', $item->milestone_duedate)),
+						'due_date_month'=>CHtml::encode(Yii::app()->dateFormatter->format('MMM', $item->milestone_duedate)),
+						'due_date_dayWeek'=>CHtml::encode(Yii::app()->dateFormatter->format('EEE', $item->milestone_duedate)),
 						'due_dateFormatted'=>CHtml::encode(Yii::app()->dateFormatter->format('dd.MM.yyyy', $item->milestone_duedate)),
 						'completed'=>round($item->percent, 2)
 					));
@@ -110,7 +114,7 @@ class DefaultController extends Controller
 	public function actionCreate()
 	{
 		// check if user has permissions to createMilestones
-		if(Yii::app()->user->checkAccess('createMilestones'))
+		if (Yii::app()->user->checkAccess('createMilestones'))
 		{
 			// create Milestones object model
 			$model = new Milestones;
@@ -119,7 +123,7 @@ class DefaultController extends Controller
 			$Users = Projects::model()->findManagersByProject(Yii::app()->user->getState('project_selected'));
 
 			// if Milestones form exist
-			if(isset($_POST['Milestones']))
+			if (isset($_POST['Milestones']))
 			{
 				// set form elements to Milestones model attributes
 				$model->attributes = $_POST['Milestones'];
@@ -238,13 +242,13 @@ class DefaultController extends Controller
 	public function actionView()
 	{
 		// check if user has permission to viewMilestones
-		if(Yii::app()->user->checkAccess('viewMilestones'))
+		if (Yii::app()->user->checkAccess('viewMilestones'))
 		{
 			$model = new Milestones();
 
 			if (($_POST) && (Yii::app()->request->isPostRequest))
 			{
-				if(isset($_GET['id']))
+				if (isset($_GET['id']))
 				{
 					$model = Milestones::model()->findByPk((int)Yii::app()->request->getParam('id', 0));
 				}
@@ -265,7 +269,7 @@ class DefaultController extends Controller
 					));
 
 					$tasks = array();
-					foreach($dataProviderTasks as $data)
+					foreach ($dataProviderTasks as $data)
 					{
 						$class = '';
 						switch ($data->task_priority) {
@@ -309,7 +313,7 @@ class DefaultController extends Controller
 					$foundTasksStatus = Tasks::model()->with('Status')->together()->findAll($criteria);
 
 					$TasksStatus = array();
-					foreach($foundTasksStatus as $task)
+					foreach ($foundTasksStatus as $task)
 					{
 						$TasksStatus[] = array(
 							'name' => $task->Status->status_name,
@@ -327,7 +331,7 @@ class DefaultController extends Controller
 					$criteria->group = "t.task_priority";
 					$foundTasksPriority = Tasks::model()->findAll($criteria);
 					$TasksPriority = array();
-					foreach($foundTasksPriority as $task)
+					foreach ($foundTasksPriority as $task)
 					{
 						$TasksPriority[] = array(Tasks::getNameOfTaskPriority($task->task_priority), intval($task->total));
 					}
@@ -375,7 +379,7 @@ class DefaultController extends Controller
 	public function actionUpdate()
 	{
 		// check if user has permissions to updateMilestones
-		if(Yii::app()->user->checkAccess('updateMilestones'))
+		if (Yii::app()->user->checkAccess('updateMilestones'))
 		{
 			// get Milestones object from $_GET['id'] parameter
 			$model = Milestones::model()->findByPk((int)Yii::app()->request->getParam('id', 0));
@@ -386,7 +390,7 @@ class DefaultController extends Controller
 				// find all projects managers
 				$Users = Projects::model()->findManagersByProject($model->project_id);
 
-				if(isset($_POST['Milestones']))
+				if (isset($_POST['Milestones']))
 				{
 					// if Milestones form exist
 					$model->attributes=$_POST['Milestones'];

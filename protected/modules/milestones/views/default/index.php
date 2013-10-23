@@ -64,7 +64,12 @@ $this->pageTitle = Yii::app()->name." - ".Yii::t('milestones', 'TitleMilestones'
 						</div>
 					</div>
 					<span class="icon">
-						<i class="icon-calendar icon-3x"></i>
+						<!-- <i class="icon-calendar icon-3x"></i> -->
+						<div class="aU5">
+							<span class="aRh">{{milestone.due_date_month}}</span>
+							<span class="aRg">{{milestone.due_date_day}}</span>
+							<span class="aRj">{{milestone.due_date_dayWeek}}</span>
+						</div>
 					</span>
 					<blockquote>
 						<div class="moduleTextDescription corners">
@@ -77,7 +82,6 @@ $this->pageTitle = Yii::app()->name." - ".Yii::t('milestones', 'TitleMilestones'
 									- Due date <abbr class="timeago" title="{{milestone.due_date}}">
 										{{milestone.due_dateFormatted}}
 									</abbr>
-									 ({{milestone.due_date}})
 								</span>
 							</span>
 							<a href="{{milestone.url}}" ng-show="milestone.countComments > 0">

@@ -14,7 +14,9 @@
 	<link href="<?php echo Yii::app()->theme->baseUrl; ?>/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
 	<link href="<?php echo Yii::app()->theme->baseUrl; ?>/bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet" />
 	<link href="<?php echo Yii::app()->theme->baseUrl; ?>/css/widgets.css" rel="stylesheet" />
-	<link href="http://netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css" rel="stylesheet">
+	<!-- <link href="http://netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css" rel="stylesheet"> -->
+	<link href="<?php echo Yii::app()->theme->baseUrl; ?>/css/jquery.mCustomScrollbar.css" rel="stylesheet" type="text/css" />
+	<link href="<?php echo Yii::app()->theme->baseUrl; ?>/css/font-awesome.css" rel="stylesheet" />
 	<link href="<?php echo Yii::app()->theme->baseUrl; ?>/css/style.min.css" rel="stylesheet" />
 	<link rel="shortcut icon" type="image/x-icon" href="<?php echo Yii::app()->request->baseUrl; ?>/favicon.png" />
 	<!--[if IE]>
@@ -90,6 +92,48 @@
 				<?php echo $content; ?>
 				<br/>
 			</div>
+			<div id="sidewidgets">
+				<div id="sidewidgetsInner">
+					<section class="form paneltab">
+						<header class="paneltab-heading announcement">
+							<h5>
+								<i class="icon-bullhorn"></i>
+								Announcements
+							</h5>
+						</header>
+						<div class="paneltab-body" style="background: #fff;">
+							&nbsp;
+						</div>
+					</section>
+
+					<section class="form paneltab">
+						<header class="paneltab-heading upcoming">
+							<h5>
+								<i class="icon-calendar-empty"></i>
+								Upcoming Events
+								<a class="pull-right btn btn-small" href="#">
+									<i class="icon-plus"></i>
+								</a>
+							</h5>
+						</header>
+						<div class="paneltab-body" style="background: #fff;">
+							&nbsp;
+						</div>
+					</section>
+
+					<section class="form paneltab">
+						<header class="paneltab-heading last-comments">
+							<h5>
+								<i class="icon-comments"></i>
+								Last Comments
+							</h5>
+						</header>
+						<div class="paneltab-body" style="background: #fff;">
+							&nbsp;
+						</div>
+					</section>
+				</div>
+			</div>
 		</div>
 	</div>
 
@@ -99,9 +143,11 @@
   	Yii::app()->clientScript->registerCoreScript('jquery.ui');
   	$cs->registerScriptFile(Yii::app()->theme->baseUrl.'/bootstrap/js/bootstrap.min.js', CClientScript::POS_END);
   	$cs->registerScriptFile(Yii::app()->theme->baseUrl.'/js/lib/jquery.timeago.js', CClientScript::POS_END);
+  	$cs->registerScriptFile(Yii::app()->theme->baseUrl.'/js/lib/jquery.mCustomScrollbar.min.js', CClientScript::POS_END);
   	$cs->registerScriptFile(Yii::app()->theme->baseUrl.'/js/site.js', CClientScript::POS_END);
   	$cs->registerScript('mainScript',"
         jQuery('.dropdown-toggle').dropdown();
+        jQuery('.projectlist').mCustomScrollbar();
 		".Yii::t('site','jquery.timeago.configuration')."
         jQuery.timeago.settings.allowFuture = true;
         jQuery('abbr.timeago').timeago();

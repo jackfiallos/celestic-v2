@@ -5,8 +5,7 @@ Celestic.config(
 	$routeProvider.when('/view/:id', {
 		templateUrl: CelesticParams.URL.view,
 		controller: 'celestic.cases.view.controller'
-	})
-	.otherwise({
+	}).otherwise({
 		redirectTo: '/',
 		controller: 'celestic.cases.home.controller'
 	});
@@ -63,15 +62,15 @@ Celestic.controller('celestic.cases.home.controller', function($scope, $http, sh
 		jQuery.ajax({
 			type: 'POST',
 			dataType:'json',
-			url: jQuery('#cases-form-create').attr('action'),
-			data: jQuery('#cases-form-create').serialize(),
+			url: jQuery('#'+CelesticParams.Forms.createForm).attr('action'),
+			data: jQuery('#'+CelesticParams.Forms.createForm).serialize(),
 			success:function(data){
 				if (!data.success) {
-					jQuery('#cases-form-create .control-group').removeClass('error');
-					jQuery('#cases-form-create .help-inline').hide();
+					jQuery('#'+CelesticParams.Forms.createForm+' .control-group').removeClass('error');
+					jQuery('#'+CelesticParams.Forms.createForm+' .help-inline').hide();
 					for(var fields in data.error) {
-						jQuery('#cases-form-create #cases-form-create_'+fields).closest('.control-group').addClass('error');
-						jQuery('#cases-form-create #cases-form-create_'+fields).next().html('<label class="labelhelper" for="'+fields+'">'+data.error[fields][0]+'</label>').show();
+						jQuery('#'+CelesticParams.Forms.createForm+' #'+fields).closest('.control-group').addClass('error');
+						jQuery('#'+CelesticParams.Forms.createForm+' #'+fields).next().html('<label class="labelhelper" for="'+fields+'">'+data.error[fields][0]+'</label>').show();
 					}
 				}
 				else {
@@ -86,18 +85,12 @@ Celestic.controller('celestic.cases.home.controller', function($scope, $http, sh
 });
 
 Celestic.controller('celestic.cases.view.controller', function($scope, $route, $routeParams, sharedService) {
-	$scope.document_name = 'asdf';
-	$scope.document_description = '';
-	$scope.document_uploadDate = '';
-	$scope.user_id = '';
+	$scope.case = {};
+	$scope.casesForm = false;
 
 	var id = ($routeParams.id || '');
 
 	sharedService.broadcast(false);
-
-	$scope.showHome = function() {
-		sharedService.broadcast(true);
-	};
 
 	jQuery.ajax({
 		type: 'POST',
@@ -108,11 +101,41 @@ Celestic.controller('celestic.cases.view.controller', function($scope, $route, $
 		},
 		success:function(data) {
 			$scope.$apply(function() {
-				$scope.document_name = data.document_name;
-				$scope.document_description = data.document_description;
-				$scope.document_uploadDate = data.document_uploadDate;
-				$scope.user_id = data.user_id;
+				$scope.case = data.case;
 			});
 		}
 	});
+
+	$scope.showHome = function() {
+		sharedService.broadcast(true);
+	};
+
+	$scope.showUpdate = function() {
+		$scope.casesForm = true;
+	};
+
+	$scope.submitForm = function() {
+		jQuery.ajax({
+			type: 'POST',
+			dataType:'json',
+			url: $scope.milestone.url,
+			data: jQuery('#milestones-form-update').serialize(),
+			success:function(data) {
+				if (!data.success) {
+					jQuery('#milestones-form-update .control-group').removeClass('error');
+					jQuery('#milestones-form-update .help-inline').hide();
+					for(var fields in data.error) {
+						jQuery('#milestones-form-update #'+fields).closest('.control-group').addClass('error');
+						jQuery('#milestones-form-update #'+fields).next().html('<label class="labelhelper" for="'+fields+'">'+data.error[fields][0]+'</label>').show();
+					}
+				}
+				else {
+					$scope.$apply(function() {
+						$scope.case = data.case;
+						$scope.casesForm = false;
+					});
+				}
+			}
+		});
+	};
 });

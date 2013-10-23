@@ -4,10 +4,11 @@
  * Milestones Model
  * 
  * @author		Jackfiallos
+ * @version		2.0.0
  * @link		http://qbit.com.mx/labs/celestic
  * @copyright 	Copyright (c) 2009-2013 Qbit Mexhico
  * @license		http://qbit.com.mx/labs/celestic/license/
- * @version		2.0.0
+ * @description
  * 
  * This is the model class for table "tb_milestones".
  *
@@ -28,8 +29,9 @@ class Milestones extends CActiveRecord
 	public $pending_tasks;
 	
 	/**
-	 * Returns the static model of the specified AR class.
-	 * @return Milestones the static model class
+	 * [model description]
+	 * @param  [type] $className [description]
+	 * @return [type]            [description]
 	 */
 	public static function model($className=__CLASS__)
 	{
@@ -37,7 +39,8 @@ class Milestones extends CActiveRecord
 	}
 
 	/**
-	 * @return string the associated database table name
+	 * [tableName description]
+	 * @return [type] [description]
 	 */
 	public function tableName()
 	{
@@ -45,41 +48,37 @@ class Milestones extends CActiveRecord
 	}
 
 	/**
-	 * @return array validation rules for model attributes.
+	 * [rules description]
+	 * @return [type] [description]
 	 */
 	public function rules()
 	{
-		// NOTE: you should only define rules for those attributes that
-		// will receive user inputs.
 		return array(
 			array('milestone_title, milestone_description, milestone_startdate, milestone_duedate, project_id, user_id', 'required', 'message'=>Yii::t('inputValidations','RequireValidation')),
 			array('project_id, user_id', 'numerical', 'integerOnly'=>true),
 			array('milestone_title', 'length', 'max'=>100, 'message'=>Yii::t('inputValidations','MaxValidation')),
 			array('milestone_title', 'length', 'min'=>10, 'message'=>Yii::t('inputValidations','MinValidation')),
 			array('milestone_title', 'unique', 'message'=>Yii::t('inputValidations','UniqueValidation')),
-			array('milestone_description, milestone_startdate, milestone_duedate', 'safe'),
-			// The following rule is used by search().
-			// Please remove those attributes that should not be searched.
-			array('milestone_id, milestone_title, milestone_description, milestone_duedate, project_id, user_id', 'safe', 'on'=>'search'),
+			array('milestone_description, milestone_startdate, milestone_duedate', 'safe')
 		);
 	}
 
 	/**
-	 * @return array relational rules.
+	 * [relations description]
+	 * @return [type] [description]
 	 */
 	public function relations()
 	{
-		// NOTE: you may need to adjust the relation name and the related
-		// class name for the relations automatically generated below.
 		return array(
 			'Projects'=>array(self::BELONGS_TO, 'Projects', 'project_id'),
 			'Users'=>array(self::BELONGS_TO, 'Users', 'user_id'),
-			'Tasks'=>array(self::HAS_MANY, 'Tasks', 'milestone_id'),
+			'Tasks'=>array(self::HAS_MANY, 'Tasks', 'milestone_id')
 		);
 	}
 
 	/**
-	 * @return array customized attribute labels (name=>label)
+	 * [attributeLabels description]
+	 * @return [type] [description]
 	 */
 	public function attributeLabels()
 	{
@@ -90,27 +89,8 @@ class Milestones extends CActiveRecord
 			'milestone_startdate' => Yii::t('milestones','milestone_startdate'),
 			'milestone_duedate' => Yii::t('milestones','milestone_duedate'),
 			'project_id' => Yii::t('milestones','project_id'),
-			'user_id' => Yii::t('milestones','user_id'),
+			'user_id' => Yii::t('milestones','user_id')
 		);
-	}
-
-	/**
-	 * Retrieves a list of models based on the current search/filter conditions.
-	 * @return CActiveDataProvider the data provider that can return the models based on the search/filter conditions.
-	 */
-	public function search()
-	{
-		// Warning: Please modify the following code to remove attributes that
-		// should not be searched.
-
-		$criteria=new CDbCriteria;
-		$criteria->compare('milestone_title',$this->milestone_title,true);
-		$criteria->compare('project_id',$this->project_id);
-		$criteria->compare('user_id',$this->user_id);
-
-		return new CActiveDataProvider(get_class($this), array(
-			'criteria'=>$criteria,
-		));
 	}
 	
 	/**
@@ -122,8 +102,8 @@ class Milestones extends CActiveRecord
 		return array(
 			'CSafeContentBehavor' => array( 
 				'class' => 'application.components.CSafeContentBehavior',
-				'attributes' => array('milestone_title', 'milestone_description', 'milestone_duedate'),
-			),
+				'attributes' => array('milestone_title', 'milestone_description', 'milestone_duedate')
+			)
 		);
 	}
 	
@@ -141,7 +121,7 @@ class Milestones extends CActiveRecord
 		{
 			$criteria->condition = 't.milestone_duedate BETWEEN CURDATE() AND CURDATE() + INTERVAL 5 WEEK AND t.project_id = :project_id';
 			$criteria->params = array(
-				':project_id'=>$project_id,
+				':project_id'=>$project_id
 			);
 		}
 		else
@@ -155,6 +135,11 @@ class Milestones extends CActiveRecord
 		return Milestones::model()->with('Projects')->together()->findAll($criteria);
     }
 	
+	/**
+	 * [findOverdue description]
+	 * @param  [type] $project_id [description]
+	 * @return [type]             [description]
+	 */
 	public function findOverdue($project_id)
     {
         $criteria = new CDbCriteria;
@@ -164,13 +149,14 @@ class Milestones extends CActiveRecord
 		{
 			$criteria->condition = 't.milestone_duedate < NOW() AND t.project_id = :project_id AND Tasks.status_id IN ('.implode(',',array(Status::STATUS_PENDING,Status::STATUS_ACCEPTED,Status::STATUS_TOTEST, Status::STATUS_INPROGRESS)).')';
 			$criteria->params = array(
-				':project_id'=>$project_id,
+				':project_id'=>$project_id
 			);
 		}
 		else
 		{
 			$WorkingProjects = Projects::model()->findMyProjects(Yii::app()->user->id);
 			$projectList = array();
+
 			foreach($WorkingProjects as $project)
 			{
 				array_push($projectList, $project->project_id);
@@ -198,6 +184,7 @@ class Milestones extends CActiveRecord
 	public function findMyMilestones($Projects)
     {
         $projectsArray = array();
+
     	foreach($Projects as $key)
         {
         	array_push($projectsArray, $key->project_id);
@@ -258,11 +245,12 @@ class Milestones extends CActiveRecord
 			FROM `tb_tasks` Tasks 
 			LEFT OUTER JOIN `tb_status` Status ON Tasks.status_id = Status.status_id
 			WHERE Tasks.milestone_id = :milestone_id 
-			) as percent';
-		$criteria->params = array(
-			':milestone_id' => $milestone_id,
-		);
+		) as percent';
+
 		$criteria->order = 't.milestone_id DESC';
+		$criteria->params = array(
+			':milestone_id' => $milestone_id
+		);
 		
 		$result = Milestones::model()->find($criteria)->percent;
 		return $result;
@@ -273,7 +261,7 @@ class Milestones extends CActiveRecord
 	 */
 	public function MilestoneWithPendingTasks()
 	{
-		$criteria=new CDbCriteria;
+		$criteria = new CDbCriteria;
 		$criteria->select = "Users.*, count(Tasks.task_id) as pending_tasks";
 		$criteria->condition = 't.milestone_duedate < NOW() AND Tasks.status_id IN ('.implode(',',array(Status::STATUS_PENDING,Status::STATUS_ACCEPTED,Status::STATUS_TOTEST, Status::STATUS_INPROGRESS)).')';
 		$criteria->group = 't.milestone_id';
