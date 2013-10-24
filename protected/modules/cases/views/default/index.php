@@ -32,28 +32,6 @@ $formFields = array(
 				<p class="aboutModuleTitle">
 					No cases has been created, you want to <?php echo CHtml::link("<i class=\"icon-plus-sign\"></i> ".Yii::t('cases','CreateOneCase'), $this->createUrl('index', array('#'=>'/create'))); ?> ?
 				</p>
-				<div class="aboutModuleInformation shadow corners">
-					<h3 class="aboutModuleInformationBoxTitle">
-						<?php echo Yii::t('cases','AboutCases'); ?>
-					</h3>
-					<ul class="aboutModuleInformationList">
-						<li>
-							<?php echo CHtml::image(Yii::app()->request->baseUrl.'/images/tick.png', '', array('class'=>'aboutModuleInformationIcon')); ?>
-							<span class="aboutModuleInformationTitle"><?php echo Yii::t('cases','CaseInformation_l1'); ?></span>
-							<span class="aboutModuleInformationDesc"><?php echo Yii::t('cases','CaseDescription_l1'); ?></span>
-						</li>
-						<li>
-							<?php echo CHtml::image(Yii::app()->request->baseUrl.'/images/tick.png', '', array('class'=>'aboutModuleInformationIcon')); ?>
-							<span class="aboutModuleInformationTitle"><?php echo Yii::t('cases','CaseInformation_l2'); ?></span>
-							<span class="aboutModuleInformationDesc"><?php echo Yii::t('cases','CaseDescription_l2'); ?></span>
-						</li>
-						<li>
-							<?php echo CHtml::image(Yii::app()->request->baseUrl.'/images/tick.png', '', array('class'=>'aboutModuleInformationIcon')); ?>
-							<span class="aboutModuleInformationTitle"><?php echo Yii::t('cases','CaseInformation_l3'); ?></span>
-							<span class="aboutModuleInformationDesc"><?php echo Yii::t('cases','CaseDescription_l3'); ?></span>
-						</li>
-					</ul>
-				</div>
 			</div>
 			<div class="input-append" ng-show="hasCases">
 				<input type="text" class="" placeholder="Filter Search" ng-model="search"> 

@@ -7,7 +7,7 @@ $this->pageTitle = Yii::app()->name." - ".Yii::t('documents', 'TitleDocuments');
 		<header class="widget-head">
 			<h3 class="module-title"><i class="icon-archive icon-2"></i><?php echo Yii::t('documents', 'Documents'); ?></h3>
 			<div class="data-header-actions">
-				<?php echo CHtml::link("<i class=\"icon-plus-sign\"></i> ".Yii::t('documents','upload'), $this->createUrl('index', array('#'=>'/create')), array('ng-click'=>'uploadform=true', 'ng-hide'=>'uploadform', 'class'=>'btn btn-primary', 'title'=>Yii::t('documents', 'CreateDocuments'))); ?>
+				<?php echo CHtml::link("<i class=\"icon-plus-sign\"></i>", $this->createUrl('index', array('#'=>'/create')), array('ng-click'=>'uploadform=true', 'ng-hide'=>'uploadform', 'class'=>'btn btn-primary', 'title'=>Yii::t('documents', 'CreateDocuments'))); ?>
 			</div>
 		</header>
 		<section class="widget-body">
@@ -20,60 +20,46 @@ $this->pageTitle = Yii::app()->name." - ".Yii::t('documents', 'TitleDocuments');
 				<p class="aboutModuleTitle">
 					No documents has been created, you want to <?php echo CHtml::link("<i class=\"icon-plus-sign\"></i> ".Yii::t('documents','CreateOneDocument'), $this->createUrl('index', array('#'=>'/create'))); ?> ?
 				</p>
-				<div class="aboutModuleInformation shadow corners">
-					<h3 class="aboutModuleInformationBoxTitle">
-						<?php echo Yii::t('documents','AboutDocuments'); ?>
-					</h3>
-					<ul class="aboutModuleInformationList">
-						<li>
-							<?php echo CHtml::image(Yii::app()->request->baseUrl.'/images/tick.png', '', array('class'=>'aboutModuleInformationIcon')); ?>
-							<span class="aboutModuleInformationTitle"><?php echo Yii::t('documents','DocumentInformation_l1'); ?></span>
-							<span class="aboutModuleInformationDesc"><?php echo Yii::t('documents','DocumentDescription_l1'); ?></span>
-						</li>
-						<li>
-							<?php echo CHtml::image(Yii::app()->request->baseUrl.'/images/tick.png', '', array('class'=>'aboutModuleInformationIcon')); ?>
-							<span class="aboutModuleInformationTitle"><?php echo Yii::t('documents','DocumentInformation_l2'); ?></span>
-							<span class="aboutModuleInformationDesc"><?php echo Yii::t('documents','DocumentDescription_l2'); ?></span>
-						</li>
-						<li>
-							<?php echo CHtml::image(Yii::app()->request->baseUrl.'/images/tick.png', '', array('class'=>'aboutModuleInformationIcon')); ?>
-							<span class="aboutModuleInformationTitle"><?php echo Yii::t('documents','DocumentInformation_l3'); ?></span>
-							<span class="aboutModuleInformationDesc"><?php echo Yii::t('documents','DocumentDescription_l3'); ?></span>
-						</li>
-					</ul>
-				</div>
 			</div>
 			<div class="view" ng-show="hasDocuments" ng-repeat="document in documents | filter:search">
 				<div class="groupdate" ng-show="CreateHeader(document.timestamp)">
 					{{document.timestamp}}
 				</div>
-				<span class="icon">
-					<img style="width:58px;height:60px" src="{{document.imageType}}">
-				</span>
 				<span class="description">
-					<h3>
-						<a href="{{document.url}}" title="{{document.name}}">
-							#{{document.id}} - {{document.name}}
-						</a>
-					</h3>
-					<div class="moduleTextDescription corners">
-						{{document.description}}
-					</div>
-					<div class="dfooter">
-						<div class="news-comments" ng-show="document.countComments > 0">
-							<img class="icon" src="<?php echo Yii::app()->theme->baseUrl; ?>/images/UI/speech-bubble-center-2.png" alt="">
-							<a href="#">{{document.countComments}} <?php echo Yii::t('site','comments'); ?> <i class="icon-comment"></i> </a>
+					<div class="row-fluid">
+						<div class="span8">
+							<h3>
+								<a href="{{document.url}}" title="{{document.name}}">
+									{{document.name}}
+								</a>
+							</h3>
 						</div>
-						<span>
-							<?php echo Yii::t('documents', 'user_id'); ?> <a href="{{document.userUrl}}">{{document.userName}}</a>
-						</span>
-						<div>
-							<a href="{{document.downloadLink}}">{{labels.downloadLabel}}</a> {{labels.orLabel}}
-							<a href="{{document.url}}" title="{{document.name}}">
-								{{labels.viewDetailsLabel}}
-							</a>
+						<div class="span4">
+							<div class="progress progress-striped" title="{{milestone.completed}}%" ng-show="milestone.completed > 0">
+								<span class="percent">{{milestone.completed}}%</span><div class="bar" style="width:{{milestone.completed}}%;"></div>
+							</div>
 						</div>
 					</div>
+					<span class="icon">
+						<img style="width:58px;height:60px" src="{{document.imageType}}">
+					</span>
+					<blockquote>
+						<div class="moduleTextDescription corners">
+							<span ng-bind-html-unsafe="document.description"></span>
+						</div>
+						<div class="dfooter">
+							<div class="news-comments" ng-show="document.countComments > 0">
+								<img class="icon" src="<?php echo Yii::app()->theme->baseUrl; ?>/images/UI/speech-bubble-center-2.png" alt="">
+								<a href="#">{{document.countComments}} <?php echo Yii::t('site','comments'); ?> <i class="icon-comment"></i> </a>
+							</div>
+							<span>
+								<?php echo Yii::t('documents', 'user_id'); ?>: <a href="{{document.userUrl}}">{{document.userName}}</a>
+							</span>
+							<div>
+								<a href="{{document.downloadLink}}">{{labels.downloadLabel}}</a>
+							</div>
+						</div>
+					</blockquote>
 				</span>
 			</div>
 		</section>

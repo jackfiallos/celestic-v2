@@ -623,8 +623,11 @@ li.center, .center {
     color:#37a6cd;
     top:-1px;
 }
-.btn-group .btn-primary {
+/*.btn-group .btn-primary {
     margin-right:2px;
+}*/
+.btn-group {
+    margin-bottom: 10px;
 }
 .tooltip-inner {
     background:#272a2c;
@@ -1789,6 +1792,9 @@ pre.prettyprint {
     p.glyphicons.right {
         padding:0 55px 0 0;
     }*/
+    .media .pull-right {
+		float: right;
+	}
 }
 @media(max-width:320px) {
     .nav-tabs>li, .nav-tabs>li>a, .nav-tabs>li>a:hover {
@@ -2000,7 +2006,7 @@ body.choose #choose-preview>span span {
 
  .documents .groupdate {
  	font-size: 16px;
-	font-weight: 300;
+	font-weight: 400;
 	border-top: 1px solid #ccbbcc;
 	padding-top: 5px;
 	text-align: right;
@@ -2013,6 +2019,7 @@ body.choose #choose-preview>span span {
 
 .documents .view span.icon {
 	float: left;
+	position: relative;
 }
 
 .documents .view span.icon img {
@@ -2021,8 +2028,13 @@ body.choose #choose-preview>span span {
 }
 
 .documents .view span.description {
-	padding-left: 64px;
+	width: 100%;
 	display: block;
+}
+
+.documents span.description blockquote {
+	margin: 0px;
+	margin-left: 80px;
 }
 
 .documents .view span.description h3 {
@@ -2262,6 +2274,8 @@ figcaption.caption a {
 	-webkit-border-radius: 6px;
 	-moz-border-radius: 6px;
 	border-radius: 6px;
+	margin-bottom: -99999px;
+	padding-bottom: 99999px;
 }
 
 .data-block header {
@@ -2588,6 +2602,10 @@ input[type="text"], textarea, select {
 box-shadow: none;
 }
 
+/*************************
+ * MINI CALENDAR MILESTONE
+ *************************/
+
 .aU5 {
 	background: url(../images/smart_mail_conv_icons.png) no-repeat 0 0;
 	height: 80px;
@@ -2618,4 +2636,79 @@ box-shadow: none;
 	position: absolute;
 	text-align: center;
 	width: 70px;
+}
+
+/***
+*
+*/
+.media:first-child {
+margin-top: 0;
+}
+.media, .media .media {
+margin-top: 15px;
+}
+.media, .media-body {
+overflow: hidden;
+zoom: 1;
+}
+.media, .media-body {
+overflow: hidden;
+zoom: 1;
+}
+.media>.pull-left {
+margin-right: 10px;
+}
+.thumb-sm {
+width: 36px;
+display: inline-block;
+}
+.pull-left {
+float: left;
+}
+.pull-left {
+float: left !important;
+}
+.thumb img, .thumb-xs img, .thumb-sm img, .thumb-md img, .thumb-lg img {
+height: auto;
+max-width: 100%;
+vertical-align: middle;
+}
+.img-circle {
+border-radius: 50%;
+}
+.media, .media-body {
+overflow: hidden;
+zoom: 1;
+}
+.media-xs {
+min-width: 50px;
+}
+.text-muted {
+color: #979797;
+}
+.text-center {
+text-align: center;
+}
+.bg-light {
+background-color: #ebeef5;
+color: #717171;
+}
+.block {
+display: block;
+}
+.m-t-sm {
+margin-top: 10px;
+}
+.pull-in {
+margin-left: -15px;
+margin-right: -15px;
+}
+.line {
+height: 2px;
+margin: 10px 0;
+font-size: 0;
+overflow: hidden;
+background-color: transparent;
+border-width: 0;
+border-top: 1px solid #eaedef;
 }

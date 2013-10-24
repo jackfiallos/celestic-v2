@@ -42,7 +42,7 @@ class DefaultController extends Controller
 					$class = '';
 
 					switch($item->case_priority)
-                   	{
+					{
 						case Cases::PRIORITY_LOW:
 							$priority = Yii::t('site','lowPriority');
 							$class = 'label-info';
@@ -59,7 +59,7 @@ class DefaultController extends Controller
 							$priority = Yii::t('site','lowPriority');
 							$class = 'label-info';
 							break;
-                    }
+					}
 
 					array_push($case, array(
 						'id'=>$item->case_id,

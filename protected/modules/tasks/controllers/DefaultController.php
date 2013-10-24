@@ -59,6 +59,46 @@ class DefaultController extends Controller
 	}
 
 	/**
+	 * [getPriority description]
+	 * @param  [type] $priorityId [description]
+	 * @return [type]             [description]
+	 */
+	public function getPriority($priorityId)
+	{
+		$output = array();
+
+		switch($priorityId)
+		{
+			case Cases::PRIORITY_LOW:
+				$output = array(
+					'priority' => Yii::t('site','lowPriority'),
+					'class' => 'label-info'
+				);
+				break;
+			case Cases::PRIORITY_MEDIUM:
+				$output = array(
+					'priority' => Yii::t('site','mediumPriority'),
+					'class' => 'label-warning'
+				);
+				break;
+			case Cases::PRIORITY_HIGH:
+				$output = array(
+					'priority' => Yii::t('site','highPriority'),
+					'class' => 'label-important'
+				);
+				break;
+			default:
+				$output = array(
+					'priority' => Yii::t('site','lowPriority'),
+					'class' => 'label-info'
+				);
+				break;
+		}
+
+		return $output;
+	}
+
+	/**
 	 * [actionIndex description]
 	 * @return [type] [description]
 	 */
@@ -66,36 +106,13 @@ class DefaultController extends Controller
 	{
 		if(Yii::app()->user->checkAccess('indexTasks'))
 		{
-
-			$view = (Yii::app()->user->getState('view') != null) ? Yii::app()->user->getState('view') : 'list'; 
-
-			if ((isset($_GET['view'])) && (!empty($_GET['view'])))
-			{
-		        if ($_GET['view'] == 'grid')
-				{
-					$view = 'grid';
-				}
-		        elseif ($_GET['view'] == 'kanban')
-				{
-					$view = 'kanban';
-				}
-		        else
-				{
-					$view = 'list';
-				}
-			}
-
-			Yii::app()->user->setState('view', $view);
-
-			$criteria = new CDbCriteria();
-			$criteria->compare('project_id', (int)Yii::app()->user->getState('project_selected'));
-			$model = Tasks::model()->findAll($criteria);
+			$project_id = (int)Yii::app()->user->getState('project_selected');
 
 			$Milestones = Milestones::model()->with('Projects.Company.Cusers')->together()->findAll(array(
 				'condition'=>'Cusers.user_id = :user_id AND t.project_id = :project_id',
 				'params'=>array(
 					':user_id' => Yii::app()->user->id,
-					':project_id' => Yii::app()->user->getState('project_selected')
+					':project_id' => $project_id
 				)
 			));
 
@@ -103,28 +120,54 @@ class DefaultController extends Controller
 				'condition'=>'Cusers.user_id = :user_id AND t.project_id = :project_id',
 				'params'=>array(
 					':user_id' => Yii::app()->user->id,
-					':project_id' => Yii::app()->user->getState('project_selected')
-				),
+					':project_id' => $project_id
+				)
 			));
 
-			if(isset($_GET['TasksSearchForm']))
+			// set model attributes from milestones form
+			if (Yii::app()->request->isPostRequest)
 			{
-				$model->attributes=$_GET['TasksSearchForm'];
-			}
+				$criteria = new CDbCriteria();
+				$criteria->compare('project_id', $project_id);
+				$model = Tasks::model()->with('UserReported','Status')->together()->findAll($criteria);
+				$tasks = array();
 
-			if ($view == 'kanban')
-			{
-				$this->layout = 'column1';
+				if ($model !== null)
+				{
+					foreach ($model as $task) {
+						array_push($tasks, array(
+							'task_id'=>$task->task_id,
+							'task_name'=>$task->task_name,
+							'userName'=>ucfirst(CHtml::encode($task->UserReported->completeName)),
+							'userUrl'=>$this->createUrl('users/view', array('id'=>$task->user_id)),
+							'status_name'=>CHtml::encode($task->Status->status_name),
+							'statusCss'=>'label-'.strtolower(str_replace(" ", "", $task->Status->status_name)),
+							'task_description'=>$task->task_description,
+							'task_priority'=>$this->getPriority($task->task_priority)['priority'],
+							'task_priorityCss'=>$this->getPriority($task->task_priority)['class'],
+							'countComments'=>Logs::getCountComments('tasks', $task->task_id),
+							'due_date_day'=>CHtml::encode(Yii::app()->dateFormatter->format('dd', $task->task_endDate)),
+							'due_date_month'=>CHtml::encode(Yii::app()->dateFormatter->format('MMM', $task->task_endDate)),
+							'due_date_year'=>CHtml::encode(Yii::app()->dateFormatter->format('yyyy', $task->task_endDate))
+						));
+					}
+				}
+
+				header('Content-type: application/json');
+				echo CJSON::encode(array(
+					'tasks'=>$tasks
+				));
+				Yii::app()->end();
 			}
 		        
 			$this->render('index', array(
-				'model'=>$model,
-				'status'=>Status::model()->findAllOrdered(),
+				'model'=>new Tasks,
+				'status'=>Status::model()->findAll(),
 				'types'=>TaskTypes::model()->findAll(),
 				'stages'=>TaskStages::model()->findAll(),
 				'milestones'=>$Milestones,
 				'cases'=>$Cases,
-				'users'=>Projects::model()->findAllUsersByProject(Yii::app()->user->getState('project_selected')),
+				'allowEdit'=>true,
 			));
 		}
 		else

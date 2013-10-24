@@ -11,8 +11,6 @@
 	),
 	'enableAjaxValidation'=>false
 )); ?>
-
-	<?php echo $form->errorSummary($model,null,null,array('class'=>'errorSummary stick'))."<br />"; ?>
 	
 	<div class="row-fluid">
 		<div class="span6">

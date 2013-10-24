@@ -7,7 +7,7 @@ $this->pageTitle = Yii::app()->name." - ".Yii::t('milestones', 'TitleMilestones'
 		<header class="widget-head">
 			<h3 class="module-title"><i class="icon-calendar-empty icon-2"></i><?php echo Yii::t('milestones', 'TitleMilestones'); ?></h3>
 			<div class="data-header-actions">
-				<?php echo CHtml::link("<i class=\"icon-plus-sign\"></i> ".Yii::t('milestones', 'CreateMilestones'), $this->createUrl('index', array('#'=>'/create')), array('class'=>'btn btn-primary', 'ng-click'=>'milestonesForm=true', 'ng-hide'=>'milestonesForm', 'title'=>Yii::t('milestones', 'CreateMilestones'))); ?>
+				<?php echo CHtml::link("<i class=\"icon-plus-sign\"></i>", $this->createUrl('index', array('#'=>'/create')), array('class'=>'btn btn-primary', 'ng-click'=>'milestonesForm=true', 'ng-hide'=>'milestonesForm', 'title'=>Yii::t('milestones', 'CreateMilestones'))); ?>
 			</div>
 		</header>
 		<section class="widget-body">
@@ -21,26 +21,6 @@ $this->pageTitle = Yii::app()->name." - ".Yii::t('milestones', 'TitleMilestones'
 				<p class="aboutModuleTitle">
 					No milestones has been created, you want to <?php echo CHtml::link(Yii::t('milestones','CreateOneMilestone'), $this->createUrl('index', array('#'=>'/create'))); ?> ?
 				</p>
-				<div class="aboutModuleInformation shadow corners">
-					<h2 class="aboutModuleInformationBoxTitle"><?php echo Yii::t('milestones','AboutMilestones'); ?></h2>
-					<ul class="aboutModuleInformationList">
-						<li>
-							<?php echo CHtml::image(Yii::app()->request->baseUrl.'/images/tick.png', '', array('class'=>'aboutModuleInformationIcon')); ?>
-							<span class="aboutModuleInformationTitle"><?php echo Yii::t('milestones','MilestoneInformation_l1'); ?></span>
-							<span class="aboutModuleInformationDesc"><?php echo Yii::t('milestones','MilestoneDescription_l1'); ?></span>
-						</li>
-						<li>
-							<?php echo CHtml::image(Yii::app()->request->baseUrl.'/images/tick.png', '', array('class'=>'aboutModuleInformationIcon')); ?>
-							<span class="aboutModuleInformationTitle"><?php echo Yii::t('milestones','MilestoneInformation_l2'); ?></span>
-							<span class="aboutModuleInformationDesc"><?php echo Yii::t('milestones','MilestoneDescription_l2'); ?></span>
-						</li>
-						<li>
-							<?php echo CHtml::image(Yii::app()->request->baseUrl.'/images/tick.png', '', array('class'=>'aboutModuleInformationIcon')); ?>
-							<span class="aboutModuleInformationTitle"><?php echo Yii::t('milestones','MilestoneInformation_l3'); ?></span>
-							<span class="aboutModuleInformationDesc"><?php echo Yii::t('milestones','MilestoneDescription_l3'); ?></span>
-						</li>
-					</ul>
-				</div>
 			</div>
 			<div class="input-append" ng-show="hasMilestones">
 				<input type="text" class="" placeholder="Filter Search" ng-model="search"> 
@@ -78,11 +58,11 @@ $this->pageTitle = Yii::app()->name." - ".Yii::t('milestones', 'TitleMilestones'
 						<div class="dfooter">
 							<span>
 								<?php echo Yii::t('milestones', 'user_id'); ?> <a href="{{milestone.userOwnerUrl}}">{{milestone.userOwner}}</a>
-								<span>
-									- Due date <abbr class="timeago" title="{{milestone.due_date}}">
+								<div>
+									Due date <abbr class="timeago" title="{{milestone.due_date}}">
 										{{milestone.due_dateFormatted}}
 									</abbr>
-								</span>
+								</div>
 							</span>
 							<a href="{{milestone.url}}" ng-show="milestone.countComments > 0">
 								<span class="label label-info">{{milestone.countComments}} <?php echo Yii::t('site','comments'); ?> <i class="icon-comment"></i> </span>

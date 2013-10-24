@@ -18,7 +18,7 @@ $db = include_once('db.php');
 
 $main = array(
 	'basePath'=>dirname(__FILE__).DIRECTORY_SEPARATOR.'..',
-	'name'=>'Celestic Community',
+	'name'=>'Celestic',
 
 	// autoloading model and component classes
 	'import'=>array(
