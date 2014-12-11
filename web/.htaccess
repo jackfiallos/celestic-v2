@@ -1,18 +1,4 @@
-# apt-get install libapache-mod-security
-# En linux el servidor debe de tener activado los siguientes modulos
-# sudo a2enmod modulo
-# rewrite mem_cache cache headers expires mod-security
-# expose_php Off to show off php configuration
-# SET GLOBAL query_cache_size = 16777216;
-# SHOW VARIABLES LIKE 'query_cache_size';
-# You can setup them in /etc/my.cnf (Red Hat) or /etc/mysql/my.cnf (Debian) file:
-# vi /etc/my.cnf
-# query_cache_size = 268435456
-# query_cache_type=1
-# query_cache_limit=1048576
-# /etc/apache2/conf.d/security
-# sudo apt-get install libapache2-mod-proxy-html libxml2-dev
-# sudo a2enmod proxy proxy_ajp proxy_http rewrite deflate headers proxy_balancer proxy_connect proxy_html
+# sudo a2enmod rewrite deflate headers
 
 ######################################
 # Global PHP and Apache Configuration
@@ -24,54 +10,17 @@ ContentDigest On
 ExpiresActive On
 ExpiresDefault A0
 
-# Do not display errors in browser (production - Off, development - On)
 php_flag display_errors Off
-
-# Do not show you are using php
 php_flag expose_php Off
-
 php_value register_globals Off
-
-#ServerTokens Full
-#SecServerSignature Taco
 ServerSignature Off
-
-# set the default language
 DefaultLanguage es-MX
 
 ##################
 # UTF-8 encoding
 ##################
 
-# Use UTF-8 encoding for anything served text/plain or text/html
 AddDefaultCharset utf-8
-
-# Force UTF-8 for a number of file formats
-AddCharset utf-8 .html .css .js .xml .json .rss
-
-# set the default character set
-<Files ~ "\.(htm|html|css|js|php)$">
-	AddDefaultCharset UTF-8
-	DefaultLanguage es-MX
-</Files>
-
-#########################################
-# Better website experience for IE users
-#########################################
-
-<IfModule mod_setenvif.c>
-	SetEnv SERVER_ADMIN hola@qompit.com
-	SetEnv TZ America/Mexico_City
-
-	SetEnv SITE_WEBMASTER "Jackfiallos"
-	SetEnv SITE_WEBMASTER_URI mailto:hola@qompit.com
-  	
-  	<IfModule mod_headers.c>
-  		Header unset X-Powered-By
-    	BrowserMatch MSIE ie
-    	Header set X-UA-Compatible "IE=Edge,chrome=1" env=ie
-  	</IfModule>
-</IfModule>
 
 ###############################################
 # SSL if needed, friendly URLs and www removed
@@ -89,20 +38,12 @@ AddCharset utf-8 .html .css .js .xml .json .rss
 	#RewriteCond %{HTTPS} !=on
 	#RewriteRule .* https://%{SERVER_NAME}%{REQUEST_URI} [R,L]
 
-	RewriteCond %{HTTP_HOST} ^www.qompit.com$ [NC]
-	RewriteRule ^(.*)$ http://qompit.com/$1 [R=301,L]
-
 	# if a directory or a file exists, use it directly
 	RewriteCond %{REQUEST_FILENAME} !-f
 	RewriteCond %{REQUEST_FILENAME} !-d
 
 	# otherwise forward it to index.php
 	RewriteRule . index.php
-
-	##External Redirect .php files to .html files (SEO friendly)
-	##RewriteRule ^(.*)\.php$ /$1.html [R=301,L]
-
-	RewriteRule ^(.*)\.html$ $1.php [R=301,L]
 
 	# Denies POST requests by blank user-agents. May prevent a small number of visitors from POSTING
 	RewriteCond %{REQUEST_METHOD} =POST
@@ -124,13 +65,8 @@ AddCharset utf-8 .html .css .js .xml .json .rss
 <files .htaccess>
 	#order allow,deny
 	#deny from all
-	Require all denied	
-</files>
-
-# prevent acess to multiple file types
-<FilesMatch "\.(htaccess|ini|log|sh)$">
 	Require all denied
-</FilesMatch>
+</files>
 
 ###################
 # Cache and compresion
@@ -140,105 +76,22 @@ AddCharset utf-8 .html .css .js .xml .json .rss
 	php_value zlib.output_compression 16386
 </ifModule>
 
-# headers caching
-<ifModule mod_headers.c>
-	Header set Content-Language "en-US"
-	<filesMatch "\\.(ico|pdf|flv|jpg|jpeg|png|gif|css)$">
-		Header set Cache-Control "max-age=29030400, public"
-	</filesMatch>
-	<filesMatch "\\.(js)$">
-		Header set Cache-Control "max-age=29030400, private"
-	</filesMatch>
-	<filesMatch "\\.(xml|txt)$">
-		Header set Cache-Control "max-age=29030400, public, must-revalidate"
-	</filesMatch>
-	<filesMatch "\\.(html|htm)$">
-		Header set Cache-Control "max-age=1, private, must-revalidate"
-	</filesMatch>
-</ifModule>
-
-# Force no caching for dynamic files
-<FilesMatch "\.(php|cgi|pl|htm)$">
-	FileETag None
-	ExpiresActive Off
-	<IfModule mod_headers.c>
-		Header unset ETag
-		Header set Expires "Wed, 11 Jan 1984 05:00:00 GMT"
-		Header set Cache-Control "private, no-cache, no-store, proxy-revalidate, no-transform"
-		Header set Pragma "no-cache"
-	</IfModule>
-#	order allow,deny
-#	deny from 127.0.0.
-#	deny from isp_name.com
-#	allor from all
-</FilesMatch>
-
-<FilesMatch "\.(html|htm|css|js|php|jpg|png|gif|ico)$">
-	FileETag None
-	<IfModule mod_headers.c>
-		Header unset ETag
-		Header set Cache-Control "max-age=0, no-cache, no-store, must-revalidate"
-		Header set Pragma "no-cache"
-		Header set Expires "Wed, 11 Jan 1984 05:00:00 GMT"
-	</IfModule>
-</FilesMatch>
-
-<FilesMatch "\.(ico|jpg|jpeg|png|gif|js|css)$">
-	<IfModule mod_headers.c>
-		Header set Cache-Control "max-age=29030400, public"
-		Header set Expires "Mon, 31 Dic 2012 20:00:00 GMT"
-	</IfModule>
-</FilesMatch>
-
-<FilesMatch "\.(ico|jpg|jpeg|png|gif|js|css)$">
-	<IfModule mod_expires.c>
-		ExpiresActive On
-		ExpiresDefault "access plus 1 year"
-	</IfModule>
-</FilesMatch>
-
 <ifModule mod_gzip.c>
 	<IfModule mod_headers.c>
 		Header add X-Enabled mod_gzip
 	</IfModule>
-	
-	mod_gzip_on Yes
-	mod_gzip_dechunk Yes
-	mod_gzip_item_include file \.(html?|css|js|php|jpg|png|gif|ico)$
-	mod_gzip_item_include handler ^cgi-script$
-	mod_gzip_item_include mime ^text/.*
-	mod_gzip_item_include mime ^application/x-javascript.*
-	mod_gzip_item_exclude mime ^image/.*
-	mod_gzip_item_exclude rspheader ^Content-Encoding:.*gzip.*
 </ifModule>
 
 <IfModule mod_deflate.c>
 	<FilesMatch "\.(js|css)$">
 		SetOutputFilter DEFLATE
 	</FilesMatch>
-	
-	Header add x-enabled mod_deflate  
-  
-	AddOutputFilterByType DEFLATE text/plain
-	AddOutputFilterByType DEFLATE text/html
-	AddOutputFilterByType DEFLATE text/xml
-	AddOutputFilterByType DEFLATE text/css
-	AddOutputFilterByType DEFLATE application/xml
-	AddOutputFilterByType DEFLATE application/xhtml+xml
-	AddOutputFilterByType DEFLATE application/rss+xml
-	AddOutputFilterByType DEFLATE application/javascript
-	AddOutputFilterByType DEFLATE application/x-javascript
-	
+
+	Header add x-enabled mod_deflate
+
 	<IfModule mod_headers.c>
 		Header append Vary User-Agent
 	</IfModule>
-	
-</IfModule>
-
-<IfModule mod_rewrite.c>  
-	# Block access to .svn files
-	RewriteRule ^(.*/)?\.svn/ - [F,L]
-	ErrorDocument 403 "Access Forbidden"
 </IfModule>
 
 <IfModule mod_headers.c>
