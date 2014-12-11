@@ -1,2 +1,0 @@
-<?php echo ("<?php"); ?>
-<?php echo $content; ?>
