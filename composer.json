@@ -9,6 +9,7 @@
         "issues": "https://github.com/jackfiallos/celestic-v2/issues?state=open",
         "forum": "http://qbit.com.mx/labs/celestic/forum",
         "blog": "http://qbit.com.mx/labs/celestic/blog",
+        "wiki": "https://github.com/jackfiallos/celestic-v2/wiki",
         "source": "https://github.com/jackfiallos/celestic-v2"
     },
     "minimum-stability": "stable",

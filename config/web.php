@@ -34,24 +34,36 @@ $config = [
             'showScriptName' => false,
             'rules' => [
 	            [
-			'class' => 'yii\rest\UrlRule', 
-			'pluralize' => false, 
-			'controller' => 'users', 
-			'except' => ['delete'],
-			'extraPatterns' => [
-			    'GET search' => 'search',
-			],
-		    ],
+                    'class' => 'yii\rest\UrlRule',
+                    'pluralize' => false,
+                    'controller' => 'users',
+                    'except' => ['delete'],
+                    'extraPatterns' => [
+                        'GET search' => 'search',
+                    ],
+                ],
+                [
+                    'class' => 'yii\rest\UrlRule',
+                    'pluralize' => false,
+                    'controller' => 'projects',
+                    'except' => ['delete'],
+                ],
+                [
+                    'class' => 'yii\rest\UrlRule',
+                    'pluralize' => false,
+                    'controller' => 'companies',
+                    'except' => ['delete'],
+                ],
             ],
-	],
-	'request' => [
-	    'enableCookieValidation' => true,
-            'enableCsrfValidation' => true,
-            'cookieValidationKey' => 'celestic.v2',
-            'parsers' => [
-	            'application/json' => 'yii\web\JsonParser',
-            ]
-	],
+    	],
+    	'request' => [
+    	    'enableCookieValidation' => true,
+                'enableCsrfValidation' => true,
+                'cookieValidationKey' => 'celestic.v2',
+                'parsers' => [
+    	            'application/json' => 'yii\web\JsonParser',
+                ]
+    	],
         'log' => [
             'traceLevel' => YII_DEBUG ? 3 : 0,
             'targets' => [

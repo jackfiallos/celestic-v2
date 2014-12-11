@@ -7,7 +7,7 @@ class m141211_032649_users extends Migration
 {
     public function up()
     {
-	return $this->addColumn('users', 'lastname', 'VARCHAR(20) NULL DEFAULT NULL AFTER name');
+	       return $this->addColumn('users', 'lastname', 'VARCHAR(20) NULL DEFAULT NULL AFTER name');
     }
 
     public function down()
