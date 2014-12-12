@@ -1,8 +1,7 @@
 Celestic v2
 ================================
 
-Web Project Manager API developed with Yii2.0
-
+Celestic API - Project Manager for projects software (developed with Yii 2.0)
 
 DIRECTORY STRUCTURE
 -------------------
@@ -10,6 +9,7 @@ DIRECTORY STRUCTURE
       config/             contains application configurations
       controllers/        contains Web controller classes
       mail/               contains view files for e-mails
+      migrations/         contains migrations files (database)
       models/             contains model classes
       runtime/            contains files generated during runtime
       tests/              contains various tests for the basic application
@@ -19,9 +19,9 @@ DIRECTORY STRUCTURE
 REQUIREMENTS
 ------------
 
-PHP 5.4.0
-MySQL 5.2
-Apache 2.0
+* PHP 5.4.0
+* MySQL 5.2
+* Apache 2.0
 
 CONFIGURATION
 -------------
@@ -41,3 +41,8 @@ return [
 ```
 
 Also check and edit the other files in the `config/` directory to customize your application.
+
+INSTALLING FOR TESTING PURPOSE
+------------------------------
+
+Please consider using `php yii migration` inside root folder
