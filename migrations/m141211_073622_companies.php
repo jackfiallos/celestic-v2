@@ -15,7 +15,7 @@ class m141211_073622_companies extends Migration
             'geo_lat' => 'FLOAT(11) NULL DEFAULT NULL',
             'geo_lng' => 'FLOAT(11) NULL DEFAULT NULL',
             'users_id' => 'INT(11) NOT NULL',
-        ));
+        ), 'ENGINE = MyISAM DEFAULT CHARACTER SET = utf8 COLLATE = utf8_general_ci');
 
         $this->addForeignKey('fk_companies_users1_idx', 'companies', 'users_id', 'users', 'id');
     }

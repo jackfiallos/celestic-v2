@@ -15,9 +15,9 @@ class m141211_073627_projects extends Migration
             'start_date' => 'DATETIME NOT NULL',
             'is_active' => 'TINYINT(1) NOT NULL DEFAULT 0',
             'companies_id' => 'INT(11) NOT NULL',
-        ));
+        ), 'ENGINE = MyISAM DEFAULT CHARACTER SET = utf8 COLLATE = utf8_general_ci');
 
-        $this->addForeignKey('fk_companies_projects_idx', 'projects', 'companies_id', 'companies', 'id');
+        $this->addForeignKey('fk_projects_companies1_idx', 'projects', 'companies_id', 'companies', 'id');
     }
 
     public function down()

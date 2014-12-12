@@ -54,6 +54,36 @@ $config = [
                     'controller' => 'companies',
                     'except' => ['delete'],
                 ],
+                [
+                    'class' => 'yii\rest\UrlRule',
+                    'pluralize' => false,
+                    'controller' => 'milestones',
+                    'except' => ['delete'],
+                ],
+                [
+                    'class' => 'yii\rest\UrlRule',
+                    'pluralize' => false,
+                    'controller' => 'tasks',
+                    'except' => ['delete'],
+                ],
+                [
+                    'class' => 'yii\rest\UrlRule',
+                    'pluralize' => false,
+                    'controller' => 'taskstages',
+                    'except' => ['create', 'update', 'delete'],
+                ],
+                [
+                    'class' => 'yii\rest\UrlRule',
+                    'pluralize' => false,
+                    'controller' => 'tasktypes',
+                    'except' => ['create', 'update', 'delete'],
+                ],
+                [
+                    'class' => 'yii\rest\UrlRule',
+                    'pluralize' => false,
+                    'controller' => 'status',
+                    'except' => ['create', 'update', 'delete'],
+                ],
             ],
     	],
     	'request' => [

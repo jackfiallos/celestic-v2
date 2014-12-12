@@ -44,17 +44,17 @@ class Users extends \yii\db\ActiveRecord
 
     public function fields()
     {
-            return [
-                'id',
-                'email',
-                'phone_number' => 'phone',
-                'active' => 'is_active',
-                'last_login',
-                'name' => function ($model)
-                {
-                    return $model->name.' '.$model->lastname;
-                },
-            ];
+        return [
+            'id',
+            'email',
+            'phone_number' => 'phone',
+            'active' => 'is_active',
+            'last_login',
+            'name' => function ($model)
+            {
+                return $model->name.' '.$model->lastname;
+            },
+        ];
     }
 
     /**
